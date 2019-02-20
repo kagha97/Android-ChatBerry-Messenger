@@ -1,3 +1,14 @@
 <resources>
     <string name="app_name">ChatBerry</string>
+    <string name="register_new_account_text">Register new account</string>
+    <string name="user_email_label">Email:</string>
+    <string name="email_input_hint">Enter email address here ...</string>
+    <string name="register_username_label">Username</string>
+    <string name="register_username_hint">Enter username here ...</string>
+    <string name="register_password_label">Password</string>
+    <string name="register_password_hint">Enter password here ...</string>
+    <string name="register_confirm_password_label">Confirm password</string>
+    <string name="register_confirm_password_text">Enter password again here ...</string>
+    <string name="register_button_cancel_label">Cancel</string>
+    <string name="register_button_confirm_label">Register</string>
 </resources>
