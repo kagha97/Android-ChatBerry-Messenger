@@ -1,5 +1,6 @@
 package com.bowfletchers.chatberry;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -17,4 +18,15 @@ public class WelcomePage extends AppCompatActivity {
         setSupportActionBar(toolbar);
     }
 
+    public void singIn(View view) {
+        // navigate to sign in activity
+        Intent signInIntent = new Intent(WelcomePage.this, Login_account.class);
+        startActivity(signInIntent);
+    }
+
+    public void singUp(View view) {
+        // navigate to register acc activity
+        Intent signUpIntent = new Intent(WelcomePage.this, Register_account.class);
+        startActivity(signUpIntent);
+    }
 }
