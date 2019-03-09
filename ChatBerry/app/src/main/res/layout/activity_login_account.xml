@@ -15,7 +15,7 @@
         android:layout_marginTop="72dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
-        android:text="SIGN-IN"
+        android:text= "@string/sign_in"
         android:textSize="30sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -28,7 +28,7 @@
         android:layout_marginTop="30dp"
         android:layout_marginEnd="20dp"
         android:layout_marginRight="30dp"
-        android:text="Email"
+        android:text="@string/signIn_email_label"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="@+id/emailInput"
         app:layout_constraintHorizontal_bias="0.399"
@@ -54,7 +54,7 @@
         android:layout_marginTop="30dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
-        android:text="Password"
+        android:text="@string/signIn_password_label"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="@+id/passwordInput"
         app:layout_constraintHorizontal_bias="0.438"
@@ -79,12 +79,13 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="34dp"
         android:background="@color/signIn"
-        android:text="SIGN-IN"
+        android:text="@string/sign_in"
         android:textColor="@color/white"
         android:textStyle="bold"
         app:layout_constraintTop_toBottomOf="@+id/passwordInput"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        android:onClick="singIn"/>
 
 
 </android.support.constraint.ConstraintLayout>
