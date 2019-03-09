@@ -9,10 +9,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".MessageViewer"></activity>
         <activity
             android:name=".WelcomePage"
             android:label="@string/title_activity_welcome_page"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -22,7 +23,7 @@
         </activity>
         <activity android:name=".Register_account" />
         <activity android:name=".User_profile" />
-        <activity android:name=".Friend_List"></activity>
+        <activity android:name=".Friend_List" />
     </application>
 
 </manifest>
