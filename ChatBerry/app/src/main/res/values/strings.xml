@@ -15,9 +15,15 @@
     <string name="user_profile_online_status_label">Online status</string>
     <string name="user_profile_button_done_label">Done</string>
     <string name="user_profile_button_logout_label">Sign out</string>
+
     <string name="sign_up">Sign-Up</string>
     <string name="sign_in">Sign-In</string>
     <string name="title_activity_welcome_page">WelcomePage</string>
     <string name="signIn_email_label">Email</string>
     <string name="signIn_password_label">Password</string>
+
+    <string name="profile_picture">Profile picture</string>
+    <string name="name">Name</string>
+    <string name="message">Message</string>
+
 </resources>
