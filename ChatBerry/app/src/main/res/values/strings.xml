@@ -26,5 +26,8 @@
     <string name="sign_up">Sign-Up</string>
     <string name="sign_in">Sign-In</string>
     <string name="title_activity_welcome_page">WelcomePage</string>
+    <string name="profile_picture">Profile picture</string>
+    <string name="name">Name</string>
+    <string name="message">Message</string>
     >>>>>>> welcome-ui
 </resources>

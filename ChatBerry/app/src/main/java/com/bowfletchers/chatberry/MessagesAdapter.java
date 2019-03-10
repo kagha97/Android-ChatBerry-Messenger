@@ -60,6 +60,7 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.ViewHo
 
     //View holder class, implements onClickListener
     class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        private TextView name;
         private TextView message;
         private int profileImage;
         private Message currentMessage;
@@ -98,6 +99,7 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.ViewHo
         //binding the data from the game object to card
         void bindTo (Message message) {
             this.currentMessage = message;
+            this.name.setText(message.getMember().getName());
             this.message.setText(message.getMessage());
             Glide.with(Context).load(message.getMember().getProfilePicture()).into(ProfileImage);
         }
