@@ -2,14 +2,13 @@ package com.bowfletchers.chatberry.ClassLibrary;
 
 import java.util.Date;
 
-public class Message {
-
+public class Story {
     private Member member;
     private String message;
     private Date messageDate;
 
 
-    public Message (Member member, String message, Date messageDate) {
+    public Story (Member member, String message, Date messageDate) {
         this.member = member;
         this.message = message;
         this.messageDate = messageDate;
@@ -27,6 +26,5 @@ public class Message {
     public Member getMember() {
         return member;
     }
-
 
 }
