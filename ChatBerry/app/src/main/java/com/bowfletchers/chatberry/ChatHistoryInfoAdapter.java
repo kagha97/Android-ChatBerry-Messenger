@@ -12,12 +12,16 @@ import android.widget.TextView;
 
 import org.w3c.dom.Text;
 
+import java.util.ArrayList;
+
 public class ChatHistoryInfoAdapter extends RecyclerView.Adapter<ChatHistoryInfoAdapter.ViewHolder> {
 
     private Context mcontext;
-    public ChatHistoryInfoAdapter(Context context)
+    private ArrayList<String> mfriendsName = new ArrayList<>();
+    public ChatHistoryInfoAdapter(Context context, ArrayList<String> friendsName)
     {
         this.mcontext = context;
+        this.mfriendsName = friendsName;
     }
     @NonNull
     @Override
@@ -28,14 +32,14 @@ public class ChatHistoryInfoAdapter extends RecyclerView.Adapter<ChatHistoryInfo
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.friendName.setText("Friend");
-        holder.lastMessage.setText("last message");
+    public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
+        holder.friendName.setText(mfriendsName.get(position));
+        holder.lastMessage.setText(mfriendsName.get(position));
     }
 
     @Override
     public int getItemCount() {
-        return 4;
+        return mfriendsName.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
