@@ -17,6 +17,8 @@ public class Login_account extends AppCompatActivity {
 
     public void confirmSingIn(View view) {
         // navigate user to the chat history
+        Intent goToIntent = new Intent(Login_account.this, Friend_List.class);
+        startActivity(goToIntent);
     }
 
     public void cancelSignIn(View view) {
