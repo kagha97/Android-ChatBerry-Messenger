@@ -2,11 +2,19 @@ package com.bowfletchers.chatberry.Activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.FontRequest;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.Toast;
 
+import com.bowfletchers.chatberry.ClassLibrary.Chat;
+import com.bowfletchers.chatberry.ClassLibrary.Member;
+import com.bowfletchers.chatberry.ClassLibrary.Message;
 import com.bowfletchers.chatberry.R;
+import com.bowfletchers.chatberry.Testing.MockData;
 
 public class WelcomePage extends AppCompatActivity {
 

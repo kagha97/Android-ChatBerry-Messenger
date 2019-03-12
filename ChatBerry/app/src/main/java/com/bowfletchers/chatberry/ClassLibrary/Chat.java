@@ -1,6 +1,7 @@
 package com.bowfletchers.chatberry.ClassLibrary;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Chat {
     private ArrayList<Member> memberList = new ArrayList<>();
@@ -16,6 +17,10 @@ public class Chat {
     public void addMessage(Message message)
     {
         messageList.add((message));
+    }
+
+    public List<Message> getMessages() {
+        return this.messageList;
     }
 
 }

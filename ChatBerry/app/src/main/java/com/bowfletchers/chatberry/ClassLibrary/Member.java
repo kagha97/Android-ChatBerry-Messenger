@@ -5,15 +5,15 @@ import java.util.List;
 
 public class Member {
     private String name;
-    private final int profilePicture;
+    private int profilePicture;
     private List<Member> friendList;
     private List<Chat> chatList;
     private List<Story> stories;
 
 
-    public Member (String name, int profilePicture) {
+    public Member (String name) {
         this.name = name;
-        this.profilePicture = profilePicture;
+        this.profilePicture = 0;
         friendList = new ArrayList<>();
         chatList = new ArrayList<>();
         stories = new ArrayList<>();
@@ -53,5 +53,21 @@ public class Member {
 
     public void removeStory(Story story) {
         this.stories.remove(story);
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setProfilePicture(int newAvarta) {
+        this.profilePicture = newAvarta;
+    }
+
+    public void addChat(Chat chat) {
+        this.chatList.add(chat);
+    }
+
+    public void removeChat(Chat chat) {
+        this.chatList.remove(chat);
     }
 }
