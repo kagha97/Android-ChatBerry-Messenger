@@ -39,11 +39,19 @@ public class Member {
         return stories;
     }
 
-    public void addFriend(Member friend){
+    public void addFriend(Member friend) {
         this.friendList.add(friend);
     }
 
     public void removeFriend(Member friend) {
         this.friendList.remove(friend);
+    }
+
+    public void addStory(Story story) {
+        this.stories.add(story);
+    }
+
+    public void removeStory(Story story) {
+        this.stories.remove(story);
     }
 }
