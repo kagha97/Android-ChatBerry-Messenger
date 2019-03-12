@@ -1,9 +1,11 @@
-package com.bowfletchers.chatberry;
+package com.bowfletchers.chatberry.Activities;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+
+import com.bowfletchers.chatberry.R;
 
 public class Login_account extends AppCompatActivity {
 

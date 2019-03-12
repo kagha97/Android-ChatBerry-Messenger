@@ -1,4 +1,4 @@
-package com.bowfletchers.chatberry;
+package com.bowfletchers.chatberry.Adapters;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
+import com.bowfletchers.chatberry.R;
 
 public class ChatHistoryInfoAdapter extends RecyclerView.Adapter<ChatHistoryInfoAdapter.ViewHolder> {
 

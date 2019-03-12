@@ -1,9 +1,12 @@
-package com.bowfletchers.chatberry;
+package com.bowfletchers.chatberry.Activities;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+
+import com.bowfletchers.chatberry.Adapters.ChatHistoryInfoAdapter;
+import com.bowfletchers.chatberry.R;
 
 public class ChatHistoryList extends AppCompatActivity {
     private RecyclerView mRecyclerView;

@@ -1,13 +1,16 @@
-package com.bowfletchers.chatberry;
+package com.bowfletchers.chatberry.Activities;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-public class Friend_List extends AppCompatActivity {
+import com.bowfletchers.chatberry.R;
+
+public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_friend_list_ui);
+        setContentView(R.layout.activity_main);
+
     }
 }

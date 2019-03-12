@@ -1,4 +1,4 @@
-package com.bowfletchers.chatberry;
+package com.bowfletchers.chatberry.ClassLibrary;
 
 public class Member {
     private String name;

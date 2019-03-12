@@ -10,10 +10,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <activity android:name=".Login_account"></activity>
+        <activity android:name=".Activities.Login_account"></activity>
 
         <activity
-            android:name=".WelcomePage"
+            android:name=".Activities.WelcomePage"
             android:label="@string/title_activity_welcome_page"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -23,15 +23,15 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".MessageViewer"></activity>
+        <activity android:name=".Activities.MessageViewer"></activity>
 
-        <activity android:name=".MainActivity"></activity>
+        <activity android:name=".Activities.MainActivity"></activity>
 
-        <activity android:name=".Register_account"></activity>
+        <activity android:name=".Activities.Register_account"></activity>
 
-        <activity android:name=".User_profile"></activity>
+        <activity android:name=".Activities.User_profile"></activity>
 
-        <activity android:name=".Friend_List"></activity>
+        <activity android:name=".Activities.Friend_List"></activity>
 
     </application>
 
