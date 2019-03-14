@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "567831002157",
+    "firebase_url": "https://chatberry-201de.firebaseio.com",
+    "project_id": "chatberry-201de",
+    "storage_bucket": "chatberry-201de.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:567831002157:android:e57265a0079a2891",
+        "android_client_info": {
+          "package_name": "com.bowfletchers.chatberry"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "567831002157-g9p7arvsdj55obbgpe3srefhvqu305af.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB8yb9nIy0LuqtAxSAn9I9uzgHGScxUYAU"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

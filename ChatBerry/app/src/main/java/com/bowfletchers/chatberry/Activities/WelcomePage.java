@@ -15,6 +15,8 @@ import com.bowfletchers.chatberry.ClassLibrary.Member;
 import com.bowfletchers.chatberry.ClassLibrary.Message;
 import com.bowfletchers.chatberry.R;
 import com.bowfletchers.chatberry.Testing.MockData;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class WelcomePage extends AppCompatActivity {
 
