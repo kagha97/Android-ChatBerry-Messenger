@@ -23,5 +23,6 @@ public class Register_account extends AppCompatActivity {
 
     public void confirmRegister(View view) {
         // navigate to the chat history page
+        
     }
 }
