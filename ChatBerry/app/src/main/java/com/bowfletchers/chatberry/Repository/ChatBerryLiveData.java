@@ -9,13 +9,13 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
-public class FirebaseLiveData extends LiveData<DataSnapshot> {
+public class ChatBerryLiveData extends LiveData<DataSnapshot> {
     private static final String LOG_TAG = "FirebaseQueryLiveData";
     private final Query query;
 
     private final DataChangeEventListener listener = new DataChangeEventListener();
 
-    public FirebaseLiveData(DatabaseReference ref) {
+    public ChatBerryLiveData(DatabaseReference ref) {
         this.query = ref;
     }
 
