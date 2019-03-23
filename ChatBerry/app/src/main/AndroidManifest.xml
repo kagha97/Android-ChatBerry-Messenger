@@ -33,6 +33,8 @@
 
         <activity android:name=".Activities.Friend_List"></activity>
 
+        <activity android:name=".Activities.ChatHistoryList"></activity>
+
     </application>
 
 </manifest>
