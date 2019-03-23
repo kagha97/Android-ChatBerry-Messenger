@@ -69,7 +69,7 @@ public class Login_account extends AppCompatActivity {
     }
 
     public void startActivity() {
-        Intent goToIntent = new Intent(Login_account.this, Friend_List.class);
+        Intent goToIntent = new Intent(Login_account.this, ChatHistoryList.class);
         startActivity(goToIntent);
     }
 

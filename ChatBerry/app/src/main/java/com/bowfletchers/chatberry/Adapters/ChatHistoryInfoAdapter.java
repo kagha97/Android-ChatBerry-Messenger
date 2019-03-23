@@ -49,7 +49,7 @@ public class ChatHistoryInfoAdapter extends RecyclerView.Adapter<ChatHistoryInfo
             super(itemView);
             friendName = itemView.findViewById(R.id.friend_name);
             lastMessage = itemView.findViewById(R.id.last_message);
-            friendImage = itemView.findViewById(R.id.friend_image);
+            friendImage = itemView.findViewById(R.id.available_user_image);
             recyclerViewLayout = itemView.findViewById(R.id.recycler_view_layout);
         }
     }

@@ -9,9 +9,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
-        <activity android:name=".Activities.Login_account"></activity>
-
+        <activity android:name=".Activities.AvailableUsers"></activity>
+        <activity android:name=".Activities.Login_account" />
         <activity
             android:name=".Activities.WelcomePage"
             android:label="@string/title_activity_welcome_page"
@@ -22,19 +21,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity android:name=".Activities.MessageViewer"></activity>
-
-        <activity android:name=".Activities.MainActivity"></activity>
-
-        <activity android:name=".Activities.Register_account"></activity>
-
-        <activity android:name=".Activities.User_profile"></activity>
-
-        <activity android:name=".Activities.Friend_List"></activity>
-
-        <activity android:name=".Activities.ChatHistoryList"></activity>
-
+        <activity android:name=".Activities.MessageViewer" />
+        <activity android:name=".Activities.MainActivity" />
+        <activity android:name=".Activities.Register_account" />
+        <activity android:name=".Activities.User_profile" />
+        <activity android:name=".Activities.Friend_List" />
+        <activity android:name=".Activities.ChatHistoryList" />
     </application>
 
 </manifest>
