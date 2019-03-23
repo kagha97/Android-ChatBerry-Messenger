@@ -55,37 +55,37 @@ public class Register_account extends AppCompatActivity {
         if (passwordInput.equals(passwordConfirmInput)) {
             // using email and password to sign up
             mAuthentication.createUserWithEmailAndPassword(emailInput, passwordInput)
-                    .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                        @Override
-                        public void onComplete(@NonNull Task<AuthResult> task) {
-                            if (task.isSuccessful()) {
-                                //Toast.makeText(Register_account.this, "Register successful", Toast.LENGTH_SHORT).show();
-                                // get userID from firebase auth
-                                FirebaseUser currentUser = mAuthentication.getCurrentUser();
-                                if (currentUser != null) {
-                                    String userId = currentUser.getUid();
+            .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                @Override
+                public void onComplete(@NonNull Task<AuthResult> task) {
+                    if (task.isSuccessful()) {
+                        //Toast.makeText(Register_account.this, "Register successful", Toast.LENGTH_SHORT).show();
+                        // get userID from firebase auth
+                        FirebaseUser currentUser = mAuthentication.getCurrentUser();
+                        if (currentUser != null) {
+                            String userId = currentUser.getUid();
 
-                                    // create user object
-                                    Member newMember = new Member(userId, usernameInput, emailInput);
+                            // create user object
+                            Member newMember = new Member(userId, usernameInput, emailInput);
 
-                                    // save new user to firebase database
-                                    mDatabase.child("users").child(userId).setValue(newMember);
+                            // save new user to firebase database
+                            mDatabase.child("users").child(userId).setValue(newMember);
 
-                                    // navigate to chat list activity
-                                    Intent chatListIntent = new Intent(Register_account.this, ChatHistoryList.class);
-                                    startActivity(chatListIntent);
-                                }
-
-                            } else {
-                                Toast.makeText(Register_account.this, "Registered failed", Toast.LENGTH_SHORT).show();
-                            }
+                            // navigate to chat list activity
+                            Intent chatListIntent = new Intent(Register_account.this, ChatHistoryList.class);
+                            chatListIntent.putExtra("NewUser", newMember);
+                            startActivity(chatListIntent);
                         }
-                    });
+
+                    } else {
+                        Toast.makeText(Register_account.this, "Registered failed", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
         }
         else {
             Toast.makeText(this, "Password does match.", Toast.LENGTH_SHORT).show();
         }
-
     }
 
     private void referenceUIs(){
