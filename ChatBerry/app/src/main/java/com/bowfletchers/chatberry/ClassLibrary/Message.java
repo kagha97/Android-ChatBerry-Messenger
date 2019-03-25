@@ -1,23 +1,29 @@
 package com.bowfletchers.chatberry.ClassLibrary;
 
-import java.util.Date;
+import com.google.firebase.database.IgnoreExtraProperties;
 
+import java.util.Date;
+@IgnoreExtraProperties
 public class Message {
 
-    private String member;
-    private String message;
+    public String content;
+    public String senderID;
     //private Date messageDate;
 
+    public Message() {
+
+    }
+
     public Message (String member, String message) {
-        this.member = member;
-        this.message = message;
+        this.senderID = member;
+        this.content = message;
     }
 
     public String getMessage() {
-        return message;
+        return content;
     }
 
     public String getMember() {
-        return member;
+        return senderID;
     }
 }

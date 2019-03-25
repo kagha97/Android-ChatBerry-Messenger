@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,6 +26,7 @@ public class MessageViewer extends AppCompatActivity {
     FirebaseAuth mAuthentication;
     DatabaseReference mDatabase;
     TextView newMessage;
+    TextView tempView;
     ArrayList<Message> msgs;
     private RecyclerView recyclerView;
     private MessagesAdapter msgAdapter;
@@ -38,10 +40,10 @@ public class MessageViewer extends AppCompatActivity {
         mDatabase = FirebaseDatabase.getInstance().getReference("chats");
         newMessage = findViewById(R.id.messageSend);
 
+        tempView = new TextView(this);
+
 
         msgs = new ArrayList<>();
-        Message msg = new Message("bob", "hi");
-        msgs.add(msg);
         //set up recycler view
         recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -55,15 +57,16 @@ public class MessageViewer extends AppCompatActivity {
         messages.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                msgs.clear();
                 for (DataSnapshot msgSnapshot: dataSnapshot.getChildren()) {
-                    Log.i(LOG_TAG, "Message: " + msgSnapshot.child("content").getValue(String.class) + " Sender: " + msgSnapshot.child("senderID").getValue(Integer.class));
+                    Log.i(LOG_TAG, "Message: " + msgSnapshot.child("content").getValue(String.class) + " Sender: " + msgSnapshot.child("senderID").getValue(String.class));
 
-                    Message message = new Message(msgSnapshot.child("senderID").getValue(Integer.class).toString(), msgSnapshot.child("content").getValue(String.class));
+                    Message message = new Message(msgSnapshot.child("senderID").getValue(String.class), msgSnapshot.child("content").getValue(String.class));
                     Log.i(LOG_TAG, "MSG OBJ: " + message.getMessage());
                    msgs.add(message);
                 }
 
-                
+
                msgAdapter.notifyDataSetChanged();
             //    displayToast(dataSnapshot.getValue(String.class));
             }
@@ -73,6 +76,8 @@ public class MessageViewer extends AppCompatActivity {
                 Log.w(LOG_TAG, "onCancelled", databaseError.toException());
             }
         });
+
+
 
 
         //Log.i(LOG_TAG, getSenderName("KCrD3GE9xLgIguld3QnViEATd5L2"));
@@ -92,7 +97,8 @@ public class MessageViewer extends AppCompatActivity {
 
                     if (snapshot.child("id").getValue().toString().equals(id)) {
                        name[0] = snapshot.child("name").getValue().toString();
-                       Log.i(LOG_TAG,snapshot.child("name").getValue().toString());
+                       Log.i(LOG_TAG,"NAME: " + snapshot.child("name").getValue().toString());
+                       tempView.setText(snapshot.child("name").getValue().toString());
                     }
                     //    displayToast(dataSnapshot.getValue(String.class));
                 }
@@ -104,9 +110,8 @@ public class MessageViewer extends AppCompatActivity {
             }
         });
 
-        return name[0];
+        return tempView.getText().toString();
     }
-
 
 
     public void displayToast(String message){
@@ -114,5 +119,16 @@ public class MessageViewer extends AppCompatActivity {
     }
 
 
+    public void sendMessage(View view) {
+        DatabaseReference chat = mDatabase.child("chat1");
+        DatabaseReference messages = chat.child("messages");
 
+        Message message = new Message(mAuthentication.getCurrentUser().getUid().toString(), newMessage.getText().toString());
+
+        DatabaseReference newMsg = messages.push();
+        newMsg.setValue(message);
+
+        newMessage.setText("");
+
+    }
 }
