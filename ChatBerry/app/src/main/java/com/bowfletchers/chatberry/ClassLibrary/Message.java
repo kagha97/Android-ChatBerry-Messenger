@@ -4,11 +4,11 @@ import java.util.Date;
 
 public class Message {
 
-    private Member member;
+    private String member;
     private String message;
     //private Date messageDate;
 
-    public Message (Member member, String message) {
+    public Message (String member, String message) {
         this.member = member;
         this.message = message;
     }
@@ -17,7 +17,7 @@ public class Message {
         return message;
     }
 
-    public Member getMember() {
+    public String getMember() {
         return member;
     }
 }

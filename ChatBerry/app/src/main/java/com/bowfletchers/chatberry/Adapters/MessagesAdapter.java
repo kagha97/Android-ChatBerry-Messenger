@@ -24,7 +24,7 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.ViewHo
     private ImageView ProfileImage;
 
     //Setting the fields with data
-    MessagesAdapter (Context context, ArrayList<Message> messageData) {
+    public MessagesAdapter (Context context, ArrayList<Message> messageData) {
         this.MessageData = messageData;
         this.Context = context;
     }
@@ -57,6 +57,7 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.ViewHo
         //set views for the card
         ViewHolder(View view) {
             super(view);
+            name = itemView.findViewById(R.id.name);
             message = itemView.findViewById(R.id.message);
             ProfileImage = itemView.findViewById(R.id.profilePicture);
             //set the onClickListener so app knows when card is clicked
@@ -76,9 +77,9 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.ViewHo
         //binding the data from the game object to card
         void bindTo (Message message) {
             this.currentMessage = message;
-            this.name.setText(message.getMember().getName());
+            this.name.setText(message.getMember());
             this.message.setText(message.getMessage());
-            Glide.with(Context).load(message.getMember().getProfilePicture()).into(ProfileImage);
+           // Glide.with(Context).load(message.getMember().getProfilePicture()).into(ProfileImage);
         }
     }
 }

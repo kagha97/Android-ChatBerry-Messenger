@@ -42,5 +42,5 @@ public class ChatBerryLiveData extends LiveData<DataSnapshot> {
             Log.e(LOG_TAG, "Can't listen to query " + query, databaseError.toException());
         }
     }
-    
+
 }

@@ -1,9 +1,11 @@
 package com.bowfletchers.chatberry.Activities;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 
 import com.bowfletchers.chatberry.Adapters.FriendListAdapter;
 import com.bowfletchers.chatberry.ClassLibrary.Member;
@@ -30,5 +32,10 @@ public class Friend_List extends AppCompatActivity {
         adapter = new FriendListAdapter(friendList);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
+    }
+
+    public void viewMessage(View view) {
+        Intent goToIntent = new Intent(this, MessageViewer.class);
+        startActivity(goToIntent);
     }
 }
