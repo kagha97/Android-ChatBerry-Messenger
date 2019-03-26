@@ -31,6 +31,7 @@ public class MessageViewer extends AppCompatActivity {
     private RecyclerView recyclerView;
     private MessagesAdapter msgAdapter;
     private static final String LOG_TAG = MessageViewer.class.getSimpleName();
+    private String NAME;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,8 +61,10 @@ public class MessageViewer extends AppCompatActivity {
                 msgs.clear();
                 for (DataSnapshot msgSnapshot: dataSnapshot.getChildren()) {
                     Log.i(LOG_TAG, "Message: " + msgSnapshot.child("content").getValue(String.class) + " Sender: " + msgSnapshot.child("senderID").getValue(String.class));
+                  //  Log.i(LOG_TAG, "NAME function: " + getSenderName(msgSnapshot.child("senderID").getValue(String.class)));
+                    getSenderName(msgSnapshot.child("senderID").getValue(String.class));
 
-                    Message message = new Message(msgSnapshot.child("senderID").getValue(String.class), msgSnapshot.child("content").getValue(String.class));
+                    Message message = new Message(getName(), msgSnapshot.child("content").getValue(String.class));
                     Log.i(LOG_TAG, "MSG OBJ: " + message.getMessage());
                    msgs.add(message);
                 }
@@ -84,7 +87,11 @@ public class MessageViewer extends AppCompatActivity {
 
     }
 
-    public String getSenderName(final String id) {
+    public String getName () {
+       return NAME;
+    }
+
+    public void getSenderName(final String id) {
         DatabaseReference users = FirebaseDatabase.getInstance().getReference().child("users");
         final String[] name = {""};
         users.addValueEventListener(new ValueEventListener() {
@@ -96,8 +103,9 @@ public class MessageViewer extends AppCompatActivity {
                     Log.i(LOG_TAG, snapshot.child("id").getValue().toString());
 
                     if (snapshot.child("id").getValue().toString().equals(id)) {
-                       name[0] = snapshot.child("name").getValue().toString();
-                       Log.i(LOG_TAG,"NAME: " + snapshot.child("name").getValue().toString());
+                       NAME = snapshot.child("name").getValue().toString();
+
+                       Log.i(LOG_TAG,"NAME: " + NAME);
                        tempView.setText(snapshot.child("name").getValue().toString());
                     }
                     //    displayToast(dataSnapshot.getValue(String.class));
@@ -110,7 +118,8 @@ public class MessageViewer extends AppCompatActivity {
             }
         });
 
-        return tempView.getText().toString();
+
+
     }
 
 
