@@ -16,7 +16,7 @@ public class ChatHistoryList extends AppCompatActivity {
     private RecyclerView mRecyclerView;
     private ChatHistoryInfoAdapter mAdapter;
 
-    private Member logInMember;
+    private String  logInMemberEmail;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,10 +28,11 @@ public class ChatHistoryList extends AppCompatActivity {
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        logInMember = (Member) getIntent().getSerializableExtra("NewUser");
+        logInMemberEmail = getIntent().getStringExtra("LoginUser");
 
-        setTitle("Welcome " + logInMember.getName());
-        Toast.makeText(this, logInMember.getEmail(), Toast.LENGTH_SHORT).show();
+        setTitle("Welcome " + logInMemberEmail);
+
+        Toast.makeText(this, logInMemberEmail, Toast.LENGTH_SHORT).show();
     }
 
 }

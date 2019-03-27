@@ -9,14 +9,19 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.bowfletchers.chatberry.ClassLibrary.Member;
 import com.bowfletchers.chatberry.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 public class Login_account extends AppCompatActivity {
     EditText editTextEmail;
@@ -30,46 +35,60 @@ public class Login_account extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_account);
+
+        referenceUIs();
+        referenceFirebase();
     }
 
     public void confirmSingIn(View view) {
         validateUser();
     }
 
-    public void validateUser() {
-        editTextEmail = findViewById(R.id.emailInput);
-        editTextPassword = findViewById(R.id.passwordInput);
+    private void validateUser() {
+
+        // get user inputs for email and password
         userInputEmail = editTextEmail.getText().toString();
         userInputPassword = editTextPassword.getText().toString();
-        mAuthentication = FirebaseAuth.getInstance();
-        mDatabase = FirebaseDatabase.getInstance().getReference();
-        if(!userInputEmail.equals("") && !userInputPassword.equals("")) {
-            mAuthentication.signInWithEmailAndPassword(userInputEmail, userInputPassword)
-                    .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                        @Override
-                        public void onComplete(@NonNull Task<AuthResult> task) {
-                            if (task.isSuccessful()) {
-                                // Sign in success, update UI with the signed-in user's information
-                                Log.d("TAG", "signInWithEmail:success");
-                                //FirebaseUser user = mAuthentication.getCurrentUser();
-                                Toast.makeText(Login_account.this, "Successfull", Toast.LENGTH_LONG).show();
-                                startActivity();
-                            } else {
-                                // If sign in fails, display a message to the user.
-                                Log.w("TAG", "signInWithEmail:failure", task.getException());
-                                Toast.makeText(Login_account.this, "Authentication failed.",
-                                        Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                    });
-        }
-        else{
-            Toast.makeText(Login_account.this , "Please dont leave the fields empty" , Toast.LENGTH_LONG).show();
-        }
+
+        // authenticate user credentials using fire base method
+        mAuthentication.signInWithEmailAndPassword(userInputEmail, userInputPassword)
+            .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                @Override
+                public void onComplete(@NonNull Task<AuthResult> task) {
+                    if (task.isSuccessful()) {
+                        // log in success
+                        // get userId of log-in user
+                        FirebaseUser logInUser = mAuthentication.getCurrentUser();
+                        String loginEmail = logInUser.getEmail();
+                        navigateToChatList(loginEmail);
+                    }
+                    else {
+                        // log in failed
+                        Toast.makeText(Login_account.this, "Log in failed :(((", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
     }
 
-    public void startActivity() {
-        Intent goToIntent = new Intent(Login_account.this, Friend_List.class);
+    // define event trigger when user log in success
+    ValueEventListener valueEventListener = new ValueEventListener() {
+        @Override
+        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+            if (dataSnapshot.exists()) {
+                Member user = dataSnapshot.getValue(Member.class);
+                Toast.makeText(Login_account.this, user.getId(), Toast.LENGTH_SHORT).show();
+            }
+        }
+
+        @Override
+        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+        }
+    };
+
+    public void navigateToChatList(String userEmail) {
+        Intent goToIntent = new Intent(Login_account.this, ChatHistoryList.class);
+        goToIntent.putExtra("LoginUser", userEmail);
         startActivity(goToIntent);
     }
 
@@ -77,5 +96,15 @@ public class Login_account extends AppCompatActivity {
         // navigate user to the welcome page
         Intent backToWelcomePage = new Intent(Login_account.this, WelcomePage.class);
         startActivity(backToWelcomePage);
+    }
+
+    private void referenceUIs() {
+        editTextEmail = findViewById(R.id.emailInput);
+        editTextPassword = findViewById(R.id.passwordInput);
+    }
+
+    private void referenceFirebase() {
+        mAuthentication = FirebaseAuth.getInstance();
+        mDatabase = FirebaseDatabase.getInstance().getReference();
     }
 }
