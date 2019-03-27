@@ -33,7 +33,10 @@
 
         <activity android:name=".Activities.Friend_List"></activity>
 
-        <activity android:name=".Activities.ChatHistoryList"></activity>
+        <activity android:name=".Activities.ChatHistoryList"
+            android:theme="@style/AppTheme.NoActionBar">
+
+        </activity>
 
     </application>
 
