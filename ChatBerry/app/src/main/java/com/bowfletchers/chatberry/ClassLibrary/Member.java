@@ -5,13 +5,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Member implements Serializable {
-    private String id;
-    private String email;
-    private String name;
-    private int profilePicture;
-    private List<Member> friendList;
-    private List<Chat> chatList;
-    private List<Story> stories;
+    public String id;
+    public String email;
+    public String name;
+    public int profilePicture;
+    public List<Member> friendList;
+    public List<Chat> chatList;
+    public List<Story> stories;
 
     public Member() {
 
@@ -104,5 +104,18 @@ public class Member implements Serializable {
 
     public void removeChat(Chat chat) {
         this.chatList.remove(chat);
+    }
+
+    @Override
+    public String toString() {
+        return "Member{" +
+                "id='" + id + '\'' +
+                ", email='" + email + '\'' +
+                ", name='" + name + '\'' +
+                ", profilePicture=" + profilePicture +
+                ", friendList=" + friendList +
+                ", chatList=" + chatList +
+                ", stories=" + stories +
+                '}';
     }
 }

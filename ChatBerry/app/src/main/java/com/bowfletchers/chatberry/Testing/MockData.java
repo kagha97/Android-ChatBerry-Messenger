@@ -18,7 +18,7 @@ public class MockData {
         testMember.addFriend(friend2);
         testMember.addFriend(friend3);
 
-        // chat with friend 1
+   /*     // chat with friend 1
         ArrayList<Member> chat1Members = new ArrayList<>();
         chat1Members.add(testMember);
         chat1Members.add(friend1);
@@ -61,7 +61,7 @@ public class MockData {
         Message message_chat3_3 = new Message(testMember, "bye 3");
         chat1.addMessage(message_chat3_1);
         chat1.addMessage(message_chat3_2);
-        chat1.addMessage(message_chat3_3);
+        chat1.addMessage(message_chat3_3);*/
 
         return testMember;
     }
