@@ -87,7 +87,7 @@ public class Login_account extends AppCompatActivity {
     };
 
     public void navigateToChatList(String userEmail) {
-        Intent goToIntent = new Intent(Login_account.this, ChatHistoryList.class);
+        Intent goToIntent = new Intent(Login_account.this, AvailableUsers.class);
         goToIntent.putExtra("LoginUser", userEmail);
         startActivity(goToIntent);
     }
