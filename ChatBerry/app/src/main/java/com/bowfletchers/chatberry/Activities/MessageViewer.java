@@ -10,6 +10,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bowfletchers.chatberry.Adapters.MessagesAdapter;
+import com.bowfletchers.chatberry.ClassLibrary.Chat;
 import com.bowfletchers.chatberry.ClassLibrary.Member;
 import com.bowfletchers.chatberry.ClassLibrary.Message;
 import com.bowfletchers.chatberry.R;
@@ -32,6 +33,7 @@ public class MessageViewer extends AppCompatActivity {
     private MessagesAdapter msgAdapter;
     private static final String LOG_TAG = MessageViewer.class.getSimpleName();
     private String NAME;
+    Member member;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +42,8 @@ public class MessageViewer extends AppCompatActivity {
         mAuthentication = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance().getReference("chats");
         newMessage = findViewById(R.id.messageSend);
+        getChatRoom();
+
 
         tempView = new TextView(this);
 
@@ -54,6 +58,13 @@ public class MessageViewer extends AppCompatActivity {
 
         DatabaseReference chat = mDatabase.child("chat1");
         DatabaseReference messages = chat.child("messages");
+
+        member = (Member) getIntent().getSerializableExtra("chatMember");
+
+
+//        displayToast(member.id);
+
+        setTitle(member.name);
 
         messages.addValueEventListener(new ValueEventListener() {
             @Override
@@ -71,6 +82,8 @@ public class MessageViewer extends AppCompatActivity {
 
 
                msgAdapter.notifyDataSetChanged();
+                recyclerView.scrollToPosition(msgs.size() - 1);
+
             //    displayToast(dataSnapshot.getValue(String.class));
             }
 
@@ -85,6 +98,63 @@ public class MessageViewer extends AppCompatActivity {
 
         //Log.i(LOG_TAG, getSenderName("KCrD3GE9xLgIguld3QnViEATd5L2"));
 
+    }
+
+    public void getChatRoom (){
+        DatabaseReference chats = FirebaseDatabase.getInstance().getReference().child("chats");
+        chats.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                  //  Chat chat = snapshot.getValue(Chat.class);
+                    // assert user != null;
+                    Log.d("chatstatus", "-------------------");
+                    String sender = snapshot.child("senderID").getValue().toString();
+                    String receiver = snapshot.child("receiverID").getValue().toString();
+
+                    String currentID = mAuthentication.getUid();
+                    String memberID = member.id;
+
+                    Log.d("chatstatus", "looking for " + memberID);
+                    Log.d("chatstatus", "I am " + currentID);
+
+                    Log.d("chatstatus", "sender " + sender);
+                    Log.d("chatstatus", "rec " + receiver);
+
+                    Log.d("parent", snapshot.getKey());
+
+
+
+                    if (sender.equals(mAuthentication.getUid()) && receiver.equals(member.id) ||
+                            sender.equals(member.id) && receiver.equals(mAuthentication.getUid())) {
+
+                        Log.d("chatstatus", "found");
+                        Log.d("chatstatus", snapshot.getKey());
+
+                    }
+                    else if (!sender.equals(mAuthentication.getUid()) && !receiver.equals(member.id) ||
+                            !sender.equals(member.id) && !receiver.equals(mAuthentication.getUid())) {
+
+                        Log.d("chatstatus", "not found");
+                        Log.d("chatstatus", "n " + snapshot.getKey());
+                        Log.d("chatstatus", "n sender " + sender);
+                        Log.d("chatstatus", "n rec " + receiver);
+
+
+                    }
+
+                  Log.i("value get", snapshot.child("senderID").getValue().toString());
+
+
+
+               }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.w(LOG_TAG, "onCancelled", databaseError.toException());
+            }
+        });
     }
 
     public String getName () {
@@ -137,7 +207,14 @@ public class MessageViewer extends AppCompatActivity {
         DatabaseReference newMsg = messages.push();
         newMsg.setValue(message);
 
+        recyclerView.scrollToPosition(msgs.size() - 1);
         newMessage.setText("");
 
+        // mDatabase.child("chats").removeValue();
+
+    }
+
+    public void scrollToBottom(View view) {
+        recyclerView.scrollToPosition(msgs.size() - 1);
     }
 }

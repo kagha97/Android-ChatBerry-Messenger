@@ -41,10 +41,10 @@ public class AvailableUsersInfoAdapter extends RecyclerView.Adapter<AvailableUse
         viewHolder.chatUser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(mcontext , mavailableUsers.get(position).id , Toast.LENGTH_LONG).show();
-//                Intent intent = new Intent(mcontext, MessageViewer.class);
-//                intent.putExtra("chatMember" , mavailableUsers.get(position));
-//                mcontext.startActivity(intent);
+           //     Toast.makeText(mcontext , mavailableUsers.get(position).id , Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(mcontext, MessageViewer.class);
+                intent.putExtra("chatMember" , mavailableUsers.get(position));
+                mcontext.startActivity(intent);
             }
         });
     }
