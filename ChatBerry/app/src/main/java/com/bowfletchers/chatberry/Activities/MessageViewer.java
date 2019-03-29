@@ -35,6 +35,7 @@ public class MessageViewer extends AppCompatActivity {
     private String NAME;
     Member member;
     private String chatID;
+    private Boolean isChatNew = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -133,13 +134,13 @@ public class MessageViewer extends AppCompatActivity {
                     Log.d("parent", snapshot.getKey());
 
 
-
                     if (sender.equals(mAuthentication.getUid()) && receiver.equals(member.id) ||
                             sender.equals(member.id) && receiver.equals(mAuthentication.getUid())) {
 
                         Log.d("chatstatus", "found");
                         chatID = snapshot.getKey();
-                        liveChatRoom(chatID);
+                        isChatNew = false;
+                      //  liveChatRoom(chatID);
                         Log.d("chatstatus", snapshot.getKey());
                         break;
 
@@ -147,7 +148,8 @@ public class MessageViewer extends AppCompatActivity {
                     else if (!sender.equals(mAuthentication.getUid()) && !receiver.equals(member.id) ||
                             !sender.equals(member.id) && !receiver.equals(mAuthentication.getUid())) {
 
-                        newChatRoom();
+                        isChatNew = true;
+                      //  newChatRoom();
                         Log.d("chatstatus", "not found");
                         Log.d("chatstatus", "n " + snapshot.getKey());
                         Log.d("chatstatus", "n sender " + sender);
@@ -159,8 +161,14 @@ public class MessageViewer extends AppCompatActivity {
                   Log.i("value get", snapshot.child("senderID").getValue().toString());
 
 
-
                }
+                if (isChatNew) {
+                    newChatRoom();
+                }
+
+                else {
+                    liveChatRoom(chatID);
+                }
             }
 
             @Override
