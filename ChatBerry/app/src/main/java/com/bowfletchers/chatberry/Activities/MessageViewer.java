@@ -34,6 +34,7 @@ public class MessageViewer extends AppCompatActivity {
     private static final String LOG_TAG = MessageViewer.class.getSimpleName();
     private String NAME;
     Member member;
+    private String chatID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,7 +43,7 @@ public class MessageViewer extends AppCompatActivity {
         mAuthentication = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance().getReference("chats");
         newMessage = findViewById(R.id.messageSend);
-        getChatRoom();
+        //getChatRoom();
 
 
         tempView = new TextView(this);
@@ -56,42 +57,16 @@ public class MessageViewer extends AppCompatActivity {
         recyclerView.setAdapter(msgAdapter);
 
 
-        DatabaseReference chat = mDatabase.child("chat1");
-        DatabaseReference messages = chat.child("messages");
-
         member = (Member) getIntent().getSerializableExtra("chatMember");
 
+        getChatRoom();
 
+        //newChatRoom();
 //        displayToast(member.id);
 
         setTitle(member.name);
 
-        messages.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                msgs.clear();
-                for (DataSnapshot msgSnapshot: dataSnapshot.getChildren()) {
-                    Log.i(LOG_TAG, "Message: " + msgSnapshot.child("content").getValue(String.class) + " Sender: " + msgSnapshot.child("senderID").getValue(String.class));
-                  //  Log.i(LOG_TAG, "NAME function: " + getSenderName(msgSnapshot.child("senderID").getValue(String.class)));
-                    getSenderName(msgSnapshot.child("senderID").getValue(String.class));
 
-                    Message message = new Message(getName(), msgSnapshot.child("content").getValue(String.class));
-                    Log.i(LOG_TAG, "MSG OBJ: " + message.getMessage());
-                   msgs.add(message);
-                }
-
-
-               msgAdapter.notifyDataSetChanged();
-                recyclerView.scrollToPosition(msgs.size() - 1);
-
-            //    displayToast(dataSnapshot.getValue(String.class));
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Log.w(LOG_TAG, "onCancelled", databaseError.toException());
-            }
-        });
 
 
 
@@ -100,9 +75,43 @@ public class MessageViewer extends AppCompatActivity {
 
     }
 
+
+
+    public void liveChatRoom(String chatid) {
+        mDatabase.child(chatid).child("messages").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                msgs.clear();
+                for (DataSnapshot msgSnapshot: dataSnapshot.getChildren()) {
+                    Log.i(LOG_TAG, "Message: " + msgSnapshot.child("content").getValue(String.class) + " Sender: " + msgSnapshot.child("senderID").getValue(String.class));
+                    //  Log.i(LOG_TAG, "NAME function: " + getSenderName(msgSnapshot.child("senderID").getValue(String.class)));
+                    getSenderName(msgSnapshot.child("senderID").getValue(String.class));
+
+                    Message message = new Message(getName(), msgSnapshot.child("content").getValue(String.class));
+                    Log.i(LOG_TAG, "MSG OBJ: " + message.getMessage());
+                    msgs.add(message);
+                }
+
+
+                msgAdapter.notifyDataSetChanged();
+                recyclerView.scrollToPosition(msgs.size() - 1);
+
+                //    displayToast(dataSnapshot.getValue(String.class));
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.w(LOG_TAG, "onCancelled", databaseError.toException());
+            }
+        });
+    }
+
+
+
     public void getChatRoom (){
+
         DatabaseReference chats = FirebaseDatabase.getInstance().getReference().child("chats");
-        chats.addValueEventListener(new ValueEventListener() {
+        chats.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
@@ -129,12 +138,16 @@ public class MessageViewer extends AppCompatActivity {
                             sender.equals(member.id) && receiver.equals(mAuthentication.getUid())) {
 
                         Log.d("chatstatus", "found");
+                        chatID = snapshot.getKey();
+                        liveChatRoom(chatID);
                         Log.d("chatstatus", snapshot.getKey());
+                        break;
 
                     }
                     else if (!sender.equals(mAuthentication.getUid()) && !receiver.equals(member.id) ||
                             !sender.equals(member.id) && !receiver.equals(mAuthentication.getUid())) {
 
+                        newChatRoom();
                         Log.d("chatstatus", "not found");
                         Log.d("chatstatus", "n " + snapshot.getKey());
                         Log.d("chatstatus", "n sender " + sender);
@@ -156,6 +169,28 @@ public class MessageViewer extends AppCompatActivity {
             }
         });
     }
+
+
+    public void newChatRoom() {
+        DatabaseReference chatDb = mDatabase;
+
+        Chat chat = new Chat(member.id, mAuthentication.getUid());
+
+        DatabaseReference newChat = chatDb.push();
+        newChat.setValue(chat);
+
+        chatID = newChat.getKey();
+
+        liveChatRoom(chatID);
+
+
+
+        Log.d("chatstatus", "new chat room created");
+        Log.d("chatstatus", "chatid: " + chatID);
+
+    }
+
+
 
     public String getName () {
        return NAME;
@@ -199,7 +234,11 @@ public class MessageViewer extends AppCompatActivity {
 
 
     public void sendMessage(View view) {
-        DatabaseReference chat = mDatabase.child("chat1");
+
+        Log.d("chatid", chatID);
+
+
+        DatabaseReference chat = mDatabase.child(chatID);
         DatabaseReference messages = chat.child("messages");
 
         Message message = new Message(mAuthentication.getCurrentUser().getUid().toString(), newMessage.getText().toString());
