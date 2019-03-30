@@ -74,11 +74,22 @@ public class User_profile extends AppCompatActivity {
             }
         });
 
+        // handle update user info when click Done button
         buttonDone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // save user photo to firebase store
                 uploadUserPhotoToStore();
+            }
+        });
+
+        // sign out user when click sign out button
+        buttonSignout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mAuth.signOut();
+                Intent backSignInIntent = new Intent(User_profile.this, Login_account.class);
+                startActivity(backSignInIntent);
             }
         });
     }
