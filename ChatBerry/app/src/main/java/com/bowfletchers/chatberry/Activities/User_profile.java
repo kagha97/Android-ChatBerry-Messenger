@@ -4,14 +4,11 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
-import android.print.PrinterId;
-import android.provider.ContactsContract;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -19,32 +16,29 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bowfletchers.chatberry.ClassLibrary.Member;
 import com.bowfletchers.chatberry.R;
 import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.ChildEventListener;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
-import java.util.Calendar;
 
 public class User_profile extends AppCompatActivity {
 
     private final int REQUEST_CODE_IMAGE = 1;
     private final String STORE_URL = "gs://chatberry-201de.appspot.com";
+    private final String DEFAULT_PHOTO_URL = "https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909__340.png";
 
     ImageView imageViewUserPhoto;
-    TextView textViewUserName;
+    TextView editTextUserName;
     Switch aSwitchOnlineStatus;
     Button buttonDone;
     Button buttonSignout;
@@ -69,7 +63,7 @@ public class User_profile extends AppCompatActivity {
         firebaseStore = FirebaseStorage.getInstance();
         storageReference = firebaseStore.getReferenceFromUrl(STORE_URL);
 
-        displayDefaultUserImage();
+        displayDefaultUserInfo();
 
         // open camera when user click on image view
         imageViewUserPhoto.setOnClickListener(new View.OnClickListener() {
@@ -85,9 +79,6 @@ public class User_profile extends AppCompatActivity {
             public void onClick(View v) {
                 // save user photo to firebase store
                 uploadUserPhotoToStore();
-
-                // update user profile with name and photo url
-                updateUserProfileInfo();
             }
         });
     }
@@ -104,16 +95,29 @@ public class User_profile extends AppCompatActivity {
 
     private void referenceViews() {
         imageViewUserPhoto = findViewById(R.id.user_profile_avatar);
-        textViewUserName = findViewById(R.id.user_profile_name);
+        editTextUserName = findViewById(R.id.user_profile_name);
         aSwitchOnlineStatus = findViewById(R.id.user_profile_onlineStatus_switch);
         buttonDone = findViewById(R.id.user_profile_button_done);
         buttonSignout = findViewById(R.id.user_profile_button_logout);
     }
 
-    private void displayDefaultUserImage(){
-        String url = "https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909__340.png";
-        Glide.with(this).load(url).into(imageViewUserPhoto);
+    private void displayDefaultUserInfo(){
+        // display user photo
+        Uri userPhotoURI = currentUser.getPhotoUrl();
+        if (userPhotoURI != null) {
+            String userPhotoURL = userPhotoURI.toString();
+            Glide.with(this).load(userPhotoURL).into(imageViewUserPhoto);
+        } else {
+            Glide.with(this).load(DEFAULT_PHOTO_URL).into(imageViewUserPhoto);
+        }
 
+        // display user name
+        String userName = currentUser.getDisplayName();
+        if (userName != null && !userName.equals("")) {
+            editTextUserName.setText(userName);
+        } else {
+            editTextUserName.setText("NO NAME");
+        }
     }
 
     private void uploadUserPhotoToStore() {
@@ -146,14 +150,32 @@ public class User_profile extends AppCompatActivity {
                     @Override
                     public void onSuccess(Uri uri) {
                         String downloadUrl = uri.toString();
-
+                        newUserPhoToURL = downloadUrl;
+                        // after upload img succeed , update the user profile
+                        // with user photo url and user name
+                        String userName = editTextUserName.getText().toString();
+                        updateUserProfileInfo(newUserPhoToURL, userName);
                     }
                 });
             }
         });
     }
 
-    private void updateUserProfileInfo() {
-
+    private void updateUserProfileInfo(String newUserPhoToURL, String newUserDisplayName) {
+        UserProfileChangeRequest userProfileChangeRequest = new UserProfileChangeRequest.Builder()
+                .setDisplayName(newUserDisplayName)
+                .setPhotoUri(Uri.parse(newUserPhoToURL))
+                .build();
+        currentUser.updateProfile(userProfileChangeRequest)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            Toast.makeText(User_profile.this, "User info has been updated successfully", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(User_profile.this, "Update user information failed", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
     }
 }
