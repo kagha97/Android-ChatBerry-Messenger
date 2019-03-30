@@ -31,7 +31,8 @@
 
         <activity android:name=".Activities.Register_account"></activity>
 
-        <activity android:name=".Activities.User_profile"></activity>
+        <activity android:name=".Activities.User_profile"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
 
         <activity android:name=".Activities.Friend_List"></activity>
 

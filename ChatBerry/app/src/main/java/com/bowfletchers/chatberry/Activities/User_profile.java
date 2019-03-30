@@ -9,13 +9,15 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
-
+import android.support.v7.widget.Toolbar;
 import com.bowfletchers.chatberry.R;
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -48,13 +50,12 @@ public class User_profile extends AppCompatActivity {
     FirebaseStorage firebaseStore;
     StorageReference storageReference;
 
-    String newUserDisplayName;
-    String newUserPhoToURL;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_profile);
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
         referenceViews();
 
         // init Fire auth instance
@@ -92,6 +93,29 @@ public class User_profile extends AppCompatActivity {
                 startActivity(backSignInIntent);
             }
         });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.homePage:
+                Intent chatListIntent = new Intent(User_profile.this, ChatHistoryList.class);
+                startActivity(chatListIntent);
+                return true;
+            case R.id.my_friends:
+                Intent userFriendsIntent = new Intent(User_profile.this, Friend_List.class);
+                startActivity(userFriendsIntent);
+                return true;
+            default:
+                // Do nothing
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -161,11 +185,10 @@ public class User_profile extends AppCompatActivity {
                     @Override
                     public void onSuccess(Uri uri) {
                         String downloadUrl = uri.toString();
-                        newUserPhoToURL = downloadUrl;
                         // after upload img succeed , update the user profile
                         // with user photo url and user name
                         String userName = editTextUserName.getText().toString();
-                        updateUserProfileInfo(newUserPhoToURL, userName);
+                        updateUserProfileInfo(downloadUrl, userName);
                     }
                 });
             }

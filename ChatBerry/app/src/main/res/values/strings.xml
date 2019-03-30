@@ -27,5 +27,6 @@
     <string name="message">Message</string>
     <string name="menu_user_profile_label">My Profile</string>
     <string name="menu_user_friends_label">My Friends</string>
+    <string name="menu_home_activity_label">Home Activity</string>
 
 </resources>
