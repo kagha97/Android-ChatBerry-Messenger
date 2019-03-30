@@ -20,6 +20,7 @@ public class ChatHistoryList extends AppCompatActivity {
     private ChatHistoryInfoAdapter mAdapter;
 
     private String  logInMemberEmail;
+    private String getLogInMemberId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,11 +34,10 @@ public class ChatHistoryList extends AppCompatActivity {
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        logInMemberEmail = getIntent().getStringExtra("LoginUser");
+        logInMemberEmail = getIntent().getStringExtra("LoginUserEmail");
+        getLogInMemberId = getIntent().getStringExtra("LoginUserId");
 
         setTitle("Welcome " + logInMemberEmail);
-
-        Toast.makeText(this, logInMemberEmail, Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -51,10 +51,12 @@ public class ChatHistoryList extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.my_profile:
                 Intent userProfileIntent = new Intent(ChatHistoryList.this, User_profile.class);
+                userProfileIntent.putExtra("UserId", getLogInMemberId);
                 startActivity(userProfileIntent);
                 return true;
             case R.id.my_friends:
                 Intent userFriendsIntent = new Intent(ChatHistoryList.this, Friend_List.class);
+                userFriendsIntent.putExtra("UserId", getLogInMemberId);
                 startActivity(userFriendsIntent);
                 return true;
             default:
