@@ -12,19 +12,18 @@ import com.google.firebase.database.FirebaseDatabase;
 
 public class LiveChatRoom extends ViewModel {
 
-    private final String CHATID;
-    private final DatabaseReference CHAT;
+    private  String CHATID;
+    private  DatabaseReference CHAT;
 
-    private final FirebaseQueryLiveData liveData;
+    private FirebaseQueryLiveData liveData;
 
-    public LiveChatRoom (String id) {
+
+
+    @NonNull
+    public LiveData<DataSnapshot> getChatRoom(String id) {
         this.CHATID = id;
         CHAT =  FirebaseDatabase.getInstance().getReference("/chats/" + CHATID + "/messages");
         liveData = new FirebaseQueryLiveData(CHAT);
-    }
-
-    @NonNull
-    public LiveData<DataSnapshot> getChatRoom() {
         return liveData;
     }
 }

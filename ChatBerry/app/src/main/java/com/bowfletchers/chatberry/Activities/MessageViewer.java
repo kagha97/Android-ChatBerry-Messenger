@@ -2,7 +2,6 @@ package com.bowfletchers.chatberry.Activities;
 
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.Observer;
-import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -19,13 +18,13 @@ import com.bowfletchers.chatberry.ClassLibrary.Chat;
 import com.bowfletchers.chatberry.ClassLibrary.Member;
 import com.bowfletchers.chatberry.ClassLibrary.Message;
 import com.bowfletchers.chatberry.R;
-import com.bowfletchers.chatberry.ViewModel.Chat.ChatViewModel;
+import com.bowfletchers.chatberry.ViewModel.Chat.GetChatRoom;
+import com.bowfletchers.chatberry.ViewModel.Chat.LiveChatRoom;
+import com.bowfletchers.chatberry.ViewModel.Chat.SendMessage;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,8 +48,6 @@ public class MessageViewer extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_message_viewer);
-        mAuthentication = FirebaseAuth.getInstance();
-        mDatabase = FirebaseDatabase.getInstance().getReference("chats");
         newMessage = findViewById(R.id.messageSend);
         //getChatRoom();
 
@@ -66,13 +63,73 @@ public class MessageViewer extends AppCompatActivity {
 
 
         member = (Member) getIntent().getSerializableExtra("chatMember");
+        getChatRoom();
 
-     //   getChatRoom();
 
-        //Chat view model
-        ChatViewModel chatViewModel = ViewModelProviders.of(this).get(ChatViewModel.class);
+        setTitle(member.name);
+    }
+
+
+
+    public void getChatRoom() {
+        GetChatRoom chatViewModel = ViewModelProviders.of(this).get(GetChatRoom.class);
 
         LiveData<DataSnapshot> liveData = chatViewModel.getChatRoom();
+
+        liveData.observe(this, new Observer<DataSnapshot>() {
+
+            @Override
+            public void onChanged(@Nullable DataSnapshot dataSnapshot) {
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    String currentID = mAuthentication.getUid();
+                    String memberID = member.id;
+
+                    String sender = snapshot.child("senderID").getValue().toString();
+                    String receiver = snapshot.child("receiverID").getValue().toString();
+
+                    Log.d("chatstatus", "looking for " + memberID);
+                    Log.d("chatstatus", "I am " + currentID);
+
+                    if (sender.equals(mAuthentication.getUid()) && receiver.equals(member.id) ||
+                            sender.equals(member.id) && receiver.equals(mAuthentication.getUid())) {
+
+                        Log.d("chatstatus", "found");
+                        chatID = snapshot.getKey();
+                        isChatNew = false;
+                        Log.d("chatstatus", snapshot.getKey());
+                        break;
+
+                    }
+                    else if (!sender.equals(mAuthentication.getUid()) && !receiver.equals(member.id) ||
+                            !sender.equals(member.id) && !receiver.equals(mAuthentication.getUid())) {
+
+                        isChatNew = true;
+                        //  newChatRoom();
+                        Log.d("chatstatus", "not found");
+                        Log.d("chatstatus", "n " + snapshot.getKey());
+                        Log.d("chatstatus", "n sender " + sender);
+                        Log.d("chatstatus", "n rec " + receiver);
+
+                    }
+                }
+
+                if (isChatNew) {
+                    newChatRoom();
+                }
+
+                else {
+                    liveChatRoom(chatID);
+                }
+            }
+
+
+            });
+    }
+
+
+    public void liveChatRoom(String chatid) {
+        LiveChatRoom liveChatRoom = ViewModelProviders.of(this).get(LiveChatRoom.class);
+        LiveData<DataSnapshot> liveData = liveChatRoom.getChatRoom(chatid);
 
 
         liveData.observe(this, new Observer<DataSnapshot>() {
@@ -80,58 +137,6 @@ public class MessageViewer extends AppCompatActivity {
             public void onChanged(@Nullable DataSnapshot dataSnapshot) {
                 for (DataSnapshot msgSnapshot: dataSnapshot.getChildren()) {
 
-
-                 Message amsg = new Message(msgSnapshot.child("senderID").getValue().toString(), msgSnapshot.child("content").getValue().toString());
-                msgs.add(amsg);
-                    Log.i("livechat", "updated");
-                    Log.i("livechat", msgSnapshot.child("content").getValue().toString());
-                }
-                Log.i("livechat", "updated");
-               msgAdapter.notifyDataSetChanged();
-               recyclerView.scrollToPosition(msgs.size() - 1);
-            }
-
-        });
-
-        //newChatRoom();
-//        displayToast(member.id);
-
-        setTitle(member.name);
-
-
-
-
-        //Log.i(LOG_TAG, getSenderName("KCrD3GE9xLgIguld3QnViEATd5L2"));
-
-    }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    public void liveChatRoom(String chatid) {
-        mDatabase.child(chatid).child("messages").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                msgs.clear();
-                int i = 0;
-                for (DataSnapshot msgSnapshot: dataSnapshot.getChildren()) {
                     Log.i(LOG_TAG, "Message: " + msgSnapshot.child("content").getValue(String.class) + " Sender: " + msgSnapshot.child("senderID").getValue(String.class));
                     //  Log.i(LOG_TAG, "NAME function: " + getSenderName(msgSnapshot.child("senderID").getValue(String.class)));
 
@@ -142,97 +147,14 @@ public class MessageViewer extends AppCompatActivity {
 
                     Log.i("IDofsender", "ID of object: " + message.senderID);
                     msgs.add(message);
-                    i++;
                 }
-
-
                 msgAdapter.notifyDataSetChanged();
                 recyclerView.scrollToPosition(msgs.size() - 1);
 
-                //    displayToast(dataSnapshot.getValue(String.class));
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Log.w(LOG_TAG, "onCancelled", databaseError.toException());
             }
         });
     }
 
-
-
-
-
-
-
-    public void getChatRoom (){
-
-        DatabaseReference chats = FirebaseDatabase.getInstance().getReference().child("chats");
-        chats.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                  //  Chat chat = snapshot.getValue(Chat.class);
-                    // assert user != null;
-                    Log.d("chatstatus", "-------------------");
-                    String sender = snapshot.child("senderID").getValue().toString();
-                    String receiver = snapshot.child("receiverID").getValue().toString();
-
-                    String currentID = mAuthentication.getUid();
-                    String memberID = member.id;
-
-                    Log.d("chatstatus", "looking for " + memberID);
-                    Log.d("chatstatus", "I am " + currentID);
-
-                    Log.d("chatstatus", "sender " + sender);
-                    Log.d("chatstatus", "rec " + receiver);
-
-                    Log.d("parent", snapshot.getKey());
-
-
-                    if (sender.equals(mAuthentication.getUid()) && receiver.equals(member.id) ||
-                            sender.equals(member.id) && receiver.equals(mAuthentication.getUid())) {
-
-                        Log.d("chatstatus", "found");
-                        chatID = snapshot.getKey();
-                        isChatNew = false;
-                      //  liveChatRoom(chatID);
-                        Log.d("chatstatus", snapshot.getKey());
-                        break;
-
-                    }
-                    else if (!sender.equals(mAuthentication.getUid()) && !receiver.equals(member.id) ||
-                            !sender.equals(member.id) && !receiver.equals(mAuthentication.getUid())) {
-
-                        isChatNew = true;
-                      //  newChatRoom();
-                        Log.d("chatstatus", "not found");
-                        Log.d("chatstatus", "n " + snapshot.getKey());
-                        Log.d("chatstatus", "n sender " + sender);
-                        Log.d("chatstatus", "n rec " + receiver);
-
-
-                    }
-
-                  Log.i("value get", snapshot.child("senderID").getValue().toString());
-
-
-               }
-                if (isChatNew) {
-                    newChatRoom();
-                }
-
-                else {
-                    liveChatRoom(chatID);
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Log.w(LOG_TAG, "onCancelled", databaseError.toException());
-            }
-        });
-    }
 
 
     public void newChatRoom() {
@@ -255,49 +177,6 @@ public class MessageViewer extends AppCompatActivity {
     }
 
 
-    /*
-        UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
-                                    .setDisplayName(usernameInput).build();
-
-                            currentUser.updateProfile(profileUpdates);
-     */
-
-    public String getName () {
-       return NAME;
-    }
-
-    public String getSenderName(final String id) {
-        DatabaseReference users = FirebaseDatabase.getInstance().getReference().child("users");
-        users.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    //Member user = snapshot.getValue(Member.class);
-                   // assert user != null;
-                    Log.i(LOG_TAG, snapshot.child("id").getValue().toString());
-
-                    if (snapshot.child("id").getValue().toString().equals(id)) {
-                       NAME = snapshot.child("name").getValue().toString();
-                       chatNames.add(snapshot.child("name").getValue().toString());
-
-                       Log.i("IDofsender","NAME: " + NAME);
-
-                       break;
-                    }
-                    //    displayToast(dataSnapshot.getValue(String.class));
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Log.w(LOG_TAG, "onCancelled", databaseError.toException());
-            }
-        });
-
-        return NAME;
-
-    }
-
 
     public void displayToast(String message){
         Toast.makeText(this, message,Toast.LENGTH_SHORT).show();
@@ -309,21 +188,12 @@ public class MessageViewer extends AppCompatActivity {
 
 //        Log.d("chatid", chatID);
 
+        SendMessage sendMessage = new SendMessage();
 
-        DatabaseReference chat = mDatabase.child("-Lb68GO9HseFwz7LZc3p");
-        DatabaseReference messages = chat.child("messages");
 
-        Message message = new Message(mAuthentication.getUid(), newMessage.getText().toString());
-
-      //  Log.d("dname", mAuthentication.getCurrentUser().getDisplayName());
-
-        DatabaseReference newMsg = messages.push();
-        newMsg.setValue(message);
-
-        //recyclerView.scrollToPosition(msgs.size() - 1);
+        sendMessage.sendMessage(chatID, newMessage.getText().toString());
         newMessage.setText("");
-
-        // mDatabase.child("chats").removeValue();
+        recyclerView.scrollToPosition(msgs.size() - 1);
 
     }
 
