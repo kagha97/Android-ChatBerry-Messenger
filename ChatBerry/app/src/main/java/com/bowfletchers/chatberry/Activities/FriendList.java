@@ -14,7 +14,7 @@ import com.bowfletchers.chatberry.Testing.MockData;
 
 import java.util.List;
 
-public class Friend_List extends AppCompatActivity {
+public class FriendList extends AppCompatActivity {
 
     private RecyclerView recyclerView;
     private FriendListAdapter adapter;

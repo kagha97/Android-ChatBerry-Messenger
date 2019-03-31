@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context=".Activities.User_profile">
+    tools:context=".Activities.UserProfile">
 
     <ImageView
         android:id="@+id/user_profile_avatar"

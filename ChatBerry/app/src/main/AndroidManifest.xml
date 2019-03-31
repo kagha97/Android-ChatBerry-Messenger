@@ -11,8 +11,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Activities.AvailableUsers"></activity>
-        <activity android:name=".Activities.Login_account" />
+        <activity android:name=".Activities.AvailableUsers"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity android:name=".Activities.LoginAccount" />
         <activity
             android:name=".Activities.WelcomePage"
             android:label="@string/title_activity_welcome_page"
@@ -28,18 +29,17 @@
 
         <activity android:name=".Activities.MainActivity"></activity>
 
-        <activity android:name=".Activities.Register_account"></activity>
+        <activity android:name=".Activities.RegisterAccount"></activity>
 
-        <activity android:name=".Activities.User_profile"
+        <activity android:name=".Activities.UserProfile"
             android:theme="@style/AppTheme.NoActionBar"></activity>
 
-        <activity android:name=".Activities.Friend_List"></activity>
+        <activity android:name=".Activities.FriendList"></activity>
 
         <activity android:name=".Activities.ChatHistoryList"
             android:theme="@style/AppTheme.NoActionBar">
 
         </activity>
-
     </application>
 
 </manifest>

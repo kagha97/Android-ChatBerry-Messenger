@@ -19,7 +19,7 @@ import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-public class Register_account extends AppCompatActivity {
+public class RegisterAccount extends AppCompatActivity {
 
     EditText editTextEmail;
     EditText editTextUserName;
@@ -41,7 +41,7 @@ public class Register_account extends AppCompatActivity {
 
     public void cancelRegister(View view) {
         // navigate back to welcome page
-        Intent backToSignInIntent = new Intent(Register_account.this, WelcomePage.class);
+        Intent backToSignInIntent = new Intent(RegisterAccount.this, WelcomePage.class);
         startActivity(backToSignInIntent);
     }
 
@@ -60,7 +60,7 @@ public class Register_account extends AppCompatActivity {
                 @Override
                 public void onComplete(@NonNull Task<AuthResult> task) {
                     if (task.isSuccessful()) {
-                        //Toast.makeText(Register_account.this, "Register successful", Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(RegisterAccount.this, "Register successful", Toast.LENGTH_SHORT).show();
                         // get userID from firebase auth
                         final FirebaseUser currentUser = mAuthentication.getCurrentUser();
                         if (currentUser != null) {
@@ -80,13 +80,13 @@ public class Register_account extends AppCompatActivity {
                             mDatabase.child("users").child(userId).setValue(newMember);
 
                             // navigate to chat list activity
-                            Intent chatListIntent = new Intent(Register_account.this, ChatHistoryList.class);
+                            Intent chatListIntent = new Intent(RegisterAccount.this, ChatHistoryList.class);
                             chatListIntent.putExtra("NewUser", newMember);
                             startActivity(chatListIntent);
                         }
 
                     } else {
-                        Toast.makeText(Register_account.this, "Registered failed", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(RegisterAccount.this, "Registered failed", Toast.LENGTH_SHORT).show();
                     }
                 }
             });

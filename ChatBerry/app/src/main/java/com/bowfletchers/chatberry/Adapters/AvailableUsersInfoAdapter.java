@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bowfletchers.chatberry.Activities.MessageViewer;
 import com.bowfletchers.chatberry.ClassLibrary.Member;
@@ -30,7 +29,7 @@ public class AvailableUsersInfoAdapter extends RecyclerView.Adapter<AvailableUse
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int i) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.available_users_layout, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.available_users_item_layout, parent, false);
         ViewHolder holder = new ViewHolder(view);
         return holder;
     }

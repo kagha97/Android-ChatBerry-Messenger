@@ -27,13 +27,15 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
 
-public class User_profile extends AppCompatActivity {
+public class UserProfile extends AppCompatActivity {
 
     private final int REQUEST_CODE_IMAGE = 1;
     private final String STORE_URL = "gs://chatberry-201de.appspot.com";
@@ -47,6 +49,7 @@ public class User_profile extends AppCompatActivity {
 
     FirebaseAuth mAuth;
     FirebaseUser currentUser;
+    DatabaseReference mUserRef;
     FirebaseStorage firebaseStore;
     StorageReference storageReference;
 
@@ -59,6 +62,7 @@ public class User_profile extends AppCompatActivity {
         referenceViews();
 
         // init Fire auth instance
+        mUserRef = FirebaseDatabase.getInstance().getReference("users");
         mAuth = FirebaseAuth.getInstance();
         currentUser = mAuth.getCurrentUser();
         firebaseStore = FirebaseStorage.getInstance();
@@ -89,7 +93,7 @@ public class User_profile extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 mAuth.signOut();
-                Intent backSignInIntent = new Intent(User_profile.this, Login_account.class);
+                Intent backSignInIntent = new Intent(UserProfile.this, LoginAccount.class);
                 startActivity(backSignInIntent);
             }
         });
@@ -105,11 +109,11 @@ public class User_profile extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.homePage:
-                Intent chatListIntent = new Intent(User_profile.this, ChatHistoryList.class);
+                Intent chatListIntent = new Intent(UserProfile.this, ChatHistoryList.class);
                 startActivity(chatListIntent);
                 return true;
             case R.id.my_friends:
-                Intent userFriendsIntent = new Intent(User_profile.this, Friend_List.class);
+                Intent userFriendsIntent = new Intent(UserProfile.this, FriendList.class);
                 startActivity(userFriendsIntent);
                 return true;
             default:
@@ -175,7 +179,7 @@ public class User_profile extends AppCompatActivity {
             @Override
             public void onFailure(@NonNull Exception exception) {
                 // Handle unsuccessful uploads
-                Toast.makeText(User_profile.this, "Upload image failed", Toast.LENGTH_SHORT).show();
+                Toast.makeText(UserProfile.this, "Upload image failed", Toast.LENGTH_SHORT).show();
             }
         }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
@@ -186,9 +190,12 @@ public class User_profile extends AppCompatActivity {
                     public void onSuccess(Uri uri) {
                         String downloadUrl = uri.toString();
                         // after upload img succeed , update the user profile
-                        // with user photo url and user name
+                        // with user photo url and user name in Authentication
                         String userName = editTextUserName.getText().toString();
                         updateUserProfileInfo(downloadUrl, userName);
+
+                        // also update user info in database al well
+                        updateUserInfoInDatabase(downloadUrl, userName);
                     }
                 });
             }
@@ -205,11 +212,17 @@ public class User_profile extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
-                            Toast.makeText(User_profile.this, "User info has been updated successfully", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(UserProfile.this, "User info has been updated successfully", Toast.LENGTH_SHORT).show();
                         } else {
-                            Toast.makeText(User_profile.this, "Update user information failed", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(UserProfile.this, "Update user information failed", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
+    }
+
+    private void updateUserInfoInDatabase(String newUserPhoToURL, String newUserDisplayName) {
+        String currentUserId = currentUser.getUid();
+        mUserRef.child(currentUserId).child("name").setValue(newUserDisplayName);
+        mUserRef.child(currentUserId).child("profilePicture").setValue(newUserPhoToURL);
     }
 }

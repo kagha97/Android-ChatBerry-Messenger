@@ -4,26 +4,20 @@ import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.bowfletchers.chatberry.ClassLibrary.Member;
 import com.bowfletchers.chatberry.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
-import com.google.firebase.database.ValueEventListener;
 
-public class Login_account extends AppCompatActivity {
+public class LoginAccount extends AppCompatActivity {
     EditText editTextEmail;
     EditText editTextPassword;
     String userInputEmail;
@@ -65,20 +59,20 @@ public class Login_account extends AppCompatActivity {
                     }
                     else {
                         // log in failed
-                        Toast.makeText(Login_account.this, "Log in failed :(((", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(LoginAccount.this, "Log in failed :(((", Toast.LENGTH_SHORT).show();
                     }
                 }
             });
     }
 
     public void navigateToChatList(String userEmail, String userId) {
-        Intent goToIntent = new Intent(Login_account.this, AvailableUsers.class);
+        Intent goToIntent = new Intent(LoginAccount.this, AvailableUsers.class);
         startActivity(goToIntent);
     }
 
     public void cancelSignIn(View view) {
         // navigate user to the welcome page
-        Intent backToWelcomePage = new Intent(Login_account.this, WelcomePage.class);
+        Intent backToWelcomePage = new Intent(LoginAccount.this, WelcomePage.class);
         startActivity(backToWelcomePage);
     }
 
