@@ -53,6 +53,7 @@ public class WelcomePage extends AppCompatActivity {
         // navigate to sign in activity
         Intent signInIntent = new Intent(WelcomePage.this, LoginAccount.class);
         startActivity(signInIntent);
+        finish();
     }
 
     public void singUp(View view) {

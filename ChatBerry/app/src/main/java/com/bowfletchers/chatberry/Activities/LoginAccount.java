@@ -56,7 +56,6 @@ public class LoginAccount extends AppCompatActivity {
                         String loginEmail = logInUser.getEmail();
                         String loginUserId = logInUser.getUid();
                         navigateToChatList(loginEmail, loginUserId);
-                        finish();
                     }
                     else {
                         // log in failed
@@ -69,6 +68,7 @@ public class LoginAccount extends AppCompatActivity {
     public void navigateToChatList(String userEmail, String userId) {
         Intent goToIntent = new Intent(LoginAccount.this, AvailableUsers.class);
         startActivity(goToIntent);
+        finish();
     }
 
     public void cancelSignIn(View view) {
