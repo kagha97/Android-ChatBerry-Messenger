@@ -128,7 +128,7 @@ public class MessageViewer extends AppCompatActivity {
 
             });
     }
-    
+
     public void liveChatRoom(String chatid) {
         LiveChatRoom liveChatRoom = ViewModelProviders.of(this).get(LiveChatRoom.class);
         LiveData<DataSnapshot> liveData = liveChatRoom.getChatRoom(chatid);
