@@ -15,6 +15,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -61,8 +62,15 @@ public class Register_account extends AppCompatActivity {
                     if (task.isSuccessful()) {
                         //Toast.makeText(Register_account.this, "Register successful", Toast.LENGTH_SHORT).show();
                         // get userID from firebase auth
-                        FirebaseUser currentUser = mAuthentication.getCurrentUser();
+                        final FirebaseUser currentUser = mAuthentication.getCurrentUser();
                         if (currentUser != null) {
+
+                            // save display name to user profile
+                            UserProfileChangeRequest profileUpdate = new UserProfileChangeRequest.Builder()
+                                    .setDisplayName(usernameInput)
+                                    .build();
+                            currentUser.updateProfile(profileUpdate);
+
                             String userId = currentUser.getUid();
 
                             // create user object

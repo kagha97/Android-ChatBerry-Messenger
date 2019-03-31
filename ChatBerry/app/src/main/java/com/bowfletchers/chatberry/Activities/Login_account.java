@@ -60,7 +60,8 @@ public class Login_account extends AppCompatActivity {
                         // get userId of log-in user
                         FirebaseUser logInUser = mAuthentication.getCurrentUser();
                         String loginEmail = logInUser.getEmail();
-                        navigateToChatList(loginEmail);
+                        String loginUserId = logInUser.getUid();
+                        navigateToChatList(loginEmail, loginUserId);
                     }
                     else {
                         // log in failed
@@ -70,6 +71,7 @@ public class Login_account extends AppCompatActivity {
             });
     }
 
+<<<<<<< HEAD
     // define event trigger when user log in success
     ValueEventListener valueEventListener = new ValueEventListener() {
         @Override
@@ -89,6 +91,10 @@ public class Login_account extends AppCompatActivity {
     public void navigateToChatList(String userEmail) {
         Intent goToIntent = new Intent(Login_account.this, AvailableUsers.class);
         goToIntent.putExtra("LoginUser", userEmail);
+=======
+    public void navigateToChatList(String userEmail, String userId) {
+        Intent goToIntent = new Intent(Login_account.this, ChatHistoryList.class);
+>>>>>>> handle-user-profile
         startActivity(goToIntent);
     }
 

@@ -14,12 +14,18 @@ import android.support.v7.widget.Toolbar;
 
 import com.bowfletchers.chatberry.Adapters.ChatHistoryInfoAdapter;
 import com.bowfletchers.chatberry.R;
+import com.google.android.gms.common.internal.safeparcel.SafeParcelable;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class ChatHistoryList extends AppCompatActivity {
     private RecyclerView mRecyclerView;
     private ChatHistoryInfoAdapter mAdapter;
 
-    private String  logInMemberEmail;
+    private FirebaseAuth mAuth;
+    private FirebaseUser mUser;
+
+    private String  logInMemberName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,11 +39,15 @@ public class ChatHistoryList extends AppCompatActivity {
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        logInMemberEmail = getIntent().getStringExtra("LoginUser");
+        mAuth = FirebaseAuth.getInstance();
+        mUser = mAuth.getCurrentUser();
 
-        setTitle("Welcome " + logInMemberEmail);
-
-        Toast.makeText(this, logInMemberEmail, Toast.LENGTH_SHORT).show();
+        String userName = mUser.getDisplayName();
+        if (userName != null && !userName.equals("")) {
+            setTitle("Welcome " + userName);
+        } else {
+            setTitle("Welcome");
+        }
     }
 
     @Override
@@ -57,8 +67,9 @@ public class ChatHistoryList extends AppCompatActivity {
                 Intent userFriendsIntent = new Intent(ChatHistoryList.this, Friend_List.class);
                 startActivity(userFriendsIntent);
                 return true;
-            default:
-                // Do nothing
+            case R.id.homePage:
+                Intent chatListIntent = new Intent(ChatHistoryList.this, ChatHistoryList.class);
+                startActivity(chatListIntent);
         }
         return super.onOptionsItemSelected(item);
     }
