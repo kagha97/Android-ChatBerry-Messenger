@@ -19,6 +19,7 @@ import com.bowfletchers.chatberry.ClassLibrary.Member;
 import com.bowfletchers.chatberry.ClassLibrary.Message;
 import com.bowfletchers.chatberry.R;
 import com.bowfletchers.chatberry.ViewModel.Chat.GetChatRoom;
+import com.bowfletchers.chatberry.ViewModel.Chat.GetMemberName;
 import com.bowfletchers.chatberry.ViewModel.Chat.LiveChatRoom;
 import com.bowfletchers.chatberry.ViewModel.Chat.SendMessage;
 import com.google.firebase.auth.FirebaseAuth;
@@ -41,6 +42,7 @@ public class MessageViewer extends AppCompatActivity {
     private String NAME;
     Member member;
     private String chatID;
+    private String memName;
     private Boolean isChatNew = false;
     private List<String> chatNames = new ArrayList<>();
 
@@ -51,6 +53,8 @@ public class MessageViewer extends AppCompatActivity {
         newMessage = findViewById(R.id.messageSend);
         //getChatRoom();
 
+        mAuthentication = FirebaseAuth.getInstance();
+        mDatabase = FirebaseDatabase.getInstance().getReference("chats");
         tempView = new TextView(this);
 
 
@@ -64,6 +68,9 @@ public class MessageViewer extends AppCompatActivity {
 
         member = (Member) getIntent().getSerializableExtra("chatMember");
         getChatRoom();
+
+        GetMemberName n = new GetMemberName();
+
 
 
         setTitle(member.name);
@@ -127,6 +134,22 @@ public class MessageViewer extends AppCompatActivity {
     }
 
 
+
+    public void getMemberName (String id) {
+        final GetMemberName memberName = ViewModelProviders.of(this).get(GetMemberName.class);
+        LiveData<DataSnapshot> data = memberName.getMemberName(id);
+
+        data.observe(this, new Observer<DataSnapshot>() {
+            @Override
+            public void onChanged(@Nullable DataSnapshot dataSnapshot) {
+                memName = dataSnapshot.child("name").getValue(String.class);
+                Log.d("memname1", memName);
+            }
+        });
+
+    }
+
+
     public void liveChatRoom(String chatid) {
         LiveChatRoom liveChatRoom = ViewModelProviders.of(this).get(LiveChatRoom.class);
         LiveData<DataSnapshot> liveData = liveChatRoom.getChatRoom(chatid);
@@ -141,8 +164,8 @@ public class MessageViewer extends AppCompatActivity {
                     //  Log.i(LOG_TAG, "NAME function: " + getSenderName(msgSnapshot.child("senderID").getValue(String.class)));
 
                     Log.i("IDofsender", "ID: " + msgSnapshot.child("senderID"));
-
-                    Message message = new Message(msgSnapshot.child("senderID").getValue().toString(), msgSnapshot.child("content").getValue(String.class));
+                    getMemberName(msgSnapshot.child("senderID").getValue().toString());
+                    Message message = new Message(memName, msgSnapshot.child("content").getValue(String.class));
                     Log.i(LOG_TAG, "MSG OBJ: " + message.getMessage());
 
                     Log.i("IDofsender", "ID of object: " + message.senderID);
