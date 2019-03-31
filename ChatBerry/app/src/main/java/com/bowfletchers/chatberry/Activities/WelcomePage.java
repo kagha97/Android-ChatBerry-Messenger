@@ -12,9 +12,14 @@ import android.view.View;
 
 import com.bowfletchers.chatberry.R;
 import com.bowfletchers.chatberry.ViewModel.ChatBerryViewModel;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 
 public class WelcomePage extends AppCompatActivity {
+
+    FirebaseAuth mAuth;
+    FirebaseUser mUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,6 +27,15 @@ public class WelcomePage extends AppCompatActivity {
         setContentView(R.layout.activity_welcome_page);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        mAuth = FirebaseAuth.getInstance();
+        mUser = mAuth.getCurrentUser();
+
+        if (mUser != null) {
+            Intent gotoChatlistIntent = new Intent(WelcomePage.this, AvailableUsers.class);
+            startActivity(gotoChatlistIntent);
+            finish();
+        }
 
         // test Firebase connect
         ChatBerryViewModel viewModel = ViewModelProviders.of(this).get(ChatBerryViewModel.class);
