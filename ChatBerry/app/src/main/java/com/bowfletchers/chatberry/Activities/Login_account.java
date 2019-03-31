@@ -71,30 +71,8 @@ public class Login_account extends AppCompatActivity {
             });
     }
 
-<<<<<<< HEAD
-    // define event trigger when user log in success
-    ValueEventListener valueEventListener = new ValueEventListener() {
-        @Override
-        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-            if (dataSnapshot.exists()) {
-                Member user = dataSnapshot.getValue(Member.class);
-                Toast.makeText(Login_account.this, user.getId(), Toast.LENGTH_SHORT).show();
-            }
-        }
-
-        @Override
-        public void onCancelled(@NonNull DatabaseError databaseError) {
-
-        }
-    };
-
-    public void navigateToChatList(String userEmail) {
-        Intent goToIntent = new Intent(Login_account.this, AvailableUsers.class);
-        goToIntent.putExtra("LoginUser", userEmail);
-=======
     public void navigateToChatList(String userEmail, String userId) {
-        Intent goToIntent = new Intent(Login_account.this, ChatHistoryList.class);
->>>>>>> handle-user-profile
+        Intent goToIntent = new Intent(Login_account.this, AvailableUsers.class);
         startActivity(goToIntent);
     }
 

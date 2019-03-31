@@ -19,7 +19,6 @@ import com.bowfletchers.chatberry.ClassLibrary.Member;
 import com.bowfletchers.chatberry.ClassLibrary.Message;
 import com.bowfletchers.chatberry.R;
 import com.bowfletchers.chatberry.ViewModel.Chat.GetChatRoom;
-import com.bowfletchers.chatberry.ViewModel.Chat.GetMemberName;
 import com.bowfletchers.chatberry.ViewModel.Chat.LiveChatRoom;
 import com.bowfletchers.chatberry.ViewModel.Chat.SendMessage;
 import com.google.firebase.auth.FirebaseAuth;
@@ -68,9 +67,6 @@ public class MessageViewer extends AppCompatActivity {
 
         member = (Member) getIntent().getSerializableExtra("chatMember");
         getChatRoom();
-
-        GetMemberName n = new GetMemberName();
-
 
 
         setTitle(member.name);
@@ -132,24 +128,7 @@ public class MessageViewer extends AppCompatActivity {
 
             });
     }
-
-
-
-    public void getMemberName (String id) {
-        final GetMemberName memberName = ViewModelProviders.of(this).get(GetMemberName.class);
-        LiveData<DataSnapshot> data = memberName.getMemberName(id);
-
-        data.observe(this, new Observer<DataSnapshot>() {
-            @Override
-            public void onChanged(@Nullable DataSnapshot dataSnapshot) {
-                memName = dataSnapshot.child("name").getValue(String.class);
-                Log.d("memname1", memName);
-            }
-        });
-
-    }
-
-
+    
     public void liveChatRoom(String chatid) {
         LiveChatRoom liveChatRoom = ViewModelProviders.of(this).get(LiveChatRoom.class);
         LiveData<DataSnapshot> liveData = liveChatRoom.getChatRoom(chatid);
@@ -158,14 +137,22 @@ public class MessageViewer extends AppCompatActivity {
         liveData.observe(this, new Observer<DataSnapshot>() {
             @Override
             public void onChanged(@Nullable DataSnapshot dataSnapshot) {
+                msgs.clear();
                 for (DataSnapshot msgSnapshot: dataSnapshot.getChildren()) {
 
                     Log.i(LOG_TAG, "Message: " + msgSnapshot.child("content").getValue(String.class) + " Sender: " + msgSnapshot.child("senderID").getValue(String.class));
                     //  Log.i(LOG_TAG, "NAME function: " + getSenderName(msgSnapshot.child("senderID").getValue(String.class)));
+                    String name = "";
+
+                    if (msgSnapshot.child("senderID").getValue(String.class).equals(mAuthentication.getUid()))
+                        name = mAuthentication.getCurrentUser().getDisplayName();
+                    else if (msgSnapshot.child("senderID").getValue(String.class).equals(member.getId()))
+                        name = member.getName();
+
+                    Log.d("thename", name);
 
                     Log.i("IDofsender", "ID: " + msgSnapshot.child("senderID"));
-                    getMemberName(msgSnapshot.child("senderID").getValue().toString());
-                    Message message = new Message(memName, msgSnapshot.child("content").getValue(String.class));
+                    Message message = new Message(name, msgSnapshot.child("content").getValue(String.class));
                     Log.i(LOG_TAG, "MSG OBJ: " + message.getMessage());
 
                     Log.i("IDofsender", "ID of object: " + message.senderID);
@@ -191,7 +178,6 @@ public class MessageViewer extends AppCompatActivity {
         chatID = newChat.getKey();
 
         liveChatRoom(chatID);
-
 
 
         Log.d("chatstatus", "new chat room created");
