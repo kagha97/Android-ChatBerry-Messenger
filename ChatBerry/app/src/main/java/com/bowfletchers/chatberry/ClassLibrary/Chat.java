@@ -4,23 +4,32 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Chat {
-    private ArrayList<Member> memberList = new ArrayList<>();
-    private ArrayList<Message> messageList = new ArrayList<>();
-    private String chatTitle;
+   // private ArrayList<Member> memberList = new ArrayList<>();
+  //  private ArrayList<Message> messageList = new ArrayList<>();
+   // private String chatTitle;
 
-    public Chat(String ChatTitle, ArrayList<Member> member)
+
+    public String receiverID;
+    public String senderID;
+
+
+    public Chat () {
+
+    }
+
+    public Chat(String receiverID, String senderID)
     {
-        this.chatTitle = ChatTitle;
-        this.memberList = member;
+        this.receiverID = receiverID;
+        this.senderID = senderID;
     }
 
     public void addMessage(Message message)
     {
-        messageList.add((message));
+     //   messageList.add((message));
     }
 
-    public List<Message> getMessages() {
-        return this.messageList;
-    }
+    //public List<Message> getMessages() {
+        //return this.messageList;
+  //  }
 
 }

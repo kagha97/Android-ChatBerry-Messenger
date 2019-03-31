@@ -79,7 +79,7 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.ViewHo
             this.currentMessage = message;
             this.name.setText(message.getMember());
             this.message.setText(message.getMessage());
-           // Glide.with(Context).load(message.getMember().getProfilePicture()).into(ProfileImage);
+            Glide.with(Context).load(message.getMember()).placeholder(R.drawable.ic_person).into(ProfileImage);
         }
     }
 }
