@@ -8,11 +8,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bowfletchers.chatberry.Activities.MessageViewer;
 import com.bowfletchers.chatberry.ClassLibrary.Member;
 import com.bowfletchers.chatberry.R;
+import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
 
@@ -37,6 +39,7 @@ public class AvailableUsersInfoAdapter extends RecyclerView.Adapter<AvailableUse
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, final int position) {
         viewHolder.userName.setText(mavailableUsers.get(position).name);
+        Glide.with(mcontext).load(mavailableUsers.get(position).getProfilePicture()).placeholder(R.drawable.ic_person).into(viewHolder.profilePicture);
         viewHolder.chatUser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -55,12 +58,14 @@ public class AvailableUsersInfoAdapter extends RecyclerView.Adapter<AvailableUse
 
     public class ViewHolder extends RecyclerView.ViewHolder
     {
+        ImageView profilePicture;
         TextView userName;
         Button chatUser;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             userName = itemView.findViewById(R.id.available_user_name);
             chatUser = itemView.findViewById(R.id.chat_button);
+            profilePicture = itemView.findViewById(R.id.available_user_image);
         }
     }
 }

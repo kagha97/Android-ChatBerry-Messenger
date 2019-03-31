@@ -17,11 +17,11 @@ public class Member implements Serializable {
 
     }
 
-    public Member (String id, String name, String email) {
+    public Member (String id, String name, String email, String profilePicture) {
         this.id = id;
         this.name = name;
         this.email = email;
-        this.profilePicture = "";
+        this.profilePicture = profilePicture;
         friendList = new ArrayList<>();
         chatList = new ArrayList<>();
         stories = new ArrayList<>();

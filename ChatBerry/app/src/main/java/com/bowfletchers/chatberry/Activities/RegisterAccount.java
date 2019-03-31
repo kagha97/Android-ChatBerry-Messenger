@@ -74,7 +74,7 @@ public class RegisterAccount extends AppCompatActivity {
                             String userId = currentUser.getUid();
 
                             // create user object
-                            Member newMember = new Member(userId, usernameInput, emailInput);
+                            Member newMember = new Member(userId, usernameInput, emailInput, "");
 
                             // save new user to firebase database
                             mDatabase.child("users").child(userId).setValue(newMember);
