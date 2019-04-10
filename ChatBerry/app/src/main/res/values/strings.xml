@@ -18,7 +18,7 @@
 
     <string name="sign_up">Sign-Up</string>
     <string name="sign_in">Sign-In</string>
-    <string name="title_activity_welcome_page">WelcomePage</string>
+    <string name="title_activity_welcome_page">ChatBerry</string>
     <string name="signIn_email_label">Email</string>
     <string name="signIn_password_label">Password</string>
 
