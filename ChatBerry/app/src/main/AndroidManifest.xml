@@ -34,7 +34,8 @@
         <activity android:name=".Activities.UserProfile"
             android:theme="@style/AppTheme.NoActionBar"></activity>
 
-        <activity android:name=".Activities.FriendList"></activity>
+        <activity android:name=".Activities.FriendList"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
 
         <activity android:name=".Activities.ChatHistoryList"
             android:theme="@style/AppTheme.NoActionBar">
