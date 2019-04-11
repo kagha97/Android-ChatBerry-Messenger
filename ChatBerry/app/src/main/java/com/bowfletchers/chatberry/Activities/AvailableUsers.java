@@ -61,6 +61,7 @@ public class AvailableUsers extends AppCompatActivity {
         });
     }
 
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main_menu, menu);
@@ -75,7 +76,7 @@ public class AvailableUsers extends AppCompatActivity {
                 startActivity(userProfileIntent);
                 return true;
             case R.id.my_friends:
-                Intent userFriendsIntent = new Intent(AvailableUsers.this, FriendList.class);
+                Intent userFriendsIntent = new Intent(AvailableUsers.this, NewGroupChat.class);
                 startActivity(userFriendsIntent);
                 return true;
             case R.id.homePage:
