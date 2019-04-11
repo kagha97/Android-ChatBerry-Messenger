@@ -8,41 +8,67 @@ public class Member implements Serializable {
     public String id;
     public String email;
     public String name;
-    public int profilePicture;
+    public String profilePicture;
     public List<Member> friendList;
     public List<Chat> chatList;
     public List<Story> stories;
+    public Boolean invitationRequest;
+    public Boolean me;
+
 
     public Member() {
 
     }
 
-    public Member (String id, String name, String email) {
+    public Member(String id, String name, String email) {
         this.id = id;
         this.name = name;
         this.email = email;
-        this.profilePicture = 0;
+        this.profilePicture = "0";
         friendList = new ArrayList<>();
         chatList = new ArrayList<>();
         stories = new ArrayList<>();
+        this.invitationRequest = false;
+        this.me = false;
     }
 
-    public Member(String name){
+    public Member(String id, String name, String email, String profilePicture) {
+        this.id = id;
+        this.name = name;
+        this.email = email;
+        this.profilePicture = profilePicture;
+        friendList = new ArrayList<>();
+        chatList = new ArrayList<>();
+        stories = new ArrayList<>();
+        this.invitationRequest = false;
+        this.me = false;
+    }
+
+    public Member(String name) {
         this.id = "hbhbjnknk";
         this.name = name;
         this.email = "test@gmail.com";
-        this.profilePicture = 0;
+        this.profilePicture = "";
         friendList = new ArrayList<>();
         chatList = new ArrayList<>();
         stories = new ArrayList<>();
     }
 
+    public Member(String id, String name, String email, String profilePicture ,Boolean invitationRequest, Boolean me) {
+        this.id = id;
+        this.name = name;
+        this.email = email;
+        this.profilePicture = profilePicture;
+        this.invitationRequest = invitationRequest;
+        this.me = me;
+    }
 
-    public String  getId() {
+
+    public String getId() {
         return id;
     }
 
-    public void setId(String  id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -58,7 +84,7 @@ public class Member implements Serializable {
         return name;
     }
 
-    public int getProfilePicture() {
+    public String getProfilePicture() {
         return profilePicture;
     }
 
@@ -94,7 +120,7 @@ public class Member implements Serializable {
         this.name = name;
     }
 
-    public void setProfilePicture(int newAvarta) {
+    public void setProfilePicture(String newAvarta) {
         this.profilePicture = newAvarta;
     }
 
@@ -105,6 +131,14 @@ public class Member implements Serializable {
     public void removeChat(Chat chat) {
         this.chatList.remove(chat);
     }
+
+    public Boolean getInvitationRequest() { return invitationRequest; }
+
+    public void setInvitationRequest(Boolean invitationRequest) { this.invitationRequest = invitationRequest; }
+
+    public Boolean getMe() { return me; }
+
+    public void setMe(Boolean me) { this.me = me; }
 
     @Override
     public String toString() {

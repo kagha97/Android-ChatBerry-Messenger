@@ -13,7 +13,7 @@ public class MockData {
         Member friend1 = new Member("friend1");
         Member friend2 = new Member("friend2");
         Member friend3 = new Member("friend3");
-        testMember.setProfilePicture(0);
+        testMember.setProfilePicture("0");
         testMember.addFriend(friend1);
         testMember.addFriend(friend2);
         testMember.addFriend(friend3);

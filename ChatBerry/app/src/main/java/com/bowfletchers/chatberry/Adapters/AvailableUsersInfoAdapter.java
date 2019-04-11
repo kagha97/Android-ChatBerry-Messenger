@@ -8,12 +8,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bowfletchers.chatberry.Activities.MessageViewer;
 import com.bowfletchers.chatberry.ClassLibrary.Member;
+import com.bowfletchers.chatberry.Helper.SendInvitations;
 import com.bowfletchers.chatberry.R;
+import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
 
@@ -47,6 +50,20 @@ public class AvailableUsersInfoAdapter extends RecyclerView.Adapter<AvailableUse
                 mcontext.startActivity(intent);
             }
         });
+        Glide.with(mcontext).load(mavailableUsers.get(position).profilePicture).into(viewHolder.userImage);
+        if(mavailableUsers.get(position).me) {
+            viewHolder.addUser.setVisibility(View.GONE);
+        }
+        else {
+            viewHolder.addUser.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(mcontext, "Clicked" ,Toast.LENGTH_LONG).show();
+                    SendInvitations sendInvitations = new SendInvitations();
+                    sendInvitations.checkIfAlreadySent(mavailableUsers.get(position).id);
+                }
+            });
+        }
     }
 
     @Override
@@ -54,14 +71,20 @@ public class AvailableUsersInfoAdapter extends RecyclerView.Adapter<AvailableUse
         return mavailableUsers.size();
     }
 
+
+
     public class ViewHolder extends RecyclerView.ViewHolder
     {
         TextView userName;
         Button chatUser;
+        Button addUser;
+        ImageView userImage;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             userName = itemView.findViewById(R.id.available_user_name);
             chatUser = itemView.findViewById(R.id.chat_button);
+            addUser = itemView.findViewById(R.id.add_friend_button);
+            userImage = itemView.findViewById(R.id.available_user_image);
         }
     }
 }
