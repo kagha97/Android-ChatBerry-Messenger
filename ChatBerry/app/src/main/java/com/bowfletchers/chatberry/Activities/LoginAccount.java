@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.bowfletchers.chatberry.ClassLibrary.FirebaseInstances;
 import com.bowfletchers.chatberry.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -83,7 +84,7 @@ public class LoginAccount extends AppCompatActivity {
     }
 
     private void referenceFirebase() {
-        mAuthentication = FirebaseAuth.getInstance();
-        mDatabase = FirebaseDatabase.getInstance().getReference();
+        mAuthentication = FirebaseInstances.getDatabaseAuth();
+        mDatabase = FirebaseInstances.getDatabaseReference("");
     }
 }

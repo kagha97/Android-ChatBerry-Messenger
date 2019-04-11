@@ -12,6 +12,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.bowfletchers.chatberry.Adapters.AvailableUsersInfoAdapter;
+import com.bowfletchers.chatberry.ClassLibrary.FirebaseInstances;
 import com.bowfletchers.chatberry.ClassLibrary.Member;
 import com.bowfletchers.chatberry.R;
 import com.google.firebase.auth.FirebaseAuth;
@@ -39,7 +40,7 @@ public class AvailableUsers extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        mAuth = FirebaseAuth.getInstance();
+        mAuth = FirebaseInstances.getDatabaseAuth();
         mUser = mAuth.getCurrentUser();
         if (mUser == null) {
             Intent backToSignInIntent = new Intent(AvailableUsers.this, LoginAccount.class);
@@ -55,8 +56,8 @@ public class AvailableUsers extends AppCompatActivity {
 
     public void getAllAvailableUsers()
     {
-        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("users");
-        ref.addValueEventListener(new ValueEventListener() {
+        DatabaseReference usersReference = FirebaseInstances.getDatabaseReference("users");
+        usersReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for(DataSnapshot users : dataSnapshot.getChildren())

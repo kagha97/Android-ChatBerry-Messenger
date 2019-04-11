@@ -10,8 +10,8 @@ import android.view.MenuItem;
 import android.support.v7.widget.Toolbar;
 
 import com.bowfletchers.chatberry.Adapters.ChatHistoryInfoAdapter;
+import com.bowfletchers.chatberry.ClassLibrary.FirebaseInstances;
 import com.bowfletchers.chatberry.R;
-import com.google.android.gms.dynamic.IFragmentWrapper;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -31,7 +31,7 @@ public class ChatHistoryList extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        mAuth = FirebaseAuth.getInstance();
+        mAuth = FirebaseInstances.getDatabaseAuth();
         mUser = mAuth.getCurrentUser();
 
         if (mUser == null) {

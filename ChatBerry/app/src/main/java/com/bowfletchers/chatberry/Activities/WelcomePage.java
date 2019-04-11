@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
+import com.bowfletchers.chatberry.ClassLibrary.FirebaseInstances;
 import com.bowfletchers.chatberry.R;
 import com.bowfletchers.chatberry.ViewModel.ChatBerryViewModel;
 import com.google.firebase.auth.FirebaseAuth;
@@ -28,7 +29,7 @@ public class WelcomePage extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        mAuth = FirebaseAuth.getInstance();
+        mAuth = FirebaseInstances.getDatabaseAuth();
         mUser = mAuth.getCurrentUser();
 
         if (mUser != null) {

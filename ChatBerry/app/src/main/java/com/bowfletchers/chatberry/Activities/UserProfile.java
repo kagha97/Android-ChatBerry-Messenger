@@ -20,6 +20,8 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.support.v7.widget.Toolbar;
+
+import com.bowfletchers.chatberry.ClassLibrary.FirebaseInstances;
 import com.bowfletchers.chatberry.R;
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -65,11 +67,7 @@ public class UserProfile extends AppCompatActivity {
         referenceViews();
 
         // init Fire auth instance
-        mUserRef = FirebaseDatabase.getInstance().getReference("users");
-        mAuth = FirebaseAuth.getInstance();
-        currentUser = mAuth.getCurrentUser();
-        firebaseStore = FirebaseStorage.getInstance();
-        storageReference = firebaseStore.getReferenceFromUrl(STORE_URL);
+        referenceFirebaseInstances();
 
         displayDefaultUserInfo();
 
@@ -255,5 +253,13 @@ public class UserProfile extends AppCompatActivity {
     private void updateUserOnlineStatus(int userOnlineStatus) {
         String currentUserId = currentUser.getUid();
         mUserRef.child(currentUserId).child("onlineStatus").setValue(userOnlineStatus);
+    }
+
+    private void referenceFirebaseInstances() {
+        mUserRef = FirebaseInstances.getDatabaseReference("users");
+        mAuth = FirebaseInstances.getDatabaseAuth();
+        currentUser = mAuth.getCurrentUser();
+        firebaseStore = FirebaseInstances.getFirebaseStorage();
+        storageReference = firebaseStore.getReferenceFromUrl(STORE_URL);
     }
 }
