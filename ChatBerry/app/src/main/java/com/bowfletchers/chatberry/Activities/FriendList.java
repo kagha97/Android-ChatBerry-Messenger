@@ -9,6 +9,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.bowfletchers.chatberry.Adapters.FriendListAdapter;
 import com.bowfletchers.chatberry.ClassLibrary.Member;
@@ -66,4 +67,5 @@ public class FriendList extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
 }

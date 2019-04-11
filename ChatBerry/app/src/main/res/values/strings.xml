@@ -28,5 +28,7 @@
     <string name="menu_user_profile_label">My Profile</string>
     <string name="menu_user_friends_label">My Friends</string>
     <string name="menu_home_activity_label">Home Activity</string>
+    <string name="button_chat_label">Chat</string>
+    <string name="button_friend_detail_label">Detail</string>
 
 </resources>
