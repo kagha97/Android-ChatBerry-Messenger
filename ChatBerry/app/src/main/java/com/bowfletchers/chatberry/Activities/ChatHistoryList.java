@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import android.support.v7.widget.Toolbar;
 
 import com.bowfletchers.chatberry.Adapters.ChatHistoryInfoAdapter;
+import com.bowfletchers.chatberry.ClassLibrary.FirebaseInstances;
 import com.bowfletchers.chatberry.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -30,13 +31,18 @@ public class ChatHistoryList extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        mAuth = FirebaseInstances.getDatabaseAuth();
+        mUser = mAuth.getCurrentUser();
+
+        if (mUser == null) {
+            Intent backToSignInIntent = new Intent(ChatHistoryList.this, LoginAccount.class);
+            startActivity(backToSignInIntent);
+        }
+
         mRecyclerView = findViewById(R.id.chat_history_recycler_view);
         mAdapter = new ChatHistoryInfoAdapter( this);
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-
-        mAuth = FirebaseAuth.getInstance();
-        mUser = mAuth.getCurrentUser();
 
         String userName = mUser.getDisplayName();
         if (userName != null && !userName.equals("")) {

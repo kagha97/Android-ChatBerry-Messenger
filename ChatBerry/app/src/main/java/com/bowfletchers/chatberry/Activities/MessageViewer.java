@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import com.bowfletchers.chatberry.Adapters.MessagesAdapter;
 import com.bowfletchers.chatberry.ClassLibrary.Chat;
+import com.bowfletchers.chatberry.ClassLibrary.FirebaseInstances;
 import com.bowfletchers.chatberry.ClassLibrary.Member;
 import com.bowfletchers.chatberry.ClassLibrary.Message;
 import com.bowfletchers.chatberry.R;
@@ -52,8 +53,8 @@ public class MessageViewer extends AppCompatActivity {
         newMessage = findViewById(R.id.messageSend);
         //getChatRoom();
 
-        mAuthentication = FirebaseAuth.getInstance();
-        mDatabase = FirebaseDatabase.getInstance().getReference("chats");
+        mAuthentication = FirebaseInstances.getDatabaseAuth();
+        mDatabase = FirebaseInstances.getDatabaseReference("chats");
         tempView = new TextView(this);
 
 
