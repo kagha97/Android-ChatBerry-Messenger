@@ -5,6 +5,7 @@ import android.arch.lifecycle.ViewModel;
 import android.arch.lifecycle.ViewModelProvider;
 import android.support.annotation.NonNull;
 
+import com.bowfletchers.chatberry.ClassLibrary.FirebaseInstances;
 import com.bowfletchers.chatberry.DataSource.FirebaseQueryLiveData;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
@@ -22,7 +23,7 @@ public class LiveChatRoom extends ViewModel {
     @NonNull
     public LiveData<DataSnapshot> getChatRoom(String id) {
         this.CHATID = id;
-        CHAT =  FirebaseDatabase.getInstance().getReference("/chats/" + CHATID + "/messages");
+        CHAT =  FirebaseInstances.getDatabaseReference("/chats/" + CHATID + "/messages");
         liveData = new FirebaseQueryLiveData(CHAT);
         return liveData;
     }
