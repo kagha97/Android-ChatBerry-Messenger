@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bowfletchers.chatberry.Activities.FriendRequests;
 import com.bowfletchers.chatberry.Activities.MessageViewer;
 import com.bowfletchers.chatberry.ClassLibrary.Member;
 import com.bowfletchers.chatberry.Helper.SendInvitations;
@@ -59,8 +60,10 @@ public class AvailableUsersInfoAdapter extends RecyclerView.Adapter<AvailableUse
                 @Override
                 public void onClick(View v) {
                     Toast.makeText(mcontext, "Clicked" ,Toast.LENGTH_LONG).show();
-                    SendInvitations sendInvitations = new SendInvitations();
-                    sendInvitations.checkIfAlreadySent(mavailableUsers.get(position).id);
+//                    SendInvitations sendInvitations = new SendInvitations();
+//                    sendInvitations.checkIfAlreadySent(mavailableUsers.get(position).id);
+                    Intent intent = new Intent(mcontext, FriendRequests.class);
+                    mcontext.startActivity(intent);
                 }
             });
         }
