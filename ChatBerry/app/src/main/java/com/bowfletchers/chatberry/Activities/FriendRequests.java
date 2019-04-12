@@ -26,13 +26,15 @@ public class FriendRequests extends AppCompatActivity {
     public List<Member> requesteeList = new ArrayList<>();
     private RecyclerView mRecyclerView;
     private FriendRequestAdapter mAdapter;
+    private String invitationId;
+    private List<String> invitationList = new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_friend_requests);
         getAllFriendRequests();
         mRecyclerView = findViewById(R.id.requestee_recycler_view);
-        mAdapter = new FriendRequestAdapter(this, requesteeList);
+        mAdapter = new FriendRequestAdapter(this, requesteeList, invitationList);
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
@@ -46,6 +48,7 @@ public class FriendRequests extends AppCompatActivity {
                     final String receiver = snapshot.child("receiverId").getValue().toString();
                     final String sender = snapshot.child("senderId").getValue().toString();
                     if(receiver.equals(userId)) {
+                        invitationId = snapshot.getKey();
                         Log.d("Request", "You have a request");
                         DatabaseReference userReference = FirebaseDatabase.getInstance().getReference("users");
                         userReference.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -55,6 +58,7 @@ public class FriendRequests extends AppCompatActivity {
                                 {
                                     if(userSnapshot.child("id").getValue().toString().equals(sender)) {
                                         Log.d("Name", userSnapshot.child("name").getValue().toString());
+                                        invitationList.add(invitationId);
                                         requesteeList.add(new Member(userSnapshot.child("id").getValue().toString(), userSnapshot.child("name").getValue().toString(), userSnapshot.child("email").getValue().toString(), userSnapshot.child("profilePicture").getValue().toString()));
                                     }
                                 }
