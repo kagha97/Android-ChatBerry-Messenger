@@ -44,6 +44,8 @@ public class FriendRequests extends AppCompatActivity {
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                invitationList.clear();
+                requesteeList.clear();
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()){
                     final String receiver = snapshot.child("receiverId").getValue().toString();
                     final String sender = snapshot.child("senderId").getValue().toString();

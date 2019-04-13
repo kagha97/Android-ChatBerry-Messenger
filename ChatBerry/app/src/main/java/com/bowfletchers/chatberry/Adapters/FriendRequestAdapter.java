@@ -52,17 +52,20 @@ public class FriendRequestAdapter extends RecyclerView.Adapter<FriendRequestAdap
        viewHolder.confirmFriend.setOnClickListener(new View.OnClickListener() {
            @Override
            public void onClick(View v) {
-//               DatabaseReference reference = users.child(memberList.get(position).id);
-//               DatabaseReference friends = reference.child("friends");
-//               MemberFriendList memberFriendList = new MemberFriendList(auth.getUid());
-//               DatabaseReference addFriends = friends.push();
-//               addFriends.setValue(memberFriendList);
-//
-//               DatabaseReference currentUser = users.child(auth.getUid());
-//               DatabaseReference currentUserFriends = currentUser.child("friends");
-//               MemberFriendList currentMemberFriendList = new MemberFriendList(memberList.get(position).id);
-//               DatabaseReference addFriendsToCurrentUser = currentUserFriends.push();
-//               addFriendsToCurrentUser.setValue(currentMemberFriendList);
+               DatabaseReference reference = users.child(memberList.get(position).id);
+               DatabaseReference friends = reference.child("friends");
+               MemberFriendList memberFriendList = new MemberFriendList(auth.getUid());
+               DatabaseReference addFriends = friends.push();
+               addFriends.setValue(memberFriendList);
+
+               DatabaseReference currentUser = users.child(auth.getUid());
+               DatabaseReference currentUserFriends = currentUser.child("friends");
+               MemberFriendList currentMemberFriendList = new MemberFriendList(memberList.get(position).id);
+               DatabaseReference addFriendsToCurrentUser = currentUserFriends.push();
+               addFriendsToCurrentUser.setValue(currentMemberFriendList);
+
+               DatabaseReference child = invitations.child(invitationList.get(position));
+               child.removeValue();
 
 
 

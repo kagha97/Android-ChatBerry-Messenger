@@ -40,7 +40,7 @@ public class AvailableUsersInfoAdapter extends RecyclerView.Adapter<AvailableUse
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder viewHolder, final int position) {
+    public void onBindViewHolder(@NonNull final ViewHolder viewHolder, final int position) {
         viewHolder.userName.setText(mavailableUsers.get(position).name);
         viewHolder.chatUser.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -53,17 +53,18 @@ public class AvailableUsersInfoAdapter extends RecyclerView.Adapter<AvailableUse
         });
         Glide.with(mcontext).load(mavailableUsers.get(position).profilePicture).into(viewHolder.userImage);
         if(mavailableUsers.get(position).me) {
-            viewHolder.addUser.setVisibility(View.GONE);
+            viewHolder.addUser.setVisibility(View.INVISIBLE);
         }
         else {
             viewHolder.addUser.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Toast.makeText(mcontext, "Clicked" ,Toast.LENGTH_LONG).show();
-//                    SendInvitations sendInvitations = new SendInvitations();
-//                    sendInvitations.checkIfAlreadySent(mavailableUsers.get(position).id);
-                    Intent intent = new Intent(mcontext, FriendRequests.class);
-                    mcontext.startActivity(intent);
+                    viewHolder.addUser.setVisibility(View.VISIBLE);
+                    SendInvitations sendInvitations = new SendInvitations();
+                    sendInvitations.checkIfAlreadySent(mavailableUsers.get(position).id);
+//                    Intent intent = new Intent(mcontext, FriendRequests.class);
+//                    mcontext.startActivity(intent);
                 }
             });
         }
