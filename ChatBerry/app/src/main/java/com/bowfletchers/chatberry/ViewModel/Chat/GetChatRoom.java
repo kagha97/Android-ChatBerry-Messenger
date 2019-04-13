@@ -16,12 +16,24 @@ public class GetChatRoom extends ViewModel {
     private static final DatabaseReference CHATS =
             FirebaseDatabase.getInstance().getReference("/chats");
 
+
+    private static final DatabaseReference GCHATS =
+            FirebaseDatabase.getInstance().getReference("/gchats");
+
     private final FirebaseQueryDataOnce liveData = new FirebaseQueryDataOnce(CHATS);
+    private final FirebaseQueryDataOnce liveGData = new FirebaseQueryDataOnce(GCHATS);
 
 
     @NonNull
     public LiveData<DataSnapshot> getChatRoom() {
         return liveData;
+    }
+
+
+
+    @NonNull
+    public LiveData<DataSnapshot> getGChatRoom() {
+        return liveGData;
     }
 
 }

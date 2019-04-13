@@ -9,6 +9,7 @@ public class Member implements Serializable {
     public String email;
     public String name;
     public int onlineStatus; // 0 for offline and 1 for online
+    public boolean add;
     public String profilePicture;
     public List<Member> friendList;
     public List<Chat> chatList;
@@ -29,6 +30,14 @@ public class Member implements Serializable {
         stories = new ArrayList<>();
     }
 
+    public Member (String id, String name, String status, boolean add, String profilePicture) {
+        this.id = id;
+        this.name = name;
+        this.add = add;
+        this.onlineStatus = Integer.parseInt(status);
+        this.profilePicture = profilePicture;
+    }
+
     public Member(String name){
         this.id = "hbhbjnknk";
         this.name = name;
@@ -37,6 +46,16 @@ public class Member implements Serializable {
         friendList = new ArrayList<>();
         chatList = new ArrayList<>();
         stories = new ArrayList<>();
+    }
+
+
+
+
+    public String getStatusString() {
+        if (onlineStatus == 1) {
+            return "Online";
+        }
+        return "Offline";
     }
 
     public String  getId() {
@@ -114,6 +133,15 @@ public class Member implements Serializable {
     public void removeChat(Chat chat) {
         this.chatList.remove(chat);
     }
+
+    public int getStatus() {
+        return onlineStatus;
+    }
+
+    public void Check (boolean isCheck) {
+        this.add = isCheck;
+    }
+
 
     @Override
     public String toString() {

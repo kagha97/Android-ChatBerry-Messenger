@@ -176,6 +176,8 @@ public class MessageViewer extends AppCompatActivity {
     public void newChatRoom() {
         DatabaseReference chatDb = mDatabase;
 
+
+
         Chat chat = new Chat(member.id, mAuthentication.getUid());
 
         DatabaseReference newChat = chatDb.push();

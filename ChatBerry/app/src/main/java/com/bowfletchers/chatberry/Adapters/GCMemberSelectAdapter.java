@@ -12,8 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
-import com.bowfletchers.chatberry.ClassLibrary.GCMember;
-import com.bowfletchers.chatberry.ClassLibrary.Message;
+import com.bowfletchers.chatberry.ClassLibrary.Member;
 import com.bowfletchers.chatberry.R;
 import com.bumptech.glide.Glide;
 
@@ -22,13 +21,13 @@ import java.util.ArrayList;
 //Adapter for the recycler view
 public class GCMemberSelectAdapter extends RecyclerView.Adapter<GCMemberSelectAdapter.ViewHolder> {
 
-    private ArrayList<GCMember> MemberData;
+    private ArrayList<Member> MemberData;
     private Context Context;
     private ImageView ProfileImage;
     private CheckBox check;
 
     //Setting the fields with data
-    public GCMemberSelectAdapter (Context context, ArrayList<GCMember> memberData) {
+    public GCMemberSelectAdapter (Context context, ArrayList<Member> memberData) {
         this.MemberData = memberData;
         this.Context = context;
     }
@@ -41,7 +40,7 @@ public class GCMemberSelectAdapter extends RecyclerView.Adapter<GCMemberSelectAd
     @Override
     //get the game object for each card with index
     public void onBindViewHolder(GCMemberSelectAdapter.ViewHolder holder, int pos){
-        GCMember currentMember = MemberData.get(pos);
+        Member currentMember = MemberData.get(pos);
 
         holder.bindTo(currentMember);
     }
@@ -55,7 +54,7 @@ public class GCMemberSelectAdapter extends RecyclerView.Adapter<GCMemberSelectAd
         private TextView name;
         private TextView status;
         private CheckBox check;
-        private GCMember currentMember;
+        private Member currentMember;
 
 
         //set views for the card
@@ -72,7 +71,7 @@ public class GCMemberSelectAdapter extends RecyclerView.Adapter<GCMemberSelectAd
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     currentMember.Check(isChecked);
-                    displayToast(String.valueOf(currentMember.getAdd()));
+                    displayToast(String.valueOf(currentMember.add));
                 }
             });
         }
@@ -88,10 +87,10 @@ public class GCMemberSelectAdapter extends RecyclerView.Adapter<GCMemberSelectAd
         }
 
         //binding the data from the game object to card
-        void bindTo (GCMember member) {
+        void bindTo (Member member) {
             this.currentMember = member;
             this.name.setText(member.getName());
-            this.status.setText(member.getStatus());
+            this.status.setText(member.getStatusString());
             Glide.with(Context).load(member.getProfilePicture()).placeholder(R.drawable.ic_person).into(ProfileImage);
         }
     }

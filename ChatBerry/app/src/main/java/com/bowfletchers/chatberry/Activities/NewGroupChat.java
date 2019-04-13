@@ -3,6 +3,7 @@ package com.bowfletchers.chatberry.Activities;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -13,28 +14,35 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
 
 import com.bowfletchers.chatberry.Adapters.GCMemberSelectAdapter;
-import com.bowfletchers.chatberry.Adapters.MessagesAdapter;
+import com.bowfletchers.chatberry.ClassLibrary.Chat;
+import com.bowfletchers.chatberry.ClassLibrary.FirebaseInstances;
 import com.bowfletchers.chatberry.ClassLibrary.GCMember;
+import com.bowfletchers.chatberry.ClassLibrary.GroupChat;
+import com.bowfletchers.chatberry.ClassLibrary.Member;
 import com.bowfletchers.chatberry.R;
-import com.bowfletchers.chatberry.ViewModel.Chat.GetChatRoom;
 import com.bowfletchers.chatberry.ViewModel.GChat.GetMembers;
 import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseReference;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class NewGroupChat extends AppCompatActivity {
 
     private RecyclerView recyclerView;
-    private ArrayList<GCMember> mems;
+    private ArrayList<Member> mems;
     private GCMemberSelectAdapter memAdapter;
+    private TextView groupName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_group_chat);
         Toolbar toolbar = findViewById(R.id.toolbar);
+        groupName = findViewById(R.id.groupName);
         setSupportActionBar(toolbar);
         setTitle("New Group Chat");
         FloatingActionButton fab = findViewById(R.id.confirm);
@@ -46,9 +54,11 @@ public class NewGroupChat extends AppCompatActivity {
 
 
                 Log.i("NMem", "---------");
-                for (GCMember mem : mems) {
-                    Log.i("NMem", mem.getName() + ". status:" + String.valueOf(mem.getAdd()));
+                for (Member mem : mems) {
+                    Log.i("NMem", mem.getName() + ". status:" + String.valueOf(mem.add));
                 }
+
+                newGroupChat();
 
 
             }
@@ -58,7 +68,7 @@ public class NewGroupChat extends AppCompatActivity {
 
         //set up recycler view
         mems = new ArrayList<>();
-        mems.add(new GCMember("3422323", "bob", "Online",false, "http://google.ca"));
+       // mems.add(new Member("3422323", "bob", "Online",false, "http://google.ca"));
         //set up recycler view
         recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -87,12 +97,39 @@ public class NewGroupChat extends AppCompatActivity {
                     String pfp = snapshot.child("profilePicture").getValue().toString();
 
 
-                    GCMember member = new GCMember(id, name,"0",false, pfp);
+                    Member member = new Member(id, name,"0",false, pfp);
                     mems.add(member);
                 }
                 memAdapter.notifyDataSetChanged();
             }
         });
+    }
+
+    public void newGroupChat() {
+        DatabaseReference chatDb = FirebaseInstances.getDatabaseReference("gchats");
+        List<GCMember> checkedMembers = new ArrayList<>();
+
+        for (Member member : mems) {
+            if (member.add) {
+                GCMember mem = new GCMember(member.getId(), 0);
+                checkedMembers.add(mem);
+            }
+        }
+
+        GroupChat chat = new GroupChat(groupName.getText().toString(), FirebaseInstances.getDatabaseAuth().getUid(), checkedMembers);
+
+        DatabaseReference newChat = chatDb.push();
+        newChat.setValue(chat);
+
+        String chatID = newChat.getKey();
+
+        Intent intent = new Intent(this, GroupMessageViewer.class);
+        intent.putExtra("id" , chatID);
+        this.startActivity(intent);
+
+        Log.d("chatstatus", "new chat room created");
+     //   Log.d("chatstatus", "chatid: " + chatID);
+
     }
 
 }
