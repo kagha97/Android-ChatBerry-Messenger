@@ -2,13 +2,16 @@ package com.bowfletchers.chatberry.Activities;
 
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Context;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.View;
 import android.widget.TextView;
 
 import com.bowfletchers.chatberry.Adapters.MessagesAdapter;
@@ -17,6 +20,8 @@ import com.bowfletchers.chatberry.ClassLibrary.Member;
 import com.bowfletchers.chatberry.ClassLibrary.Message;
 import com.bowfletchers.chatberry.R;
 import com.bowfletchers.chatberry.ViewModel.Chat.LiveChatRoom;
+import com.bowfletchers.chatberry.ViewModel.Chat.SendMessage;
+import com.bowfletchers.chatberry.ViewModel.GChat.GetMembers;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
@@ -29,20 +34,27 @@ public class GroupMessageViewer extends AppCompatActivity {
     TextView newMessage;
     TextView tempView;
     ArrayList<Message> msgs;
+    ArrayList<Member> memberList;
+    ArrayList<String> memberIDList;
+    ArrayList<Member> members;
     FirebaseAuth mAuthentication;
     DatabaseReference mDatabase;
+    Context context;
+    String chatID;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_group_message_viewer);
-
+        newMessage = findViewById(R.id.messageSend);
 
         mAuthentication = FirebaseInstances.getDatabaseAuth();
         mDatabase = FirebaseInstances.getDatabaseReference("gchats");
-
+        context = this;
         msgs = new ArrayList<>();
+        memberIDList = new ArrayList<>();
+        memberList = new ArrayList<>();
         //set up recycler view
         recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -50,13 +62,13 @@ public class GroupMessageViewer extends AppCompatActivity {
         recyclerView.setAdapter(msgAdapter);
 
         Log.i("gchat", "chat id: " +getIntent().getStringExtra("id"));
-
-        liveChatRoom(getIntent().getStringExtra("id"));
+        chatID = getIntent().getStringExtra("id");
+        liveChatRoom(chatID, context);
 
 
     }
 
-    public void liveChatRoom(String chatid) {
+    public void liveChatRoom(String chatid, Context ctx) {
         LiveChatRoom liveChatRoom = ViewModelProviders.of(this).get(LiveChatRoom.class);
         LiveData<DataSnapshot> liveData = liveChatRoom.getGroupChatRoom(chatid);
 
@@ -65,40 +77,46 @@ public class GroupMessageViewer extends AppCompatActivity {
             @Override
             public void onChanged(@Nullable DataSnapshot dataSnapshot) {
                 msgs.clear();
-               /* for (DataSnapshot msgSnapshot: dataSnapshot.getChildren()) {
+
+                setTitle(dataSnapshot.child("name").getValue().toString());
+
+                for (DataSnapshot msgSnapshot: dataSnapshot.child("memberList").getChildren()) {
+                    Log.i("gchat", "ID: " + msgSnapshot.child("memberID").getValue().toString());
+                    memberIDList.add(msgSnapshot.child("memberID").getValue().toString());
+                }
+
+                memberIDList.add(dataSnapshot.child("ownerID").getValue().toString());
+
+                getMemberList();
+
+
 
                  //   Log.i("gmessage", "Message: " + msgSnapshot.child("content").getValue(String.class) + " Sender: " + msgSnapshot.child("senderID").getValue(String.class));
                     //  Log.i(LOG_TAG, "NAME function: " + getSenderName(msgSnapshot.child("senderID").getValue(String.class)));
-                    String name = "";
-                    String pfp = "";
 
-                    Log.i("gchat", "Group name: " + msgSnapshot.child("name").getValue().toString());
-                    Log.i("gchat", "ID: " + msgSnapshot.child("memberList").getChildren().toString());
+                    msgs.clear();
+                    for (DataSnapshot rmsgs : dataSnapshot.child("messages").getChildren()) {
+                        Member member = new Member();
 
-                  *//*  if (msgSnapshot.child("ownerID").getValue(String.class).equals(mAuthentication.getUid())) {
-                        name = mAuthentication.getCurrentUser().getDisplayName();
-                        pfp = mAuthentication.getCurrentUser().getPhotoUrl().toString();
+                        for (Member mem : memberList) {
+                            Log.i("member", mem.name);
+                                if (mem.getId().equals(rmsgs.child("senderID").getValue().toString())) {
+                                    member = mem;
+                                }
+
+                        }
+
+                        Message message = new Message(member.getName(), rmsgs.child("message").getValue(String.class), member.getProfilePicture());
+                        msgs.add(message);
                     }
-                    else if (msgSnapshot.child("senderID").getValue(String.class).equals(member.getId())) {
-                        name = member.getName();
-                        pfp = member.getProfilePicture();
-                    }*//*
 
-                    Log.d("thename", name);
-
-                    Log.i("IDofsender", "ID: " + msgSnapshot.child("senderID"));
                  //  Message message = new Message(name, msgSnapshot.child("content").getValue(String.class),pfp);
                //     Log.i(LOG_TAG, "MSG OBJ: " + message.getMessage());
 
                     //Log.i("IDofsender", "ID of object: " + message.senderID);
-                   // msgs.add(message);
-                }*/
+
+
                 Log.i("gchat", "Group name: " + dataSnapshot.child("name").getValue().toString());
-
-
-                for (DataSnapshot msgSnapshot: dataSnapshot.child("memberList").getChildren()) {
-                    Log.i("gchat", "ID: " + msgSnapshot.getValue().toString());
-                }
 
                 msgAdapter.notifyDataSetChanged();
                 recyclerView.scrollToPosition(msgs.size() - 1);
@@ -108,7 +126,50 @@ public class GroupMessageViewer extends AppCompatActivity {
     }
 
 
+    public void getMemberList () {
+        GetMembers liveChatRoom = ViewModelProviders.of(this).get(GetMembers.class);
+        LiveData<DataSnapshot> memberData = liveChatRoom.getMembersOnce();
 
+
+        memberData.observe(this, new Observer<DataSnapshot>() {
+            @Override
+            public void onChanged(@Nullable DataSnapshot dataSnapshot) {
+                for (String id : memberIDList) {
+                    String name = dataSnapshot.child(id).child("name").getValue().toString();
+                    String uid = dataSnapshot.child(id).child("id").getValue().toString();
+                    String pfp = dataSnapshot.child(id).child("profilePicture").getValue().toString();
+                    String onlineStatus;
+                    if (dataSnapshot.child(id).child("onlineStatus").getValue() != null) {
+                        onlineStatus = "1";
+                    }
+                    else {
+                        onlineStatus = "0";
+                    }
+
+
+                    Member member = new Member(uid, name, onlineStatus, false, pfp);
+                    memberList.add(member);
+                }
+            }
+        });
+
+    }
+
+    public void sendMessage(View view) {
+//        Log.d("chatid", chatID);
+
+        SendMessage sendMessage = new SendMessage();
+
+
+        sendMessage.sendGroupMessage(chatID, newMessage.getText().toString(), mAuthentication.getCurrentUser().getPhotoUrl().toString());
+        newMessage.setText("");
+
+        recyclerView.scrollToPosition(msgs.size() - 1);
+    }
+
+    public void scrollToBottom(View view) {
+        recyclerView.scrollToPosition(msgs.size() - 1);
+    }
 
 
 

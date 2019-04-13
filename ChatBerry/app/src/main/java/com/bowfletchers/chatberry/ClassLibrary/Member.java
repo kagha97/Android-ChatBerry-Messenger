@@ -8,7 +8,7 @@ public class Member implements Serializable {
     public String id;
     public String email;
     public String name;
-    public int onlineStatus; // 0 for offline and 1 for online
+    public Integer onlineStatus; // 0 for offline and 1 for online
     public boolean add;
     public String profilePicture;
     public List<Member> friendList;
@@ -55,7 +55,13 @@ public class Member implements Serializable {
         if (onlineStatus == 1) {
             return "Online";
         }
-        return "Offline";
+        else if (onlineStatus.equals(null)) {
+            return "Offline";
+        }
+
+        else {
+            return "Offline";
+        }
     }
 
     public String  getId() {

@@ -141,7 +141,7 @@ public class MessageViewer extends AppCompatActivity {
                 msgs.clear();
                 for (DataSnapshot msgSnapshot: dataSnapshot.getChildren()) {
 
-                    Log.i(LOG_TAG, "Message: " + msgSnapshot.child("content").getValue(String.class) + " Sender: " + msgSnapshot.child("senderID").getValue(String.class));
+                    Log.i(LOG_TAG, "Message: " + msgSnapshot.child("message").getValue(String.class) + " Sender: " + msgSnapshot.child("senderID").getValue(String.class));
                     //  Log.i(LOG_TAG, "NAME function: " + getSenderName(msgSnapshot.child("senderID").getValue(String.class)));
                     String name = "";
                     String pfp = "";

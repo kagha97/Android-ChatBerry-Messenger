@@ -17,7 +17,6 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.bowfletchers.chatberry.Adapters.GCMemberSelectAdapter;
-import com.bowfletchers.chatberry.ClassLibrary.Chat;
 import com.bowfletchers.chatberry.ClassLibrary.FirebaseInstances;
 import com.bowfletchers.chatberry.ClassLibrary.GCMember;
 import com.bowfletchers.chatberry.ClassLibrary.GroupChat;
@@ -83,7 +82,7 @@ public class NewGroupChat extends AppCompatActivity {
     public void loadMembers() {
         GetMembers members = ViewModelProviders.of(this).get(GetMembers.class);
 
-        LiveData<DataSnapshot> liveData = members.getMembers();
+        LiveData<DataSnapshot> liveData = members.getMembersLive();
 
         liveData.observe(this, new Observer<DataSnapshot>() {
             @Override
