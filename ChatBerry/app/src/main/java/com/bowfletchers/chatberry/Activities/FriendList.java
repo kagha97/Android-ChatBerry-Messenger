@@ -24,6 +24,7 @@ import com.bowfletchers.chatberry.ClassLibrary.Member;
 import com.bowfletchers.chatberry.R;
 import com.bowfletchers.chatberry.Testing.MockData;
 import com.bowfletchers.chatberry.ViewModel.FriendList.FriendListViewModel;
+import com.google.android.gms.dynamic.IFragmentWrapper;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -95,6 +96,7 @@ public class FriendList extends AppCompatActivity {
         friendListLiveData.observe(this, new Observer<DataSnapshot>() {
             @Override
             public void onChanged(@Nullable DataSnapshot dataSnapshot) {
+                friendList.clear();
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     // for each friend in friend list of current user
                     // get its id
@@ -106,7 +108,14 @@ public class FriendList extends AppCompatActivity {
                     currentFriendRef.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                            Member currentFriend = dataSnapshot.getValue(Member.class);
+
+                            String userId = dataSnapshot.child("id").getValue().toString();
+                            String userName = dataSnapshot.child("name").getValue().toString();
+                            String userEmail = dataSnapshot.child("email").getValue().toString();
+                            String userPhotoURL = dataSnapshot.child("profilePicture").getValue().toString();
+
+                            Member currentFriend = new Member(userId, userName, userEmail, userPhotoURL);
+
                             friendList.add(currentFriend);
                             adapter.notifyDataSetChanged();
                         }
