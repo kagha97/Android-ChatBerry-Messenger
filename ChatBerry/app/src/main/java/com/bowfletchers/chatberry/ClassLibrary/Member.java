@@ -29,6 +29,17 @@ public class Member implements Serializable {
         stories = new ArrayList<>();
     }
 
+    public Member (String id, String name, String email, String profilePicture, int onlineStatus) {
+        this.id = id;
+        this.name = name;
+        this.email = email;
+        this.profilePicture = profilePicture;
+        this.onlineStatus = onlineStatus;
+        friendList = new ArrayList<>();
+        chatList = new ArrayList<>();
+        stories = new ArrayList<>();
+    }
+
     public Member(String name){
         this.id = "hbhbjnknk";
         this.name = name;

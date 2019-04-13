@@ -22,6 +22,7 @@ public class LiveChatRoom extends ViewModel {
 
     @NonNull
     public LiveData<DataSnapshot> getChatRoom(String id) {
+
         this.CHATID = id;
         CHAT =  FirebaseInstances.getDatabaseReference("/chats/" + CHATID + "/messages");
         liveData = new FirebaseQueryLiveData(CHAT);
