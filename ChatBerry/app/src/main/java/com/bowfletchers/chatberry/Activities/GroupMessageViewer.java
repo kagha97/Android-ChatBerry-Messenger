@@ -77,19 +77,18 @@ public class GroupMessageViewer extends AppCompatActivity {
             @Override
             public void onChanged(@Nullable DataSnapshot dataSnapshot) {
                 msgs.clear();
+                memberIDList.clear();
 
-                setTitle(dataSnapshot.child("name").getValue().toString());
+                setTitle(dataSnapshot.child("name").getValue(String.class));
 
                 for (DataSnapshot msgSnapshot: dataSnapshot.child("memberList").getChildren()) {
                     Log.i("gchat", "ID: " + msgSnapshot.child("memberID").getValue().toString());
                     memberIDList.add(msgSnapshot.child("memberID").getValue().toString());
                 }
 
-                memberIDList.add(dataSnapshot.child("ownerID").getValue().toString());
+                memberIDList.add(dataSnapshot.child("ownerID").getValue(String.class));
 
                 getMemberList();
-
-
 
                  //   Log.i("gmessage", "Message: " + msgSnapshot.child("content").getValue(String.class) + " Sender: " + msgSnapshot.child("senderID").getValue(String.class));
                     //  Log.i(LOG_TAG, "NAME function: " + getSenderName(msgSnapshot.child("senderID").getValue(String.class)));
@@ -97,7 +96,7 @@ public class GroupMessageViewer extends AppCompatActivity {
                     msgs.clear();
                     for (DataSnapshot rmsgs : dataSnapshot.child("messages").getChildren()) {
                         Member member = new Member();
-
+                        Log.i("member","-----  ");
                         for (Member mem : memberList) {
                             Log.i("member", mem.name);
                                 if (mem.getId().equals(rmsgs.child("senderID").getValue().toString())) {
@@ -116,7 +115,7 @@ public class GroupMessageViewer extends AppCompatActivity {
                     //Log.i("IDofsender", "ID of object: " + message.senderID);
 
 
-                Log.i("gchat", "Group name: " + dataSnapshot.child("name").getValue().toString());
+                Log.i("gchat", "Group name: " + dataSnapshot.child("name").getValue(String.class));
 
                 msgAdapter.notifyDataSetChanged();
                 recyclerView.scrollToPosition(msgs.size() - 1);
@@ -134,6 +133,7 @@ public class GroupMessageViewer extends AppCompatActivity {
         memberData.observe(this, new Observer<DataSnapshot>() {
             @Override
             public void onChanged(@Nullable DataSnapshot dataSnapshot) {
+                memberList.clear();
                 for (String id : memberIDList) {
                     String name = dataSnapshot.child(id).child("name").getValue().toString();
                     String uid = dataSnapshot.child(id).child("id").getValue().toString();
@@ -150,6 +150,8 @@ public class GroupMessageViewer extends AppCompatActivity {
                     Member member = new Member(uid, name, onlineStatus, false, pfp);
                     memberList.add(member);
                 }
+
+                Log.i("member", String.valueOf(memberList.size()));
             }
         });
 
