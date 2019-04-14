@@ -30,10 +30,10 @@
     <string name="menu_home_activity_label">Home Activity</string>
     <string name="button_chat_label">Chat</string>
     <string name="button_friend_detail_label">Detail</string>
-    <string name="friend_requests">Friend Requests</string>
     <string name="menu_create_story">Create new story</string>
     <string name="user_story_status_hint">Your status</string>
     <string name="button_update_story_label">Update</string>
     <string name="login_email_hint">Email</string>
+    <string name="menu_friend_request">Friend Requests</string>
 
 </resources>
