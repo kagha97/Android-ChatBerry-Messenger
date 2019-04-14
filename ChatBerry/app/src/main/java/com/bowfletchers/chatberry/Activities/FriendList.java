@@ -87,6 +87,10 @@ public class FriendList extends AppCompatActivity {
             case R.id.createStory:
                 Intent createNewStoryIntent = new Intent(FriendList.this, CreateUserStory.class);
                 startActivity(createNewStoryIntent);
+            case R.id.friendStories:
+                Intent friendStoriesIntent = new Intent(FriendList.this, FriendStories.class);
+                startActivity(friendStoriesIntent);
+                return true;
         }
         return super.onOptionsItemSelected(item);
     }

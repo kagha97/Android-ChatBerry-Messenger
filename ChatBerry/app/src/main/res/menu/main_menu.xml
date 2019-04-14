@@ -27,6 +27,9 @@
     <item
         android:id="@+id/createStory"
         android:title="@string/menu_create_story"
-        app:showAsAction="never"
-        android:icon="@drawable/ic_home_page" />
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/friendStories"
+        android:title="@string/menu_friend_stories"
+        app:showAsAction="never" />
 </menu>

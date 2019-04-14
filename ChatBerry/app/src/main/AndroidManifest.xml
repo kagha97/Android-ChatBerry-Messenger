@@ -11,8 +11,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Activities.CreateUserStory"
+        <activity android:name=".Activities.FriendStories"
             android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity
+            android:name=".Activities.CreateUserStory"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".Activities.FriendProfile"
             android:theme="@style/AppTheme.NoActionBar" />
@@ -30,24 +33,19 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity android:name=".Activities.MessageViewer"></activity>
-
-        <activity android:name=".Activities.MainActivity"></activity>
-
-        <activity android:name=".Activities.RegisterAccount"></activity>
-
-        <activity android:name=".Activities.UserProfile"
+        <activity android:name=".Activities.MessageViewer" />
+        <activity android:name=".Activities.MainActivity" />
+        <activity android:name=".Activities.RegisterAccount" />
+        <activity
+            android:name=".Activities.UserProfile"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".Activities.FriendList"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".Activities.FriendRequests" />
+        <activity
+            android:name=".Activities.ChatHistoryList"
             android:theme="@style/AppTheme.NoActionBar"></activity>
-
-        <activity android:name=".Activities.FriendList"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
-        <activity android:name=".Activities.FriendRequests"></activity>
-
-        <activity android:name=".Activities.ChatHistoryList"
-            android:theme="@style/AppTheme.NoActionBar">
-
-        </activity>
     </application>
 
 </manifest>

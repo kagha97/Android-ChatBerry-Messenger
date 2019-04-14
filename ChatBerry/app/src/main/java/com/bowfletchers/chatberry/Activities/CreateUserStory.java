@@ -47,6 +47,8 @@ public class CreateUserStory extends AppCompatActivity {
 
     private final int REQUEST_CODE_IMAGE = 1;
     private final String STORE_URL = "gs://chatberry-201de.appspot.com";
+    private final String DEFAULT_PHOTO_URL = "https://banner2.kisspng.com/20180228/drw/kisspng-common-sunflower-clip-art-sunflower-5a9649f0a8c575.8371432015197987686913.jpg";
+
 
 
     private FirebaseAuth mAuth;
@@ -131,6 +133,10 @@ public class CreateUserStory extends AppCompatActivity {
             case R.id.homePage:
                 Intent chatListIntent = new Intent(CreateUserStory.this, ChatHistoryList.class);
                 startActivity(chatListIntent);
+            case R.id.friendStories:
+                Intent friendStoriesIntent = new Intent(CreateUserStory.this, FriendStories.class);
+                startActivity(friendStoriesIntent);
+                return true;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -147,9 +153,16 @@ public class CreateUserStory extends AppCompatActivity {
 
                 UserStory userStory = dataSnapshot.getValue(UserStory.class);
 
-                // map data to views
-                Glide.with(CreateUserStory.this).load(userStory.getPhotoStoryURL()).into(imageViewStoryPhoto);
-                editTextStatus.setText(userStory.getStatusMessage());
+                if (userStory == null) {
+                    // if user has not  created story , display default info
+                    Glide.with(CreateUserStory.this).load(DEFAULT_PHOTO_URL).into(imageViewStoryPhoto);
+                    editTextStatus.setText(getString(R.string.no_status_message));
+                } else {
+                    // if user has been created story
+                    // retrieve the current data
+                    Glide.with(CreateUserStory.this).load(userStory.getPhotoStoryURL()).into(imageViewStoryPhoto);
+                    editTextStatus.setText(userStory.getStatusMessage());
+                }
             }
         });
     }

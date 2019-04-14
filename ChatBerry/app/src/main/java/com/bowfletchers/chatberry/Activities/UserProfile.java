@@ -142,6 +142,10 @@ public class UserProfile extends AppCompatActivity {
                 Intent createNewStoryIntent = new Intent(UserProfile.this, CreateUserStory.class);
                 startActivity(createNewStoryIntent);
                 return true;
+            case R.id.friendStories:
+                Intent friendStoriesIntent = new Intent(UserProfile.this, FriendStories.class);
+                startActivity(friendStoriesIntent);
+                return true;
             default:
                 // Do nothing
         }
