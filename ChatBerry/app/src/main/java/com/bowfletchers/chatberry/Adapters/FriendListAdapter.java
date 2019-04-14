@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bowfletchers.chatberry.Activities.FriendProfile;
 import com.bowfletchers.chatberry.Activities.MessageViewer;
 import com.bowfletchers.chatberry.ClassLibrary.Member;
 import com.bowfletchers.chatberry.R;
@@ -46,6 +47,18 @@ public class FriendListAdapter extends RecyclerView.Adapter<FriendListAdapter.Fr
                 v.getContext().startActivity(goToChatIntent);
             }
         });
+
+        friendListViewHolder.friendDetailButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //open new activity to display friend profile information
+                String friendID = friendList.get(i).getId();
+                Intent gotoFriendIntent = new Intent(v.getContext(), FriendProfile.class);
+                gotoFriendIntent.putExtra("friendId", friendID);
+                v.getContext().startActivity(gotoFriendIntent);
+            }
+        });
+
     }
 
     @Override
@@ -58,30 +71,12 @@ public class FriendListAdapter extends RecyclerView.Adapter<FriendListAdapter.Fr
         private TextView friendName;
         private Button friendChatButton;
         private Button friendDetailButton;
-        private int currentPosition;
 
         public FriendListViewHolder(@NonNull final View itemView) {
             super(itemView);
             friendName = itemView.findViewById(R.id.friend_item_name);
             friendChatButton = itemView.findViewById(R.id.buttonChat);
             friendDetailButton = itemView.findViewById(R.id.buttonDetail);
-            currentPosition = getAdapterPosition();
-
-            friendChatButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    // open chat window with clicked friend
-                    Toast.makeText(v.getContext(), currentPosition + "", Toast.LENGTH_SHORT).show();
-                }
-            });
-
-            friendDetailButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    // display clicked friend profile info
-                    Toast.makeText(v.getContext(), "display profile info of this friend", Toast.LENGTH_SHORT).show();
-                }
-            });
         }
 
         public void bindTo(Member memberData) {

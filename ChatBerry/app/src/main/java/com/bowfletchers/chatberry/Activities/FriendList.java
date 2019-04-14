@@ -40,7 +40,6 @@ public class FriendList extends AppCompatActivity {
     private RecyclerView recyclerView;
     private FriendListAdapter adapter;
     private List<Member> friendList = new ArrayList<>();
-    private Member foundMember;
 
     private FirebaseAuth mAuth;
     private DatabaseReference usersRef;
