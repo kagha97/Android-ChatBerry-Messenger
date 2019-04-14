@@ -8,7 +8,7 @@ public class Member implements Serializable {
     public String id;
     public String email;
     public String name;
-    public int onlineStatus; // 0 for offline and 1 for online
+    public long onlineStatus; // 0 for offline and 1 for online
     public String profilePicture;
     public List<Member> friendList;
     public List<Chat> chatList;
@@ -93,11 +93,11 @@ public class Member implements Serializable {
         return email;
     }
 
-    public int getOnlineStatus() {
+    public long getOnlineStatus() {
         return onlineStatus;
     }
 
-    public void setOnlineStatus(int onlineStatus) {
+    public void setOnlineStatus(long onlineStatus) {
         this.onlineStatus = onlineStatus;
     }
 

@@ -65,9 +65,11 @@ public class UserProfile extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         referenceViews();
-
         // init Fire auth instance
         referenceFirebaseInstances();
+
+        setTitle(currentUser.getDisplayName() + "'s profile");
+
 
         displayDefaultUserInfo();
 
@@ -106,7 +108,6 @@ public class UserProfile extends AppCompatActivity {
         aSwitchOnlineStatus.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                Toast.makeText(UserProfile.this, "The switch is " + (isChecked ? "on" : "off"), Toast.LENGTH_SHORT).show();
                 if(isChecked) {
                     // when Switch is ON
                     // set online user to 1
@@ -136,6 +137,10 @@ public class UserProfile extends AppCompatActivity {
             case R.id.my_friends:
                 Intent userFriendsIntent = new Intent(UserProfile.this, FriendList.class);
                 startActivity(userFriendsIntent);
+                return true;
+            case R.id.createStory:
+                Intent createNewStoryIntent = new Intent(UserProfile.this, CreateUserStory.class);
+                startActivity(createNewStoryIntent);
                 return true;
             default:
                 // Do nothing

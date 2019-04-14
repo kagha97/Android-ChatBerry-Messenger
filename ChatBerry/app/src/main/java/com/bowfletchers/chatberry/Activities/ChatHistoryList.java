@@ -104,6 +104,9 @@ public class ChatHistoryList extends AppCompatActivity {
             case R.id.homePage:
                 Intent chatListIntent = new Intent(ChatHistoryList.this, ChatHistoryList.class);
                 startActivity(chatListIntent);
+            case R.id.createStory:
+                Intent createNewStoryIntent = new Intent(ChatHistoryList.this, CreateUserStory.class);
+                startActivity(createNewStoryIntent);
         }
         return super.onOptionsItemSelected(item);
     }
