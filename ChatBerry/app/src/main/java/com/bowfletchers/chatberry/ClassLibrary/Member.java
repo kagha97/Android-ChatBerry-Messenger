@@ -8,6 +8,7 @@ public class Member implements Serializable {
     public String id;
     public String email;
     public String name;
+    public int onlineStatus; // 0 for offline and 1 for online
     public String profilePicture;
     public List<Member> friendList;
     public List<Chat> chatList;
@@ -37,6 +38,18 @@ public class Member implements Serializable {
         this.name = name;
         this.email = email;
         this.profilePicture = profilePicture;
+        this.onlineStatus = 0;
+        friendList = new ArrayList<>();
+        chatList = new ArrayList<>();
+        stories = new ArrayList<>();
+    }
+
+    public Member (String id, String name, String email, String profilePicture, int onlineStatus) {
+        this.id = id;
+        this.name = name;
+        this.email = email;
+        this.profilePicture = profilePicture;
+        this.onlineStatus = onlineStatus;
         friendList = new ArrayList<>();
         chatList = new ArrayList<>();
         stories = new ArrayList<>();
@@ -74,6 +87,14 @@ public class Member implements Serializable {
 
     public String getEmail() {
         return email;
+    }
+
+    public int getOnlineStatus() {
+        return onlineStatus;
+    }
+
+    public void setOnlineStatus(int onlineStatus) {
+        this.onlineStatus = onlineStatus;
     }
 
     public void setEmail(String email) {

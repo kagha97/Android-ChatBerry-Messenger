@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import com.bowfletchers.chatberry.Adapters.MessagesAdapter;
 import com.bowfletchers.chatberry.ClassLibrary.Chat;
+import com.bowfletchers.chatberry.ClassLibrary.FirebaseInstances;
 import com.bowfletchers.chatberry.ClassLibrary.Member;
 import com.bowfletchers.chatberry.ClassLibrary.Message;
 import com.bowfletchers.chatberry.R;
@@ -52,8 +53,8 @@ public class MessageViewer extends AppCompatActivity {
         newMessage = findViewById(R.id.messageSend);
         //getChatRoom();
 
-        mAuthentication = FirebaseAuth.getInstance();
-        mDatabase = FirebaseDatabase.getInstance().getReference("chats");
+        mAuthentication = FirebaseInstances.getDatabaseAuth();
+        mDatabase = FirebaseInstances.getDatabaseReference("chats");
         tempView = new TextView(this);
 
 
@@ -143,16 +144,21 @@ public class MessageViewer extends AppCompatActivity {
                     Log.i(LOG_TAG, "Message: " + msgSnapshot.child("content").getValue(String.class) + " Sender: " + msgSnapshot.child("senderID").getValue(String.class));
                     //  Log.i(LOG_TAG, "NAME function: " + getSenderName(msgSnapshot.child("senderID").getValue(String.class)));
                     String name = "";
+                    String pfp = "";
 
-                    if (msgSnapshot.child("senderID").getValue(String.class).equals(mAuthentication.getUid()))
+                    if (msgSnapshot.child("senderID").getValue(String.class).equals(mAuthentication.getUid())) {
                         name = mAuthentication.getCurrentUser().getDisplayName();
-                    else if (msgSnapshot.child("senderID").getValue(String.class).equals(member.getId()))
+                        pfp = mAuthentication.getCurrentUser().getPhotoUrl().toString();
+                    }
+                    else if (msgSnapshot.child("senderID").getValue(String.class).equals(member.getId())) {
                         name = member.getName();
+                        pfp = member.getProfilePicture();
+                    }
 
                     Log.d("thename", name);
 
                     Log.i("IDofsender", "ID: " + msgSnapshot.child("senderID"));
-                    Message message = new Message(name, msgSnapshot.child("content").getValue(String.class));
+                    Message message = new Message(name, msgSnapshot.child("content").getValue(String.class),pfp);
                     Log.i(LOG_TAG, "MSG OBJ: " + message.getMessage());
 
                     Log.i("IDofsender", "ID of object: " + message.senderID);
@@ -200,7 +206,7 @@ public class MessageViewer extends AppCompatActivity {
         SendMessage sendMessage = new SendMessage();
 
 
-        sendMessage.sendMessage(chatID, newMessage.getText().toString());
+        sendMessage.sendMessage(chatID, newMessage.getText().toString(), mAuthentication.getCurrentUser().getPhotoUrl().toString());
         newMessage.setText("");
         recyclerView.scrollToPosition(msgs.size() - 1);
 

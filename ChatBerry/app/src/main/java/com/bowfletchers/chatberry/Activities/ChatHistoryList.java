@@ -1,20 +1,17 @@
 package com.bowfletchers.chatberry.Activities;
 
 import android.content.Intent;
-import android.os.Build;
-import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 import android.support.v7.widget.Toolbar;
 
 import com.bowfletchers.chatberry.Adapters.ChatHistoryInfoAdapter;
+import com.bowfletchers.chatberry.ClassLibrary.FirebaseInstances;
 import com.bowfletchers.chatberry.R;
-import com.google.android.gms.common.internal.safeparcel.SafeParcelable;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -34,13 +31,18 @@ public class ChatHistoryList extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        mAuth = FirebaseInstances.getDatabaseAuth();
+        mUser = mAuth.getCurrentUser();
+
+        if (mUser == null) {
+            Intent backToSignInIntent = new Intent(ChatHistoryList.this, LoginAccount.class);
+            startActivity(backToSignInIntent);
+        }
+
         mRecyclerView = findViewById(R.id.chat_history_recycler_view);
         mAdapter = new ChatHistoryInfoAdapter( this);
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-
-        mAuth = FirebaseAuth.getInstance();
-        mUser = mAuth.getCurrentUser();
 
         String userName = mUser.getDisplayName();
         if (userName != null && !userName.equals("")) {
@@ -60,11 +62,11 @@ public class ChatHistoryList extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.my_profile:
-                Intent userProfileIntent = new Intent(ChatHistoryList.this, User_profile.class);
+                Intent userProfileIntent = new Intent(ChatHistoryList.this, UserProfile.class);
                 startActivity(userProfileIntent);
                 return true;
             case R.id.my_friends:
-                Intent userFriendsIntent = new Intent(ChatHistoryList.this, Friend_List.class);
+                Intent userFriendsIntent = new Intent(ChatHistoryList.this, FriendList.class);
                 startActivity(userFriendsIntent);
                 return true;
             case R.id.homePage:

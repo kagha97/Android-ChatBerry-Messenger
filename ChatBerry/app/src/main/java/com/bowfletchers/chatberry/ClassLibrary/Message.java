@@ -8,15 +8,17 @@ public class Message {
 
     public String content;
     public String senderID;
+    public String imageURL;
     //private Date messageDate;
 
     public Message() {
 
     }
 
-    public Message (String member, String message) {
+    public Message (String member, String message, String imageURL) {
         this.senderID = member;
         this.content = message;
+        this.imageURL = imageURL;
     }
 
     public String getMessage() {
@@ -25,5 +27,9 @@ public class Message {
 
     public String getMember() {
         return senderID;
+    }
+
+    public String getImageURL() {
+        return imageURL;
     }
 }

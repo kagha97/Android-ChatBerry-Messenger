@@ -9,15 +9,19 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.support.v7.widget.Toolbar;
+
+import com.bowfletchers.chatberry.ClassLibrary.FirebaseInstances;
 import com.bowfletchers.chatberry.R;
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -27,17 +31,20 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
 
-public class User_profile extends AppCompatActivity {
+public class UserProfile extends AppCompatActivity {
 
     private final int REQUEST_CODE_IMAGE = 1;
     private final String STORE_URL = "gs://chatberry-201de.appspot.com";
     private final String DEFAULT_PHOTO_URL = "https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909__340.png";
+    private int userOnlineStatus;
 
     ImageView imageViewUserPhoto;
     TextView editTextUserName;
@@ -47,6 +54,7 @@ public class User_profile extends AppCompatActivity {
 
     FirebaseAuth mAuth;
     FirebaseUser currentUser;
+    DatabaseReference mUserRef;
     FirebaseStorage firebaseStore;
     StorageReference storageReference;
 
@@ -59,10 +67,7 @@ public class User_profile extends AppCompatActivity {
         referenceViews();
 
         // init Fire auth instance
-        mAuth = FirebaseAuth.getInstance();
-        currentUser = mAuth.getCurrentUser();
-        firebaseStore = FirebaseStorage.getInstance();
-        storageReference = firebaseStore.getReferenceFromUrl(STORE_URL);
+        referenceFirebaseInstances();
 
         displayDefaultUserInfo();
 
@@ -88,9 +93,29 @@ public class User_profile extends AppCompatActivity {
         buttonSignout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // sign out user from mAuth
                 mAuth.signOut();
-                Intent backSignInIntent = new Intent(User_profile.this, Login_account.class);
+                // set online status to offline (0)
+                updateUserOnlineStatus(0);
+                Intent backSignInIntent = new Intent(UserProfile.this, LoginAccount.class);
                 startActivity(backSignInIntent);
+            }
+        });
+
+        // update user online status when the switch adjusting
+        aSwitchOnlineStatus.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                Toast.makeText(UserProfile.this, "The switch is " + (isChecked ? "on" : "off"), Toast.LENGTH_SHORT).show();
+                if(isChecked) {
+                    // when Switch is ON
+                    // set online user to 1
+                    userOnlineStatus = 1;
+                } else {
+                    // when Switch is ON
+                    // set online user to 0
+                    userOnlineStatus = 0;
+                }
             }
         });
     }
@@ -105,11 +130,11 @@ public class User_profile extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.homePage:
-                Intent chatListIntent = new Intent(User_profile.this, ChatHistoryList.class);
+                Intent chatListIntent = new Intent(UserProfile.this, ChatHistoryList.class);
                 startActivity(chatListIntent);
                 return true;
             case R.id.my_friends:
-                Intent userFriendsIntent = new Intent(User_profile.this, Friend_List.class);
+                Intent userFriendsIntent = new Intent(UserProfile.this, FriendList.class);
                 startActivity(userFriendsIntent);
                 return true;
             default:
@@ -175,7 +200,7 @@ public class User_profile extends AppCompatActivity {
             @Override
             public void onFailure(@NonNull Exception exception) {
                 // Handle unsuccessful uploads
-                Toast.makeText(User_profile.this, "Upload image failed", Toast.LENGTH_SHORT).show();
+                Toast.makeText(UserProfile.this, "Upload image failed", Toast.LENGTH_SHORT).show();
             }
         }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
@@ -186,9 +211,15 @@ public class User_profile extends AppCompatActivity {
                     public void onSuccess(Uri uri) {
                         String downloadUrl = uri.toString();
                         // after upload img succeed , update the user profile
-                        // with user photo url and user name
+                        // with user photo url and user name in Authentication
                         String userName = editTextUserName.getText().toString();
                         updateUserProfileInfo(downloadUrl, userName);
+
+                        // also update user info in database al well
+                        updateUserInfoInDatabase(downloadUrl, userName);
+
+                        // update online status
+                        updateUserOnlineStatus(userOnlineStatus);
                     }
                 });
             }
@@ -205,11 +236,30 @@ public class User_profile extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
-                            Toast.makeText(User_profile.this, "User info has been updated successfully", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(UserProfile.this, "User info has been updated successfully", Toast.LENGTH_SHORT).show();
                         } else {
-                            Toast.makeText(User_profile.this, "Update user information failed", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(UserProfile.this, "Update user information failed", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
+    }
+
+    private void updateUserInfoInDatabase(String newUserPhoToURL, String newUserDisplayName) {
+        String currentUserId = currentUser.getUid();
+        mUserRef.child(currentUserId).child("name").setValue(newUserDisplayName);
+        mUserRef.child(currentUserId).child("profilePicture").setValue(newUserPhoToURL);
+    }
+
+    private void updateUserOnlineStatus(int userOnlineStatus) {
+        String currentUserId = currentUser.getUid();
+        mUserRef.child(currentUserId).child("onlineStatus").setValue(userOnlineStatus);
+    }
+
+    private void referenceFirebaseInstances() {
+        mUserRef = FirebaseInstances.getDatabaseReference("users");
+        mAuth = FirebaseInstances.getDatabaseAuth();
+        currentUser = mAuth.getCurrentUser();
+        firebaseStore = FirebaseInstances.getFirebaseStorage();
+        storageReference = firebaseStore.getReferenceFromUrl(STORE_URL);
     }
 }

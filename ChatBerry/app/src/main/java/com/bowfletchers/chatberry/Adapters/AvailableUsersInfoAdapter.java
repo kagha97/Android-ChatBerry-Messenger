@@ -10,7 +10,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bowfletchers.chatberry.Activities.FriendRequests;
 import com.bowfletchers.chatberry.Activities.MessageViewer;
@@ -34,7 +33,7 @@ public class AvailableUsersInfoAdapter extends RecyclerView.Adapter<AvailableUse
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int i) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.available_users_layout, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.available_users_item_layout, parent, false);
         ViewHolder holder = new ViewHolder(view);
         return holder;
     }
@@ -42,6 +41,7 @@ public class AvailableUsersInfoAdapter extends RecyclerView.Adapter<AvailableUse
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder viewHolder, final int position) {
         viewHolder.userName.setText(mavailableUsers.get(position).name);
+        Glide.with(mcontext).load(mavailableUsers.get(position).getProfilePicture()).placeholder(R.drawable.ic_person).into(viewHolder.profilePicture);
         viewHolder.chatUser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -79,6 +79,7 @@ public class AvailableUsersInfoAdapter extends RecyclerView.Adapter<AvailableUse
 
     public class ViewHolder extends RecyclerView.ViewHolder
     {
+        ImageView profilePicture;
         TextView userName;
         Button chatUser;
         Button addUser;
@@ -89,6 +90,7 @@ public class AvailableUsersInfoAdapter extends RecyclerView.Adapter<AvailableUse
             chatUser = itemView.findViewById(R.id.chat_button);
             addUser = itemView.findViewById(R.id.add_friend_button);
             userImage = itemView.findViewById(R.id.available_user_image);
+            profilePicture = itemView.findViewById(R.id.available_user_image);
         }
     }
 }

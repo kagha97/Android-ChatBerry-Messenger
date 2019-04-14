@@ -50,7 +50,6 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.ViewHo
     class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private TextView name;
         private TextView message;
-        private int profileImage;
         private Message currentMessage;
 
 
@@ -79,7 +78,7 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.ViewHo
             this.currentMessage = message;
             this.name.setText(message.getMember());
             this.message.setText(message.getMessage());
-            Glide.with(Context).load(message.getMember()).placeholder(R.drawable.ic_person).into(ProfileImage);
+            Glide.with(Context).load(message.getImageURL()).placeholder(R.drawable.ic_person).into(ProfileImage);
         }
     }
 }

@@ -18,7 +18,7 @@
 
     <string name="sign_up">Sign-Up</string>
     <string name="sign_in">Sign-In</string>
-    <string name="title_activity_welcome_page">WelcomePage</string>
+    <string name="title_activity_welcome_page">ChatBerry</string>
     <string name="signIn_email_label">Email</string>
     <string name="signIn_password_label">Password</string>
 
@@ -28,5 +28,7 @@
     <string name="menu_user_profile_label">My Profile</string>
     <string name="menu_user_friends_label">My Friends</string>
     <string name="menu_home_activity_label">Home Activity</string>
+    <string name="button_chat_label">Chat</string>
+    <string name="button_friend_detail_label">Detail</string>
 
 </resources>
