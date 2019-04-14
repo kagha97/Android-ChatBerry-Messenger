@@ -10,9 +10,11 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bowfletchers.chatberry.ClassLibrary.FirebaseInstances;
 import com.bowfletchers.chatberry.ClassLibrary.Member;
 import com.bowfletchers.chatberry.ClassLibrary.MemberFriendList;
 import com.bowfletchers.chatberry.R;
+import com.bowfletchers.chatberry.ViewModel.AvailableUsersModel.AddFriends;
 import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -46,36 +48,21 @@ public class FriendRequestAdapter extends RecyclerView.Adapter<FriendRequestAdap
 
     @Override
     public void onBindViewHolder(@NonNull FriendRequestAdapter.ViewHolder viewHolder, final int position) {
-       // viewHolder.name.setText("Test");
        viewHolder.name.setText(memberList.get(position).getName());
        Glide.with(mcontenxt).load(memberList.get(position).profilePicture).into(viewHolder.imageView);
        viewHolder.confirmFriend.setOnClickListener(new View.OnClickListener() {
            @Override
            public void onClick(View v) {
-               DatabaseReference reference = users.child(memberList.get(position).id);
-               DatabaseReference friends = reference.child("friends");
-               MemberFriendList memberFriendList = new MemberFriendList(auth.getUid());
-               DatabaseReference addFriends = friends.push();
-               addFriends.setValue(memberFriendList);
-
-               DatabaseReference currentUser = users.child(auth.getUid());
-               DatabaseReference currentUserFriends = currentUser.child("friends");
-               MemberFriendList currentMemberFriendList = new MemberFriendList(memberList.get(position).id);
-               DatabaseReference addFriendsToCurrentUser = currentUserFriends.push();
-               addFriendsToCurrentUser.setValue(currentMemberFriendList);
-
-               DatabaseReference child = invitations.child(invitationList.get(position));
-               child.removeValue();
-
-
-
+               AddFriends addFriends = new AddFriends();
+               addFriends.addingFriends(auth.getUid(), memberList.get(position).id);
+               addFriends.removeInvitation(invitationList.get(position));
            }
        });
        viewHolder.cancelFriend.setOnClickListener(new View.OnClickListener() {
            @Override
            public void onClick(View v) {
-               DatabaseReference child = invitations.child(invitationList.get(position));
-               child.removeValue();
+               AddFriends addFriends = new AddFriends();
+               addFriends.removeInvitation(invitationList.get(position));
            }
        });
     }

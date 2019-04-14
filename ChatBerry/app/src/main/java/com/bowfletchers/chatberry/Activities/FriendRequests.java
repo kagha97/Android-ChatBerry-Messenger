@@ -1,6 +1,10 @@
 package com.bowfletchers.chatberry.Activities;
 
+import android.arch.lifecycle.LiveData;
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProviders;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -11,6 +15,7 @@ import com.bowfletchers.chatberry.Adapters.AvailableUsersInfoAdapter;
 import com.bowfletchers.chatberry.Adapters.FriendRequestAdapter;
 import com.bowfletchers.chatberry.ClassLibrary.Member;
 import com.bowfletchers.chatberry.R;
+import com.bowfletchers.chatberry.ViewModel.AvailableUsersModel.GetAvailableUsersReference;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -40,47 +45,35 @@ public class FriendRequests extends AppCompatActivity {
     }
 
     private void getAllFriendRequests() {
-        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("invitations");
-        reference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                invitationList.clear();
-                requesteeList.clear();
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()){
-                    final String receiver = snapshot.child("receiverId").getValue().toString();
-                    final String sender = snapshot.child("senderId").getValue().toString();
-                    if(receiver.equals(userId)) {
-                        invitationId = snapshot.getKey();
-                        Log.d("Request", "You have a request");
-                        DatabaseReference userReference = FirebaseDatabase.getInstance().getReference("users");
-                        userReference.addListenerForSingleValueEvent(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                for(DataSnapshot userSnapshot : dataSnapshot.getChildren())
-                                {
-                                    if(userSnapshot.child("id").getValue().toString().equals(sender)) {
-                                        Log.d("Name", userSnapshot.child("name").getValue().toString());
-                                        invitationList.add(invitationId);
-                                        requesteeList.add(new Member(userSnapshot.child("id").getValue().toString(), userSnapshot.child("name").getValue().toString(), userSnapshot.child("email").getValue().toString(), userSnapshot.child("profilePicture").getValue().toString()));
+        final GetAvailableUsersReference invitationsViewModel = ViewModelProviders.of(this).get(GetAvailableUsersReference.class);
+        LiveData<DataSnapshot> invitations = invitationsViewModel.getInvitations();
+        invitations.observe(this, new Observer<DataSnapshot>() {
+                    @Override
+                    public void onChanged(@Nullable DataSnapshot dataSnapshot) {
+                        invitationList.clear();
+                        requesteeList.clear();
+                        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                            final String receiver = snapshot.child("receiverId").getValue().toString();
+                            final String sender = snapshot.child("senderId").getValue().toString();
+                            if (receiver.equals(userId)) {
+                                invitationId = snapshot.getKey();
+                                LiveData<DataSnapshot> users = invitationsViewModel.getUsers();
+                                users.observe(FriendRequests.this, new Observer<DataSnapshot>() {
+                                    @Override
+                                    public void onChanged(@Nullable DataSnapshot dataSnapshot) {
+                                        for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
+                                            if (userSnapshot.child("id").getValue().toString().equals(sender)) {
+                                                Log.d("Name", userSnapshot.child("name").getValue().toString());
+                                                invitationList.add(invitationId);
+                                                requesteeList.add(new Member(userSnapshot.child("id").getValue().toString(), userSnapshot.child("name").getValue().toString(), userSnapshot.child("email").getValue().toString(), userSnapshot.child("profilePicture").getValue().toString()));
+                                            }
+                                        }
+                                        mAdapter.notifyDataSetChanged();
                                     }
-                                }
-                                mAdapter.notifyDataSetChanged();
+                                });
                             }
-
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                            }
-                        });
+                        }
                     }
-                }
-                mAdapter.notifyDataSetChanged();
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
         });
     }
 }

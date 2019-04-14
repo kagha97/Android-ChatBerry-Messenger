@@ -1,7 +1,13 @@
 package com.bowfletchers.chatberry.Activities;
 
+import android.arch.lifecycle.LiveData;
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModel;
+import android.arch.lifecycle.ViewModelProvider;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -17,6 +23,7 @@ import com.bowfletchers.chatberry.Adapters.AvailableUsersInfoAdapter;
 import com.bowfletchers.chatberry.ClassLibrary.FirebaseInstances;
 import com.bowfletchers.chatberry.ClassLibrary.Member;
 import com.bowfletchers.chatberry.R;
+import com.bowfletchers.chatberry.ViewModel.AvailableUsersModel.GetAvailableUsersReference;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -34,7 +41,6 @@ public class AvailableUsers extends AppCompatActivity {
     private ArrayList<String> myFriendsIdList = new ArrayList<>();
     private ArrayList<String> myInvitationsList = new ArrayList<>();
     private final String auth = FirebaseAuth.getInstance().getUid();
-    //private final DatabaseReference myFriends = FirebaseDatabase.getInstance().getReference("/users/" + auth + "/friends" );
 
     FirebaseAuth mAuth;
     FirebaseUser mUser;
@@ -62,10 +68,11 @@ public class AvailableUsers extends AppCompatActivity {
     }
 
     private void getMyInvitations() {
-        final DatabaseReference myInvitations = FirebaseDatabase.getInstance().getReference("invitations");
-        myInvitations.addValueEventListener(new ValueEventListener() {
+        GetAvailableUsersReference invitationsViewModel = ViewModelProviders.of(this).get(GetAvailableUsersReference.class);
+        LiveData<DataSnapshot> invitations = invitationsViewModel.getInvitations();
+        invitations.observe(this, new Observer<DataSnapshot>() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+            public void onChanged(@Nullable DataSnapshot dataSnapshot) {
                 myInvitationsList.clear();
                 for(DataSnapshot invitations: dataSnapshot.getChildren()){
                     if(invitations.child("senderId").getValue().toString().equals(auth)){
@@ -76,41 +83,31 @@ public class AvailableUsers extends AppCompatActivity {
                     }
                 }
             }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
         });
     }
 
     private void getMyFriends() {
-        DatabaseReference users = FirebaseDatabase.getInstance().getReference("users");
-        DatabaseReference friends = users.child(auth);
-        DatabaseReference friendList = friends.child("friends");
-        friendList.addValueEventListener(new ValueEventListener() {
+        GetAvailableUsersReference friendsViewModel = ViewModelProviders.of(this).get(GetAvailableUsersReference.class);
+        LiveData<DataSnapshot> friends = friendsViewModel.getFriends();
+        friends.observe(this, new Observer<DataSnapshot>() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+            public void onChanged(@Nullable DataSnapshot dataSnapshot) {
                 myFriendsIdList.clear();
                 for(DataSnapshot myFriends: dataSnapshot.getChildren()){
                     myFriendsIdList.add(myFriends.child("friendId").getValue().toString());
                 }
                 mAdapter.notifyDataSetChanged();
             }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
         });
     }
 
     public void getAllAvailableUsers()
     {
-        DatabaseReference usersReference = FirebaseInstances.getDatabaseReference("users");
-        usersReference.addValueEventListener(new ValueEventListener() {
+        GetAvailableUsersReference userViewModel = ViewModelProviders.of(this).get(GetAvailableUsersReference.class);
+        LiveData<DataSnapshot> users = userViewModel.getUsers();
+        users.observe(this, new Observer<DataSnapshot>() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+            public void onChanged(@Nullable DataSnapshot dataSnapshot) {
                 userNames.clear();
                 for(DataSnapshot users : dataSnapshot.getChildren())
                 {
@@ -125,13 +122,7 @@ public class AvailableUsers extends AppCompatActivity {
                         userNames.add(new Member(users.child("id").getValue().toString(), users.child("name").getValue().toString(), users.child("email").getValue().toString(), users.child("profilePicture").getValue().toString()));
                     }
                 }
-                //Toast.makeText(AvailableUsers.this, userNames.get(1), Toast.LENGTH_LONG).show();
                 mAdapter.notifyDataSetChanged();
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
             }
         });
     }
