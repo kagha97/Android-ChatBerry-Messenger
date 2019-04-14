@@ -42,6 +42,8 @@ public class Member implements Serializable {
         friendList = new ArrayList<>();
         chatList = new ArrayList<>();
         stories = new ArrayList<>();
+        this.invitationRequest = false;
+        this.me = false;
     }
 
     public Member (String id, String name, String email, String profilePicture, int onlineStatus) {
@@ -65,6 +67,8 @@ public class Member implements Serializable {
         friendList = new ArrayList<>();
         chatList = new ArrayList<>();
         stories = new ArrayList<>();
+        this.invitationRequest = false;
+        this.me = false;
     }
 
     public Member(String id, String name, String email, String profilePicture ,Boolean invitationRequest, Boolean me) {

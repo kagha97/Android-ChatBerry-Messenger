@@ -32,6 +32,7 @@ public class AvailableUsers extends AppCompatActivity {
     private AvailableUsersInfoAdapter mAdapter;
     private ArrayList<Member> userNames = new ArrayList<>();
     private ArrayList<String> myFriendsIdList = new ArrayList<>();
+    private ArrayList<String> myInvitationsList = new ArrayList<>();
     private final String auth = FirebaseAuth.getInstance().getUid();
     //private final DatabaseReference myFriends = FirebaseDatabase.getInstance().getReference("/users/" + auth + "/friends" );
 
@@ -42,7 +43,6 @@ public class AvailableUsers extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_available_users);
-        getMyFriends();
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -52,12 +52,36 @@ public class AvailableUsers extends AppCompatActivity {
             Intent backToSignInIntent = new Intent(AvailableUsers.this, LoginAccount.class);
             startActivity(backToSignInIntent);
         }
-
+        getMyFriends();
+        getMyInvitations();
         getAllAvailableUsers();
         mRecyclerView = findViewById(R.id.available_users_recycler_view);
         mAdapter = new AvailableUsersInfoAdapter(userNames, this);
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+    }
+
+    private void getMyInvitations() {
+        final DatabaseReference myInvitations = FirebaseDatabase.getInstance().getReference("invitations");
+        myInvitations.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                myInvitationsList.clear();
+                for(DataSnapshot invitations: dataSnapshot.getChildren()){
+                    if(invitations.child("senderId").getValue().toString().equals(auth)){
+                        myInvitationsList.add(invitations.child("receiverId").getValue().toString());
+                    }
+                    else if(invitations.child("receiverId").getValue().toString().equals(auth)){
+                        myInvitationsList.add(invitations.child("senderId").getValue().toString());
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
     private void getMyFriends() {
@@ -128,6 +152,10 @@ public class AvailableUsers extends AppCompatActivity {
             case R.id.my_friends:
                 Intent userFriendsIntent = new Intent(AvailableUsers.this, FriendList.class);
                 startActivity(userFriendsIntent);
+                return true;
+            case R.id.my_friend_requests:
+                Intent friendRequests = new Intent(AvailableUsers.this, FriendRequests.class);
+                startActivity(friendRequests);
                 return true;
             case R.id.homePage:
                 Intent chatListIntent = new Intent(AvailableUsers.this, ChatHistoryList.class);
