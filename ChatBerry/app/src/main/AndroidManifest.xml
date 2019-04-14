@@ -11,8 +11,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Activities.FriendProfile"
+        <activity android:name=".Activities.CreateUserStory"
             android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity
+            android:name=".Activities.FriendProfile"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".Activities.AvailableUsers"
             android:theme="@style/AppTheme.NoActionBar" />
@@ -38,7 +41,7 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".Activities.ChatHistoryList"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
 </manifest>

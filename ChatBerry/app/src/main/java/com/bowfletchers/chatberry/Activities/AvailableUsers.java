@@ -95,6 +95,9 @@ public class AvailableUsers extends AppCompatActivity {
             case R.id.homePage:
                 Intent chatListIntent = new Intent(AvailableUsers.this, ChatHistoryList.class);
                 startActivity(chatListIntent);
+            case R.id.createStory:
+                Intent createNewStoryIntent = new Intent(AvailableUsers.this, CreateUserStory.class);
+                startActivity(createNewStoryIntent);
         }
         return super.onOptionsItemSelected(item);
     }
