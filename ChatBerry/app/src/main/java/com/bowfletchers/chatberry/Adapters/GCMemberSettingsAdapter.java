@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Adapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -17,20 +18,26 @@ import com.bowfletchers.chatberry.R;
 import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class GCMemberSettingsAdapter extends RecyclerView.Adapter<GCMemberSettingsAdapter.ViewHolder>  {
 
 
-    private ArrayList<Member> MemberData;
+    private List<Member> MemberData;
     private android.content.Context Context;
     private ImageView ProfileImage;
     private CheckBox check;
+    private String ownerID;
+    private String userID;
 
     //Setting the fields with data
-    public GCMemberSettingsAdapter (Context context, ArrayList<Member> memberData) {
+    public GCMemberSettingsAdapter (Context context, List<Member> memberData, String ownerID, String userID) {
         this.MemberData = memberData;
         this.Context = context;
+        this.ownerID = ownerID;
+        this.userID = userID;
     }
+
 
     @Override
     public GCMemberSettingsAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int id) {
@@ -69,25 +76,31 @@ public class GCMemberSettingsAdapter extends RecyclerView.Adapter<GCMemberSettin
             //set the onClickListener so app knows when card is clicked
             view.setOnClickListener(this);
 
-            check.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    currentMember.Check(isChecked);
-                    displayToast(String.valueOf(currentMember.add));
-                }
-            });
 
 
             kick.setOnClickListener(new Button.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    MemberData.remove(currentMember);
-                    kick.setText("Kicked");
+                    displayToast(currentMember.getId() + " | "  + ownerID);
+                    if (currentMember.getId().equals(ownerID)) {
+                       // MemberData.remove(currentMember);
+                        //notifyDataSetChanged();
+                        displayToast("Can't kick yourself.");
+                    }
+                    else if (userID.equals(ownerID)){
+                        MemberData.remove(currentMember);
+                        notifyDataSetChanged();
+                        displayToast("User kicked.");
+                    }
+
+                    else {
+                        displayToast("Only group Owner and Admins can kick.");
+                    }
+
                 }
             });
 
             }
-
 
         @Override
         //when card is clicked

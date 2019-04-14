@@ -125,6 +125,7 @@ public class NewGroupChat extends AppCompatActivity {
         Intent intent = new Intent(this, GroupMessageViewer.class);
 
         intent.putExtra("id" , chatID);
+        intent.putExtra("owner" , FirebaseInstances.getDatabaseAuth().getUid());
         this.startActivity(intent);
 
         Log.d("chatstatus", "new chat room created");

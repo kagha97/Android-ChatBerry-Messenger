@@ -90,6 +90,7 @@ public class GroupMessageViewer extends AppCompatActivity {
                 Intent editGCIntent = new Intent(GroupMessageViewer.this, EditGroupChat.class);
                 editGCIntent.putExtra("id", chatID);
                 editGCIntent.putExtra("title", getTitle().toString());
+                editGCIntent.putExtra("owner", getIntent().getStringExtra("owner"));
                 startActivity(editGCIntent);
                 return true;
             case R.id.leave:
