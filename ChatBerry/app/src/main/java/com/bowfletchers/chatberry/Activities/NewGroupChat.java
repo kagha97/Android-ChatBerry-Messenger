@@ -110,7 +110,7 @@ public class NewGroupChat extends AppCompatActivity {
 
         for (Member member : mems) {
             if (member.add) {
-                GCMember mem = new GCMember(member.getId(), 0);
+                GCMember mem = new GCMember(member.getId(), "0");
                 checkedMembers.add(mem);
             }
         }
@@ -123,6 +123,7 @@ public class NewGroupChat extends AppCompatActivity {
         String chatID = newChat.getKey();
 
         Intent intent = new Intent(this, GroupMessageViewer.class);
+
         intent.putExtra("id" , chatID);
         this.startActivity(intent);
 

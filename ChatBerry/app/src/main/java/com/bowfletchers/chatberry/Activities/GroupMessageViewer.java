@@ -5,12 +5,17 @@ import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
@@ -47,6 +52,8 @@ public class GroupMessageViewer extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_group_message_viewer);
+
+
         newMessage = findViewById(R.id.messageSend);
 
         mAuthentication = FirebaseInstances.getDatabaseAuth();
@@ -67,6 +74,35 @@ public class GroupMessageViewer extends AppCompatActivity {
 
 
     }
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.gc_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.settings:
+                Intent editGCIntent = new Intent(GroupMessageViewer.this, EditGroupChat.class);
+                editGCIntent.putExtra("id", chatID);
+                editGCIntent.putExtra("title", getTitle().toString());
+                startActivity(editGCIntent);
+                return true;
+            case R.id.leave:
+             //   Intent userFriendsIntent = new Intent(GroupMessageViewer.this, FriendList.class);
+               // startActivity(userFriendsIntent);
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+
+
+
 
     public void liveChatRoom(String chatid, Context ctx) {
         LiveChatRoom liveChatRoom = ViewModelProviders.of(this).get(LiveChatRoom.class);

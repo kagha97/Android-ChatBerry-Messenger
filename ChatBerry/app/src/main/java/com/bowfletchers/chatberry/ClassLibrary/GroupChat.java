@@ -10,7 +10,6 @@ public class GroupChat {
 
     private String ownerID;
     private String name;
-
     private List<GCMember> MemberList;
 
 
@@ -34,6 +33,11 @@ public class GroupChat {
 
     public String getName() {
         return name;
+    }
+
+
+    public void setMemberList (List<GCMember> MemberList) {
+        this.MemberList = MemberList;
     }
 
     public GroupChat() {

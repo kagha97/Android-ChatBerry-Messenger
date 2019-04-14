@@ -11,10 +11,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".Activities.EditGroupChat"></activity>
         <activity
             android:name=".Activities.NewGroupChat"
             android:label="@string/title_activity_new_group_chat"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".Activities.AvailableUsers"
             android:theme="@style/AppTheme.NoActionBar" />
@@ -36,14 +37,12 @@
         <activity
             android:name=".Activities.UserProfile"
             android:theme="@style/AppTheme.NoActionBar" />
-
         <activity
             android:name=".Activities.ChatHistoryList"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
-
-        <activity android:name=".Activities.FriendList"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
-
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".Activities.FriendList"
+            android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
 </manifest>
