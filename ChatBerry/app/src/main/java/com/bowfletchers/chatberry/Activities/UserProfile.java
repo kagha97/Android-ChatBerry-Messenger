@@ -1,5 +1,9 @@
 package com.bowfletchers.chatberry.Activities;
 
+import android.arch.lifecycle.LiveData;
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModel;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
@@ -22,7 +26,9 @@ import android.widget.Toast;
 import android.support.v7.widget.Toolbar;
 
 import com.bowfletchers.chatberry.ClassLibrary.FirebaseInstances;
+import com.bowfletchers.chatberry.ClassLibrary.Member;
 import com.bowfletchers.chatberry.R;
+import com.bowfletchers.chatberry.ViewModel.UserData.UserInfoViewModel;
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -31,6 +37,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
+import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
@@ -171,22 +178,35 @@ public class UserProfile extends AppCompatActivity {
     }
 
     private void displayDefaultUserInfo(){
-        // display user photo
-        Uri userPhotoURI = currentUser.getPhotoUrl();
-        if (userPhotoURI != null) {
-            String userPhotoURL = userPhotoURI.toString();
-            Glide.with(this).load(userPhotoURL).into(imageViewUserPhoto);
-        } else {
-            Glide.with(this).load(DEFAULT_PHOTO_URL).into(imageViewUserPhoto);
-        }
+        // read user data based
+        UserInfoViewModel userInfoViewModel = ViewModelProviders.of(UserProfile.this).get(UserInfoViewModel.class);
 
-        // display user name
-        String userName = currentUser.getDisplayName();
-        if (userName != null && !userName.equals("")) {
-            editTextUserName.setText(userName);
-        } else {
-            editTextUserName.setText("NO NAME");
-        }
+        LiveData<DataSnapshot> userInfoLiveData = userInfoViewModel.getUserDataById(currentUser.getUid());
+
+        userInfoLiveData.observe(UserProfile.this, new Observer<DataSnapshot>() {
+            @Override
+            public void onChanged(@Nullable DataSnapshot dataSnapshot) {
+
+                if (dataSnapshot != null) {
+                    String userName = dataSnapshot.child("name").getValue().toString();
+                    String userProfilePicture = dataSnapshot.child("profilePicture").getValue().toString();
+                    String userEmail = dataSnapshot.child("email").getValue().toString();
+                    String userOnlineStatus = dataSnapshot.child("onlineStatus").getValue().toString();
+
+                    Glide.with(UserProfile.this).load(userProfilePicture).into(imageViewUserPhoto);
+                    editTextUserName.setText(userName);
+                    if (userOnlineStatus.equals("1")) {
+                        aSwitchOnlineStatus.setChecked(true);
+                    } else {
+                        aSwitchOnlineStatus.setChecked(false);
+                    }
+                } else {
+                    Glide.with(UserProfile.this).load(DEFAULT_PHOTO_URL).into(imageViewUserPhoto);
+                    editTextUserName.setText("NO NAME");
+                    aSwitchOnlineStatus.setChecked(false);
+                }
+            }
+        });
     }
 
     private void uploadUserPhotoToStore() {

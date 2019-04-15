@@ -1,4 +1,4 @@
-package com.bowfletchers.chatberry.ViewModel.UserStory;
+package com.bowfletchers.chatberry.ViewModel.UserData;
 
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.ViewModel;
