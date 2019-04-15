@@ -1,11 +1,15 @@
 package com.bowfletchers.chatberry.Activities;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -14,6 +18,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.support.v7.widget.Toolbar;
+import android.widget.Button;
 
 import com.bowfletchers.chatberry.Adapters.ChatHistoryInfoAdapter;
 import com.bowfletchers.chatberry.ClassLibrary.FirebaseInstances;
@@ -32,6 +37,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ChatHistoryList extends AppCompatActivity {
+    private static final int NOTIFICATION_ID = 0;
+    private Button button_notify;
+    private static final String PRIMARY_CHANNEL_ID = "primary_notification_channel";
+    private NotificationManager mNotifyManager;
     private RecyclerView mRecyclerView;
     private ChatHistoryInfoAdapter mAdapter;
 
@@ -77,6 +86,7 @@ public class ChatHistoryList extends AppCompatActivity {
         } else {
             setTitle("Welcome");
         }
+        createNotificationChannel();
     }
 
     private void getAllChatsInfo() {
@@ -103,6 +113,7 @@ public class ChatHistoryList extends AppCompatActivity {
         chats.observe(this, new Observer<DataSnapshot>() {
             @Override
             public void onChanged(@Nullable DataSnapshot dataSnapshot) {
+                sendNotification();
                 friendIdList.clear();
                 for(DataSnapshot chats: dataSnapshot.getChildren()){
                     if(auth.equals(chats.child("senderID").getValue().toString())){
@@ -144,6 +155,35 @@ public class ChatHistoryList extends AppCompatActivity {
                 startActivity(createNewStoryIntent);
         }
         return super.onOptionsItemSelected(item);
+    }
+    public void sendNotification() {
+        NotificationCompat.Builder notifyBuilder = getNotificationBuilder();
+        mNotifyManager.notify(NOTIFICATION_ID, notifyBuilder.build());
+    }
+
+    public void createNotificationChannel() {
+        mNotifyManager = (NotificationManager)
+                getSystemService(NOTIFICATION_SERVICE);
+        if (android.os.Build.VERSION.SDK_INT >=
+                android.os.Build.VERSION_CODES.O) {
+            // Create a NotificationChannel
+            NotificationChannel notificationChannel = new NotificationChannel(PRIMARY_CHANNEL_ID,
+                    "Mascot Notification", NotificationManager
+                    .IMPORTANCE_HIGH);
+            notificationChannel.enableLights(true);
+            notificationChannel.setLightColor(Color.RED);
+            notificationChannel.enableVibration(true);
+            notificationChannel.setDescription("Notification from Mascot");
+            mNotifyManager.createNotificationChannel(notificationChannel);
+        }
+    }
+
+    private NotificationCompat.Builder getNotificationBuilder(){
+        NotificationCompat.Builder notifyBuilder = new NotificationCompat.Builder(this, PRIMARY_CHANNEL_ID)
+                .setContentTitle("You've been notified!")
+                .setContentText("This is your notification text.")
+                .setSmallIcon(R.drawable.ic_android);
+        return notifyBuilder;
     }
 
 }
