@@ -28,4 +28,15 @@ public class LiveChatRoom extends ViewModel {
         liveData = new FirebaseQueryLiveData(CHAT);
         return liveData;
     }
+
+
+
+    @NonNull
+    public LiveData<DataSnapshot> getGroupChatRoom(String id) {
+        this.CHATID = id;
+        //CHAT =  FirebaseDatabase.getInstance().getReference("/gchats/" + CHATID + "/messages");
+        CHAT =  FirebaseDatabase.getInstance().getReference("/gchats/" + CHATID);
+        liveData = new FirebaseQueryLiveData(CHAT);
+        return liveData;
+    }
 }

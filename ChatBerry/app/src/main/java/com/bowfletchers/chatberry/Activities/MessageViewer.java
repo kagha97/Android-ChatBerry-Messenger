@@ -54,11 +54,12 @@ public class MessageViewer extends AppCompatActivity {
         //getChatRoom();
 
         mAuthentication = FirebaseInstances.getDatabaseAuth();
-        mDatabase = FirebaseInstances.getDatabaseReference("chats");
+        mDatabase = FirebaseDatabase.getInstance().getReference("chats");
         tempView = new TextView(this);
 
 
         msgs = new ArrayList<>();
+        msgs.add(new Message(mAuthentication.getUid(),"test", "google.ca"));
         //set up recycler view
         recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -85,17 +86,17 @@ public class MessageViewer extends AppCompatActivity {
             @Override
             public void onChanged(@Nullable DataSnapshot dataSnapshot) {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    String currentID = mAuthentication.getUid();
+                    String currentID = mAuthentication.getCurrentUser().getUid();
                     String memberID = member.id;
 
-                    String sender = snapshot.child("senderID").getValue().toString();
-                    String receiver = snapshot.child("receiverID").getValue().toString();
+                    String sender = snapshot.child("senderID").getValue(String.class);
+                    String receiver = snapshot.child("receiverID").getValue(String.class);
 
                     Log.d("chatstatus", "looking for " + memberID);
                     Log.d("chatstatus", "I am " + currentID);
 
-                    if (sender.equals(mAuthentication.getUid()) && receiver.equals(member.id) ||
-                            sender.equals(member.id) && receiver.equals(mAuthentication.getUid())) {
+                    if (sender.equals(currentID) && receiver.equals(memberID) ||
+                            sender.equals(memberID) && receiver.equals(currentID)) {
 
                         Log.d("chatstatus", "found");
                         chatID = snapshot.getKey();
@@ -104,8 +105,8 @@ public class MessageViewer extends AppCompatActivity {
                         break;
 
                     }
-                    else if (!sender.equals(mAuthentication.getUid()) && !receiver.equals(member.id) ||
-                            !sender.equals(member.id) && !receiver.equals(mAuthentication.getUid())) {
+                    else if (!sender.equals(currentID) && !receiver.equals(memberID) ||
+                            !sender.equals(memberID) && !receiver.equals(currentID)) {
 
                         isChatNew = true;
                         //  newChatRoom();
@@ -141,7 +142,7 @@ public class MessageViewer extends AppCompatActivity {
                 msgs.clear();
                 for (DataSnapshot msgSnapshot: dataSnapshot.getChildren()) {
 
-                    Log.i(LOG_TAG, "Message: " + msgSnapshot.child("content").getValue(String.class) + " Sender: " + msgSnapshot.child("senderID").getValue(String.class));
+                    Log.i(LOG_TAG, "Message: " + msgSnapshot.child("message").getValue(String.class) + " Sender: " + msgSnapshot.child("senderID").getValue(String.class));
                     //  Log.i(LOG_TAG, "NAME function: " + getSenderName(msgSnapshot.child("senderID").getValue(String.class)));
                     String name = "";
                     String pfp = "";
@@ -158,7 +159,7 @@ public class MessageViewer extends AppCompatActivity {
                     Log.d("thename", name);
 
                     Log.i("IDofsender", "ID: " + msgSnapshot.child("senderID"));
-                    Message message = new Message(name, msgSnapshot.child("content").getValue(String.class),pfp);
+                    Message message = new Message(name, msgSnapshot.child("message").getValue(String.class),pfp);
                     Log.i(LOG_TAG, "MSG OBJ: " + message.getMessage());
 
                     Log.i("IDofsender", "ID of object: " + message.senderID);
@@ -174,6 +175,7 @@ public class MessageViewer extends AppCompatActivity {
 
 
     public void newChatRoom() {
+        Log.i("newchat", "creating new chat room");
         DatabaseReference chatDb = mDatabase;
 
         Chat chat = new Chat(member.id, mAuthentication.getUid());

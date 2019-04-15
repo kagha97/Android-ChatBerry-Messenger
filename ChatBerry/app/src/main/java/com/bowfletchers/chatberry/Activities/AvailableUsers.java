@@ -127,6 +127,7 @@ public class AvailableUsers extends AppCompatActivity {
         });
     }
 
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main_menu, menu);
@@ -151,6 +152,10 @@ public class AvailableUsers extends AppCompatActivity {
             case R.id.homePage:
                 Intent chatListIntent = new Intent(AvailableUsers.this, ChatHistoryList.class);
                 startActivity(chatListIntent);
+
+            case R.id.newgc:
+                Intent newGC = new Intent(AvailableUsers.this, NewGroupChat.class);
+                startActivity(newGC);
             case R.id.createStory:
                 Intent createNewStoryIntent = new Intent(AvailableUsers.this, CreateUserStory.class);
                 startActivity(createNewStoryIntent);
