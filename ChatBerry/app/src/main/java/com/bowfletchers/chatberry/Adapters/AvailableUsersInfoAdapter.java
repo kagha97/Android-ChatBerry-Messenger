@@ -10,9 +10,12 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.bowfletchers.chatberry.Activities.FriendRequests;
 import com.bowfletchers.chatberry.Activities.MessageViewer;
 import com.bowfletchers.chatberry.ClassLibrary.Member;
+import com.bowfletchers.chatberry.Helper.SendInvitations;
 import com.bowfletchers.chatberry.R;
 import com.bumptech.glide.Glide;
 
@@ -37,18 +40,32 @@ public class AvailableUsersInfoAdapter extends RecyclerView.Adapter<AvailableUse
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder viewHolder, final int position) {
+    public void onBindViewHolder(@NonNull final ViewHolder viewHolder, final int position) {
         viewHolder.userName.setText(mavailableUsers.get(position).name);
         Glide.with(mcontext).load(mavailableUsers.get(position).getProfilePicture()).placeholder(R.drawable.ic_person).into(viewHolder.profilePicture);
         viewHolder.chatUser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-           //     Toast.makeText(mcontext , mavailableUsers.get(position).id , Toast.LENGTH_LONG).show();
                 Intent intent = new Intent(mcontext, MessageViewer.class);
                 intent.putExtra("chatMember" , mavailableUsers.get(position));
                 mcontext.startActivity(intent);
             }
         });
+        Glide.with(mcontext).load(mavailableUsers.get(position).profilePicture).into(viewHolder.userImage);
+        if(mavailableUsers.get(position).me) {
+            viewHolder.addUser.setVisibility(View.INVISIBLE);
+        }
+        else {
+            viewHolder.addUser.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(mcontext, "Clicked" , Toast.LENGTH_LONG).show();
+                    viewHolder.addUser.setVisibility(View.VISIBLE);
+                    SendInvitations sendInvitations = new SendInvitations();
+                    sendInvitations.checkIfAlreadySent(mavailableUsers.get(position).id);
+                }
+            });
+        }
     }
 
     @Override
@@ -56,15 +73,21 @@ public class AvailableUsersInfoAdapter extends RecyclerView.Adapter<AvailableUse
         return mavailableUsers.size();
     }
 
+
+
     public class ViewHolder extends RecyclerView.ViewHolder
     {
         ImageView profilePicture;
         TextView userName;
         Button chatUser;
+        Button addUser;
+        ImageView userImage;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             userName = itemView.findViewById(R.id.available_user_name);
             chatUser = itemView.findViewById(R.id.chat_button);
+            addUser = itemView.findViewById(R.id.add_friend_button);
+            userImage = itemView.findViewById(R.id.available_user_image);
             profilePicture = itemView.findViewById(R.id.available_user_image);
         }
     }

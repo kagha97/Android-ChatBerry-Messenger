@@ -8,18 +8,33 @@ public class Member implements Serializable {
     public String id;
     public String email;
     public String name;
-    public Integer onlineStatus; // 0 for offline and 1 for online
     public boolean add;
+    public long onlineStatus; // 0 for offline and 1 for online
     public String profilePicture;
     public List<Member> friendList;
     public List<Chat> chatList;
     public List<Story> stories;
+    public Boolean invitationRequest;
+    public Boolean me;
+
 
     public Member() {
 
     }
 
-    public Member (String id, String name, String email, String profilePicture) {
+    public Member(String id, String name, String email) {
+        this.id = id;
+        this.name = name;
+        this.email = email;
+        this.profilePicture = "0";
+        friendList = new ArrayList<>();
+        chatList = new ArrayList<>();
+        stories = new ArrayList<>();
+        this.invitationRequest = false;
+        this.me = false;
+    }
+
+    public Member(String id, String name, String email, String profilePicture) {
         this.id = id;
         this.name = name;
         this.email = email;
@@ -28,6 +43,21 @@ public class Member implements Serializable {
         friendList = new ArrayList<>();
         chatList = new ArrayList<>();
         stories = new ArrayList<>();
+        this.invitationRequest = false;
+        this.me = false;
+    }
+
+    public Member (String id, String name, String email, String profilePicture, int onlineStatus) {
+        this.id = id;
+        this.name = name;
+        this.email = email;
+        this.profilePicture = profilePicture;
+        this.onlineStatus = onlineStatus;
+        friendList = new ArrayList<>();
+        chatList = new ArrayList<>();
+        stories = new ArrayList<>();
+        this.invitationRequest = false;
+        this.me = false;
     }
 
     public Member (String id, String name, String status, boolean add, String profilePicture) {
@@ -38,7 +68,7 @@ public class Member implements Serializable {
         this.profilePicture = profilePicture;
     }
 
-    public Member(String name){
+    public Member(String name) {
         this.id = "hbhbjnknk";
         this.name = name;
         this.email = "test@gmail.com";
@@ -46,6 +76,8 @@ public class Member implements Serializable {
         friendList = new ArrayList<>();
         chatList = new ArrayList<>();
         stories = new ArrayList<>();
+        this.invitationRequest = false;
+        this.me = false;
     }
 
 
@@ -55,7 +87,7 @@ public class Member implements Serializable {
         if (onlineStatus == 1) {
             return "Online";
         }
-        else if (onlineStatus.equals(null)) {
+        else if (onlineStatus == 0) {
             return "Offline";
         }
 
@@ -64,11 +96,21 @@ public class Member implements Serializable {
         }
     }
 
-    public String  getId() {
+    public Member(String id, String name, String email, String profilePicture ,Boolean invitationRequest, Boolean me) {
+        this.id = id;
+        this.name = name;
+        this.email = email;
+        this.profilePicture = profilePicture;
+        this.invitationRequest = invitationRequest;
+        this.me = me;
+    }
+
+
+    public String getId() {
         return id;
     }
 
-    public void setId(String  id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -76,11 +118,11 @@ public class Member implements Serializable {
         return email;
     }
 
-    public int getOnlineStatus() {
+    public long getOnlineStatus() {
         return onlineStatus;
     }
 
-    public void setOnlineStatus(int onlineStatus) {
+    public void setOnlineStatus(long onlineStatus) {
         this.onlineStatus = onlineStatus;
     }
 
@@ -140,7 +182,7 @@ public class Member implements Serializable {
         this.chatList.remove(chat);
     }
 
-    public int getStatus() {
+    public long getStatus() {
         return onlineStatus;
     }
 
@@ -148,6 +190,13 @@ public class Member implements Serializable {
         this.add = isCheck;
     }
 
+    public Boolean getInvitationRequest() { return invitationRequest; }
+
+    public void setInvitationRequest(Boolean invitationRequest) { this.invitationRequest = invitationRequest; }
+
+    public Boolean getMe() { return me; }
+
+    public void setMe(Boolean me) { this.me = me; }
 
     @Override
     public String toString() {

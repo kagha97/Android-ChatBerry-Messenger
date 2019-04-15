@@ -37,17 +37,6 @@ public class WelcomePage extends AppCompatActivity {
             startActivity(gotoChatlistIntent);
             finish();
         }
-
-        // test Firebase connect
-        ChatBerryViewModel viewModel = ViewModelProviders.of(this).get(ChatBerryViewModel.class);
-        LiveData<DataSnapshot> liveData = viewModel.getDataSnapshotLiveData();
-
-        liveData.observe(this, new Observer<DataSnapshot>() {
-            @Override
-            public void onChanged(@Nullable DataSnapshot dataSnapshot) {
-                //Toast.makeText(WelcomePage.this, dataSnapshot.getValue().toString(), Toast.LENGTH_SHORT).show();
-            }
-        });
     }
 
     public void singIn(View view) {

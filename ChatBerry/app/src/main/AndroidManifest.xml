@@ -15,7 +15,14 @@
         <activity android:name=".Activities.EditGroupChat" />
         <activity
             android:name=".Activities.NewGroupChat"
-            android:label="@string/title_activity_new_group_chat"
+            android:label="@string/title_activity_new_group_chat"/>
+        <activity android:name=".Activities.FriendStories"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity
+            android:name=".Activities.CreateUserStory"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".Activities.FriendProfile"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".Activities.AvailableUsers"
@@ -44,6 +51,10 @@
         <activity
             android:name=".Activities.FriendList"
             android:theme="@style/AppTheme.NoActionBar" />
+            android:name=".Activities.FriendList"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".Activities.FriendRequests" />
+
     </application>
 
 </manifest>

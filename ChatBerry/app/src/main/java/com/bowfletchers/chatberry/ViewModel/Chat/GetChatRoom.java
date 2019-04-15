@@ -4,6 +4,7 @@ import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.ViewModel;
 import android.support.annotation.NonNull;
 
+import com.bowfletchers.chatberry.ClassLibrary.FirebaseInstances;
 import com.bowfletchers.chatberry.DataSource.FirebaseQueryDataOnce;
 import com.bowfletchers.chatberry.DataSource.FirebaseQueryLiveData;
 import com.google.firebase.database.DataSnapshot;
@@ -14,7 +15,7 @@ public class GetChatRoom extends ViewModel {
 
 
     private static final DatabaseReference CHATS =
-            FirebaseDatabase.getInstance().getReference("/chats");
+            FirebaseInstances.getDatabaseReference("/chats");
 
 
     private static final DatabaseReference GCHATS =
