@@ -156,6 +156,8 @@ public class AvailableUsers extends AppCompatActivity {
             case R.id.newgc:
                 Intent newGC = new Intent(AvailableUsers.this, NewGroupChat.class);
                 startActivity(newGC);
+                return true;
+
             case R.id.createStory:
                 Intent createNewStoryIntent = new Intent(AvailableUsers.this, CreateUserStory.class);
                 startActivity(createNewStoryIntent);
@@ -163,6 +165,7 @@ public class AvailableUsers extends AppCompatActivity {
                 Intent friendStoriesIntent = new Intent(AvailableUsers.this, FriendStories.class);
                 startActivity(friendStoriesIntent);
                 return true;
+
         }
         return super.onOptionsItemSelected(item);
     }

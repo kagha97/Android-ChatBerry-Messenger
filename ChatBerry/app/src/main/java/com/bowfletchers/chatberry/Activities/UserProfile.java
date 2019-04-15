@@ -153,6 +153,14 @@ public class UserProfile extends AppCompatActivity {
                 Intent friendStoriesIntent = new Intent(UserProfile.this, FriendStories.class);
                 startActivity(friendStoriesIntent);
                 return true;
+            case R.id.my_friend_requests:
+                Intent friendRequestIntent = new Intent(UserProfile.this, FriendRequests.class);
+                startActivity(friendRequestIntent);
+                return true;
+            case R.id.newgc:
+                Intent newGC = new Intent(UserProfile.this, NewGroupChat.class);
+                startActivity(newGC);
+                return true;
             default:
                 // Do nothing
         }

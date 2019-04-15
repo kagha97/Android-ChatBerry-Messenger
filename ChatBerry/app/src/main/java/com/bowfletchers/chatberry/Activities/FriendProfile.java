@@ -78,6 +78,14 @@ public class FriendProfile extends AppCompatActivity {
                 Intent friendStoriesIntent = new Intent(FriendProfile.this, FriendStories.class);
                 startActivity(friendStoriesIntent);
                 return true;
+            case R.id.my_friend_requests:
+                Intent friendRequestIntent = new Intent(FriendProfile.this, FriendRequests.class);
+                startActivity(friendRequestIntent);
+                return true;
+            case R.id.newgc:
+                Intent newGC = new Intent(FriendProfile.this, NewGroupChat.class);
+                startActivity(newGC);
+                return true;
         }
         return super.onOptionsItemSelected(item);
     }

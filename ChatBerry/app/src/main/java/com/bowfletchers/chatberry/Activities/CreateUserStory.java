@@ -2,6 +2,8 @@ package com.bowfletchers.chatberry.Activities;
 
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModel;
+import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -13,6 +15,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -20,6 +23,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.SimpleCursorTreeAdapter;
 import android.widget.Toast;
 
 import com.bowfletchers.chatberry.ClassLibrary.FirebaseInstances;
@@ -43,8 +47,6 @@ public class CreateUserStory extends AppCompatActivity {
 
     private final int REQUEST_CODE_IMAGE = 1;
     private final String STORE_URL = "gs://chatberry-201de.appspot.com";
-    private final String DEFAULT_PHOTO_URL = "https://banner2.kisspng.com/20180228/drw/kisspng-common-sunflower-clip-art-sunflower-5a9649f0a8c575.8371432015197987686913.jpg";
-
 
 
     private FirebaseAuth mAuth;
@@ -95,7 +97,10 @@ public class CreateUserStory extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                startActivityForResult(cameraIntent, REQUEST_CODE_IMAGE);            }
+                if (cameraIntent.resolveActivity(getPackageManager()) != null) {
+                    startActivityForResult(cameraIntent, REQUEST_CODE_IMAGE);
+                }
+            }
         });
     }
 
@@ -103,8 +108,9 @@ public class CreateUserStory extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         // get the captured image to image view
         if (requestCode == REQUEST_CODE_IMAGE && resultCode == RESULT_OK && data != null) {
-            Bitmap bitmapImg = (Bitmap) data.getExtras().get("data");
-            imageViewStoryPhoto.setImageBitmap(bitmapImg);
+            Bundle extras = data.getExtras();
+            Bitmap imageBitmap = (Bitmap) extras.get("data");
+            imageViewStoryPhoto.setImageBitmap(imageBitmap);
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
@@ -133,6 +139,15 @@ public class CreateUserStory extends AppCompatActivity {
                 Intent friendStoriesIntent = new Intent(CreateUserStory.this, FriendStories.class);
                 startActivity(friendStoriesIntent);
                 return true;
+            case R.id.my_friend_requests:
+                Intent friendRequestIntent = new Intent(CreateUserStory.this, FriendRequests.class);
+                startActivity(friendRequestIntent);
+                return true;
+            case R.id.newgc:
+                Intent newGC = new Intent(CreateUserStory.this, NewGroupChat.class);
+                startActivity(newGC);
+                return true;
+
         }
         return super.onOptionsItemSelected(item);
     }
@@ -147,18 +162,18 @@ public class CreateUserStory extends AppCompatActivity {
             @Override
             public void onChanged(@Nullable DataSnapshot dataSnapshot) {
 
-                UserStory userStory = dataSnapshot.getValue(UserStory.class);
-
-                if (userStory == null) {
-                    // if user has not  created story , display default info
-                    Glide.with(CreateUserStory.this).load(DEFAULT_PHOTO_URL).into(imageViewStoryPhoto);
-                    editTextStatus.setText(getString(R.string.no_status_message));
-                } else {
-                    // if user has been created story
-                    // retrieve the current data
-                    Glide.with(CreateUserStory.this).load(userStory.getPhotoStoryURL()).into(imageViewStoryPhoto);
-                    editTextStatus.setText(userStory.getStatusMessage());
-                }
+//                UserStory userStory = null;
+//                if (dataSnapshot.getValue() != null) {
+//                    userStory = dataSnapshot.getValue(UserStory.class);
+//                    // map data to views
+//                    Glide.with(CreateUserStory.this).load(userStory.getPhotoStoryURL()).placeholder(R.drawable.common_google_signin_btn_icon_dark_focused).into(imageViewStoryPhoto);
+//                    editTextStatus.setText(userStory.getStatusMessage());
+//                }
+                String userName = dataSnapshot.child("userName").getValue().toString();
+                String userStoryPhoto = dataSnapshot.child("photoStoryURL").getValue().toString();
+                String userStatusMsg = dataSnapshot.child("statusMessage").getValue().toString();
+                Glide.with(CreateUserStory.this).load(userStoryPhoto).placeholder(R.drawable.common_google_signin_btn_icon_dark_focused).into(imageViewStoryPhoto);
+                editTextStatus.setText(userStatusMsg);
             }
         });
     }
@@ -231,6 +246,4 @@ public class CreateUserStory extends AppCompatActivity {
         mDataStore = FirebaseInstances.getFirebaseStorage();
         databaseStoreRef = mDataStore.getReferenceFromUrl(STORE_URL);
     }
-
-
 }

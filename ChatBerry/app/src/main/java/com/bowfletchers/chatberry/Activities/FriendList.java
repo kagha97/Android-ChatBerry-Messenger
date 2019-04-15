@@ -91,6 +91,14 @@ public class FriendList extends AppCompatActivity {
                 Intent friendStoriesIntent = new Intent(FriendList.this, FriendStories.class);
                 startActivity(friendStoriesIntent);
                 return true;
+            case R.id.my_friend_requests:
+                Intent friendRequestIntent = new Intent(FriendList.this, FriendRequests.class);
+                startActivity(friendRequestIntent);
+                return true;
+            case R.id.newgc:
+                Intent newGC = new Intent(FriendList.this, NewGroupChat.class);
+                startActivity(newGC);
+                return true;
         }
         return super.onOptionsItemSelected(item);
     }
