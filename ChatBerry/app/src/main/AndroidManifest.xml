@@ -4,7 +4,6 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
 
-
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -12,14 +11,17 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Activities.AddMemberToGroupChat"></activity>
+        <activity android:name=".Activities.GroupHistoryList"
+            android:theme="@style/AppTheme.NoActionBar" ></activity>
+        <activity android:name=".Activities.AddMemberToGroupChat" />
         <activity android:name=".Activities.EditGroupChat" />
         <activity
             android:name=".Activities.NewGroupChat"
             android:label="@string/title_activity_new_group_chat"
-            android:theme="@style/AppTheme.NoActionBar"/>
-        <activity android:name=".Activities.FriendStories"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".Activities.FriendStories"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".Activities.CreateUserStory"
             android:theme="@style/AppTheme.NoActionBar" />
@@ -53,10 +55,7 @@
         <activity
             android:name=".Activities.FriendList"
             android:theme="@style/AppTheme.NoActionBar" />
-            android:name=".Activities.FriendList"
-            android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".Activities.FriendRequests" />
-
     </application>
 
 </manifest>

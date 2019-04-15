@@ -166,6 +166,11 @@ public class AvailableUsers extends AppCompatActivity {
                 startActivity(friendStoriesIntent);
                 return true;
 
+            case R.id.groupChats:
+                Intent groupChatsList = new Intent(AvailableUsers.this, GroupHistoryList.class);
+                startActivity(groupChatsList);
+                return true;
+
         }
         return super.onOptionsItemSelected(item);
     }

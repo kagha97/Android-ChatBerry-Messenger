@@ -36,6 +36,10 @@
         android:title="@string/menu_create_story"
         app:showAsAction="never" />
     <item
+        android:id="@+id/groupChats"
+        android:title="Groups"
+        app:showAsAction="never"/>
+    <item
         android:id="@+id/friendStories"
         android:title="@string/menu_friend_stories"
         app:showAsAction="never" />

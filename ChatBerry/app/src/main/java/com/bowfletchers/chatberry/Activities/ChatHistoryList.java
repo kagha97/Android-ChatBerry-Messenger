@@ -27,6 +27,7 @@ import com.bowfletchers.chatberry.R;
 import com.bowfletchers.chatberry.ViewModel.ChatHistoryListModel.ChatHistoryReference;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -89,6 +90,38 @@ public class ChatHistoryList extends AppCompatActivity {
         createNotificationChannel();
     }
 
+    private void getDataChanged() {
+        for(int i =0 ; i < chatIdList.size(); i++){
+            DatabaseReference chatsRef = FirebaseDatabase.getInstance().getReference("chats/" + chatIdList.get(i));
+            chatsRef.addChildEventListener(new ChildEventListener() {
+                @Override
+                public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                    sendNotification();
+                }
+
+                @Override
+                public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+                }
+
+                @Override
+                public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+
+                }
+
+                @Override
+                public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
+        }
+    }
+
     private void getAllChatsInfo() {
         ChatHistoryReference chatsViewModel = ViewModelProviders.of(this).get(ChatHistoryReference.class);
         LiveData<DataSnapshot> users = chatsViewModel.getUsers();
@@ -113,15 +146,19 @@ public class ChatHistoryList extends AppCompatActivity {
         chats.observe(this, new Observer<DataSnapshot>() {
             @Override
             public void onChanged(@Nullable DataSnapshot dataSnapshot) {
-                sendNotification();
+                //sendNotification();
+                chatIdList.clear();
                 friendIdList.clear();
                 for(DataSnapshot chats: dataSnapshot.getChildren()){
+                    chatId = chats.getKey();
                     if(auth.equals(chats.child("senderID").getValue().toString())){
                         Log.d("IDNAME",chats.child("receiverID").getValue().toString() );
+                        chatIdList.add(chatId);
                         friendIdList.add(chats.child("receiverID").getValue().toString());
                     }
                     else if(auth.equals(chats.child("receiverID").getValue().toString())){
                         Log.d("IDNAME",chats.child("senderID").getValue().toString() );
+                        chatIdList.add(chatId);
                         friendIdList.add(chats.child("senderID").getValue().toString());
                     }
                 }

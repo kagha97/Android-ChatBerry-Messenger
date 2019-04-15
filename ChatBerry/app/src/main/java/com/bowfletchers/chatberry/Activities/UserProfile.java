@@ -161,6 +161,10 @@ public class UserProfile extends AppCompatActivity {
                 Intent newGC = new Intent(UserProfile.this, NewGroupChat.class);
                 startActivity(newGC);
                 return true;
+            case R.id.groupChats:
+                Intent groupChatsList = new Intent(UserProfile.this, GroupHistoryList.class);
+                startActivity(groupChatsList);
+                return true;
             default:
                 // Do nothing
         }
