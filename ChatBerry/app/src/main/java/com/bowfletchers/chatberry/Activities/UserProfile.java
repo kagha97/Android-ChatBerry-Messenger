@@ -178,7 +178,6 @@ public class UserProfile extends AppCompatActivity {
           mUserRef.addListenerForSingleValueEvent(new ValueEventListener() {
               @Override
               public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                  Log.d("FFF", dataSnapshot.getValue().toString());
                   String userName = dataSnapshot.child("name").getValue().toString();
                   String userEmail = dataSnapshot.child("email").getValue().toString();
                   String userPhotoURL = dataSnapshot.child("profilePicture").getValue().toString();

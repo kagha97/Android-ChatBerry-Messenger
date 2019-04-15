@@ -42,6 +42,8 @@ public class FriendStories extends AppCompatActivity {
         setSupportActionBar(toolbar);
         referenceFirebaseInstances();
 
+        setTitle("Friend's Stories");
+
         // init data
         friendStoryRecycler = findViewById(R.id.recyclerview_friendStories);
         friendStoryRecycler.setLayoutManager(new LinearLayoutManager(this));
@@ -66,16 +68,35 @@ public class FriendStories extends AppCompatActivity {
                 Intent userProfileIntent = new Intent(FriendStories.this, UserProfile.class);
                 startActivity(userProfileIntent);
                 return true;
+
             case R.id.my_friends:
                 Intent userFriendsIntent = new Intent(FriendStories.this, FriendList.class);
                 startActivity(userFriendsIntent);
                 return true;
+
+            case R.id.my_friend_requests:
+                Intent friendRequests = new Intent(FriendStories.this, FriendRequests.class);
+                startActivity(friendRequests);
+                return true;
+
             case R.id.homePage:
                 Intent chatListIntent = new Intent(FriendStories.this, ChatHistoryList.class);
                 startActivity(chatListIntent);
+                return true;
+
+            case R.id.newgc:
+                Intent newGC = new Intent(FriendStories.this, NewGroupChat.class);
+                startActivity(newGC);
+                return true;
+
             case R.id.createStory:
                 Intent createNewStoryIntent = new Intent(FriendStories.this, UserStory.class);
                 startActivity(createNewStoryIntent);
+                return true;
+
+            case R.id.friendStories:
+                Intent friendStoriesIntent = new Intent(FriendStories.this, FriendStories.class);
+                startActivity(friendStoriesIntent);
                 return true;
         }
         return super.onOptionsItemSelected(item);

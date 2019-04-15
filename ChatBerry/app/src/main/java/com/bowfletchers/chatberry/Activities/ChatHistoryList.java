@@ -140,26 +140,32 @@ public class ChatHistoryList extends AppCompatActivity {
                 Intent userProfileIntent = new Intent(ChatHistoryList.this, UserProfile.class);
                 startActivity(userProfileIntent);
                 return true;
+
             case R.id.my_friends:
                 Intent userFriendsIntent = new Intent(ChatHistoryList.this, FriendList.class);
                 startActivity(userFriendsIntent);
                 return true;
+
             case R.id.homePage:
                 Intent chatListIntent = new Intent(ChatHistoryList.this, ChatHistoryList.class);
                 startActivity(chatListIntent);
                 return true;
+
             case R.id.createStory:
                 Intent createNewStoryIntent = new Intent(ChatHistoryList.this, UserStory.class);
                 startActivity(createNewStoryIntent);
                 return true;
+
             case R.id.friendStories:
                 Intent friendStoriesIntent = new Intent(ChatHistoryList.this, FriendStories.class);
                 startActivity(friendStoriesIntent);
                 return true;
+
             case R.id.my_friend_requests:
                 Intent friendRequestIntent = new Intent(ChatHistoryList.this, FriendRequests.class);
                 startActivity(friendRequestIntent);
                 return true;
+
             case R.id.newgc:
                 Intent newGC = new Intent(ChatHistoryList.this, NewGroupChat.class);
                 startActivity(newGC);

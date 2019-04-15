@@ -132,17 +132,21 @@ public class AvailableUsers extends AppCompatActivity {
                 Intent userProfileIntent = new Intent(AvailableUsers.this, UserProfile.class);
                 startActivity(userProfileIntent);
                 return true;
+
             case R.id.my_friends:
                 Intent userFriendsIntent = new Intent(AvailableUsers.this, FriendList.class);
                 startActivity(userFriendsIntent);
                 return true;
+
             case R.id.my_friend_requests:
                 Intent friendRequests = new Intent(AvailableUsers.this, FriendRequests.class);
                 startActivity(friendRequests);
                 return true;
+
             case R.id.homePage:
                 Intent chatListIntent = new Intent(AvailableUsers.this, ChatHistoryList.class);
                 startActivity(chatListIntent);
+                return true;
 
             case R.id.newgc:
                 Intent newGC = new Intent(AvailableUsers.this, NewGroupChat.class);
@@ -152,6 +156,8 @@ public class AvailableUsers extends AppCompatActivity {
             case R.id.createStory:
                 Intent createNewStoryIntent = new Intent(AvailableUsers.this, UserStory.class);
                 startActivity(createNewStoryIntent);
+                return true;
+
             case R.id.friendStories:
                 Intent friendStoriesIntent = new Intent(AvailableUsers.this, FriendStories.class);
                 startActivity(friendStoriesIntent);

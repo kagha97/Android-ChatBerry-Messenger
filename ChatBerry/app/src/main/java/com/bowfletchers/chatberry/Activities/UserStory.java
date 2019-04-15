@@ -124,21 +124,27 @@ public class UserStory extends AppCompatActivity {
                 Intent userProfileIntent = new Intent(UserStory.this, UserProfile.class);
                 startActivity(userProfileIntent);
                 return true;
+
             case R.id.my_friends:
                 Intent userFriendsIntent = new Intent(UserStory.this, FriendList.class);
                 startActivity(userFriendsIntent);
                 return true;
+
             case R.id.homePage:
                 Intent chatListIntent = new Intent(UserStory.this, ChatHistoryList.class);
                 startActivity(chatListIntent);
+                return true;
+
             case R.id.friendStories:
                 Intent friendStoriesIntent = new Intent(UserStory.this, FriendStories.class);
                 startActivity(friendStoriesIntent);
                 return true;
+
             case R.id.my_friend_requests:
                 Intent friendRequestIntent = new Intent(UserStory.this, FriendRequests.class);
                 startActivity(friendRequestIntent);
                 return true;
+                
             case R.id.newgc:
                 Intent newGC = new Intent(UserStory.this, NewGroupChat.class);
                 startActivity(newGC);
@@ -149,11 +155,10 @@ public class UserStory extends AppCompatActivity {
     }
 
     public void displayUserStory() {
+        setTitle(currentUser.getDisplayName() + "'s story");
         userStoryReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                Log.d("FFF", dataSnapshot.getValue().toString());
-
                 String userStoryPhoto = dataSnapshot.child("photoStoryURL").getValue().toString();
                 String userStatusMsg = dataSnapshot.child("statusMessage").getValue().toString();
 

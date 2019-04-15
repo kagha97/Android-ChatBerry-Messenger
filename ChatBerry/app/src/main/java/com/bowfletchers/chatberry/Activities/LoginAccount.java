@@ -33,6 +33,7 @@ public class LoginAccount extends AppCompatActivity {
 
         referenceUIs();
         referenceFirebase();
+        setTitle("Login");
     }
 
     public void confirmSingIn(View view) {

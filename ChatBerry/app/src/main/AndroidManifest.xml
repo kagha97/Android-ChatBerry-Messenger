@@ -55,7 +55,8 @@
             android:theme="@style/AppTheme.NoActionBar" />
             android:name=".Activities.FriendList"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".Activities.FriendRequests" />
+        <activity android:name=".Activities.FriendRequests"
+            android:theme="@style/AppTheme.NoActionBar"/>
 
     </application>
 
