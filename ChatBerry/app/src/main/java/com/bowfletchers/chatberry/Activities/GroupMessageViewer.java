@@ -17,6 +17,9 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.bowfletchers.chatberry.Adapters.MessagesAdapter;
@@ -33,7 +36,7 @@ import com.google.firebase.database.DatabaseReference;
 
 import java.util.ArrayList;
 
-public class GroupMessageViewer extends AppCompatActivity {
+public class GroupMessageViewer extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
     private RecyclerView recyclerView;
     private MessagesAdapter msgAdapter;
     TextView newMessage;
@@ -68,9 +71,20 @@ public class GroupMessageViewer extends AppCompatActivity {
         msgAdapter = new MessagesAdapter(this, msgs);
         recyclerView.setAdapter(msgAdapter);
 
+        Spinner spinner = (Spinner) findViewById(R.id.emoji);
+        spinner.setOnItemSelectedListener(this);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+                R.array.emojis, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
+
+
         Log.i("gchat", "chat id: " +getIntent().getStringExtra("id"));
         chatID = getIntent().getStringExtra("id");
         liveChatRoom(chatID, context);
+
+
+
 
 
     }
@@ -211,6 +225,13 @@ public class GroupMessageViewer extends AppCompatActivity {
     }
 
 
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        newMessage.setText(newMessage.getText() + parent.getItemAtPosition(position).toString());
+    }
 
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
 
+    }
 }

@@ -10,6 +10,9 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,7 +33,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MessageViewer extends AppCompatActivity {
+public class MessageViewer extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
     FirebaseAuth mAuthentication;
     DatabaseReference mDatabase;
     TextView newMessage;
@@ -70,6 +73,12 @@ public class MessageViewer extends AppCompatActivity {
         member = (Member) getIntent().getSerializableExtra("chatMember");
         getChatRoom();
 
+        Spinner spinner = (Spinner) findViewById(R.id.emoji);
+        spinner.setOnItemSelectedListener(this);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+                R.array.emojis, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
 
         setTitle(member.name);
     }
@@ -216,5 +225,15 @@ public class MessageViewer extends AppCompatActivity {
 
     public void scrollToBottom(View view) {
         recyclerView.scrollToPosition(msgs.size() - 1);
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        newMessage.setText(newMessage.getText() + parent.getItemAtPosition(position).toString());
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
     }
 }

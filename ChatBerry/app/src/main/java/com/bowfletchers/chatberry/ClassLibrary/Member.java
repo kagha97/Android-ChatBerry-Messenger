@@ -86,10 +86,10 @@ public class Member implements Serializable {
 
     public String getType() {
         if (type.equals("1")) {
-            return "Admin";
+            return "👑";
         }
         else {
-            return "Member";
+            return "";
         }
     }
 
