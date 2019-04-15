@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.DataSetObservable;
 import android.database.DataSetObserver;
+import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -16,6 +17,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
 
 import com.bowfletchers.chatberry.Adapters.GCMemberSelectAdapter;
@@ -45,7 +47,7 @@ public class EditGroupChat extends AppCompatActivity {
     private RecyclerView recyclerView;
     GCMemberSettingsAdapter memberSettingsAdapter;
 
-    List<Member> memberList;
+    ArrayList<Member> memberList;
     List<Member> oldMemberList;
     TextView title;
     String ownerID;
@@ -107,8 +109,9 @@ public class EditGroupChat extends AppCompatActivity {
 
         chat.setMemberList(gmemList);
         DatabaseReference newChat = FirebaseInstances.getDatabaseReference("gchats/" + chatID);
-        newChat.setValue(chat);
+        newChat.child("memberList").setValue(chat.getMemberList());
     }
+
 
 
 
@@ -127,6 +130,7 @@ public class EditGroupChat extends AppCompatActivity {
                 for (DataSnapshot membs : dataSnapshot.child("memberList").getChildren()) {
                     memlist.add(new GCMember(membs.child("memberID").getValue(String.class), membs.child("type").getValue(String.class)));
                 }
+
 
 
                 chat.setMemberList(memlist);
@@ -177,7 +181,35 @@ public class EditGroupChat extends AppCompatActivity {
     }
 
 
+    public void changeName(View view) {
 
+        if (mAuthintication.getCurrentUser().getUid().equals(chat.getOwnerID())) {
+            chat.setName(title.getText().toString());
+            DatabaseReference newChat = FirebaseInstances.getDatabaseReference("gchats/" + chatID);
+            newChat.child("name").setValue(title.getText().toString());
+            Snackbar.make(recyclerView, "Group name updated to: " + title.getText().toString(),
+                    Snackbar.LENGTH_SHORT)
+                    .show();
+        }
+        else {
+            Snackbar.make(recyclerView, "Only the group owner can update name.",
+                    Snackbar.LENGTH_SHORT)
+                    .show();
+        }
 
+    }
 
+    public void addMember(View view) {
+        if (mAuthintication.getCurrentUser().getUid().equals(chat.getOwnerID())) {
+            Intent editGCIntent = new Intent(EditGroupChat.this, AddMemberToGroupChat.class);
+            editGCIntent.putExtra("id", mAuthintication.getCurrentUser().getUid());
+            editGCIntent.putExtra("chatid", chatID);
+            startActivity(editGCIntent);
+        }
+        else {
+            Snackbar.make(recyclerView, "Only the group owner can add members.",
+                    Snackbar.LENGTH_SHORT)
+                    .show();
+        }
+    }
 }

@@ -1,6 +1,8 @@
 package com.bowfletchers.chatberry.ClassLibrary;
 
-public class GCMember {
+import java.io.Serializable;
+
+public class GCMember implements Serializable {
 
 
     private String memberID;

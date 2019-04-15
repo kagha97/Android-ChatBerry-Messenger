@@ -11,7 +11,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Activities.EditGroupChat"></activity>
+        <activity android:name=".Activities.AddMemberToGroupChat"></activity>
+        <activity android:name=".Activities.EditGroupChat" />
         <activity
             android:name=".Activities.NewGroupChat"
             android:label="@string/title_activity_new_group_chat"
