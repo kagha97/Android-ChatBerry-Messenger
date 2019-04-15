@@ -7,6 +7,7 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -82,7 +83,6 @@ public class GroupMessageViewer extends AppCompatActivity implements AdapterView
         Log.i("gchat", "chat id: " +getIntent().getStringExtra("id"));
         chatID = getIntent().getStringExtra("id");
         liveChatRoom(chatID, context);
-
 
 
 
@@ -211,13 +211,23 @@ public class GroupMessageViewer extends AppCompatActivity implements AdapterView
     public void sendMessage(View view) {
 //        Log.d("chatid", chatID);
 
-        SendMessage sendMessage = new SendMessage();
+        if (!newMessage.getText().toString().equals("") || !newMessage.getText().toString().matches("\\S+")) {
+            SendMessage sendMessage = new SendMessage();
 
 
-        sendMessage.sendGroupMessage(chatID, newMessage.getText().toString(), mAuthentication.getCurrentUser().getPhotoUrl().toString());
-        newMessage.setText("");
+            sendMessage.sendGroupMessage(chatID, newMessage.getText().toString(), mAuthentication.getCurrentUser().getPhotoUrl().toString());
+            newMessage.setText("");
 
-        recyclerView.scrollToPosition(msgs.size() - 1);
+            recyclerView.scrollToPosition(msgs.size() - 1);
+        }
+        else {
+
+            Snackbar.make(view, "You can't send an empty message!",
+                    Snackbar.LENGTH_SHORT)
+                    .show();
+        }
+
+
     }
 
     public void scrollToBottom(View view) {

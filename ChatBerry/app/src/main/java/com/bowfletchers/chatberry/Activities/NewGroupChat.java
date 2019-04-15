@@ -118,24 +118,37 @@ public class NewGroupChat extends AppCompatActivity {
             }
         }
 
-        GCMember mem = new GCMember(FirebaseInstances.getDatabaseAuth().getCurrentUser().getUid(), "1");
-        checkedMembers.add(mem);
+        if (!groupName.getText().toString().equals("") && !groupName.getText().toString().trim().isEmpty()) {
+            GCMember mem = new GCMember(FirebaseInstances.getDatabaseAuth().getCurrentUser().getUid(), "1");
+            checkedMembers.add(mem);
 
-        GroupChat chat = new GroupChat(groupName.getText().toString(), FirebaseInstances.getDatabaseAuth().getUid(), checkedMembers);
+            GroupChat chat = new GroupChat(groupName.getText().toString(), FirebaseInstances.getDatabaseAuth().getUid(), checkedMembers);
 
-        DatabaseReference newChat = chatDb.push();
-        newChat.setValue(chat);
+            DatabaseReference newChat = chatDb.push();
+            newChat.setValue(chat);
 
-        String chatID = newChat.getKey();
+            String chatID = newChat.getKey();
 
-        Intent intent = new Intent(this, GroupMessageViewer.class);
+            Intent intent = new Intent(this, GroupMessageViewer.class);
 
-        intent.putExtra("id" , chatID);
-        intent.putExtra("owner" , FirebaseInstances.getDatabaseAuth().getUid());
-        this.startActivity(intent);
+            intent.putExtra("id" , chatID);
+            intent.putExtra("owner" , FirebaseInstances.getDatabaseAuth().getUid());
+            this.startActivity(intent);
 
-        Log.d("chatstatus", "new chat room created");
-     //   Log.d("chatstatus", "chatid: " + chatID);
+            Log.d("chatstatus", "new chat room created");
+            //   Log.d("chatstatus", "chatid: " + chatID);
+
+
+
+        }
+        else {
+
+            Snackbar.make(recyclerView, "Group chat name can't be empty!",
+                    Snackbar.LENGTH_SHORT)
+                    .show();
+        }
+
+
 
     }
 
