@@ -16,7 +16,8 @@
         <activity android:name=".Activities.EditGroupChat" />
         <activity
             android:name=".Activities.NewGroupChat"
-            android:label="@string/title_activity_new_group_chat"/>
+            android:label="@string/title_activity_new_group_chat"
+            android:theme="@style/AppTheme.NoActionBar"/>
         <activity android:name=".Activities.FriendStories"
             android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity
