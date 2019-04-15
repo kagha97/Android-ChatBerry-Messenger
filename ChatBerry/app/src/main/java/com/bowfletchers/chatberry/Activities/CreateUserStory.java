@@ -215,7 +215,8 @@ public class CreateUserStory extends AppCompatActivity {
 
     private void updateUserStoryInDatabase(String photoURL, String status) {
         String currentUserId = currentUser.getUid();
-        UserStory userStory = new UserStory(currentUserId, photoURL, status);
+        String currentUserName = currentUser.getDisplayName();
+        UserStory userStory = new UserStory(currentUserId, currentUserName, photoURL, status);
         userDataReference.child(currentUserId).child("story").setValue(userStory);
     }
 

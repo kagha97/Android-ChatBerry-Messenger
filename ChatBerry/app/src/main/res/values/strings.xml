@@ -37,5 +37,7 @@
     <string name="menu_friend_request">Friend Requests</string>
     <string name="menu_friend_stories">Friend\'s Stories</string>
     <string name="no_status_message">No Status at this time</string>
+    <string name="friend_story_status_label">Says:</string>
+    <string name="friend_story_status_msg_sample">This is a nice day</string>
 
 </resources>
