@@ -73,7 +73,7 @@ public class CreateUserStory extends AppCompatActivity {
 
         // display current user story when page load
         String userId = currentUser.getUid();
-        displayUserStory(userId);
+        //displayUserStory(userId);
 
         // handle cancel button
         buttonCancel.setOnClickListener(new View.OnClickListener() {

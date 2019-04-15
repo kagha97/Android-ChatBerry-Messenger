@@ -1,6 +1,7 @@
 package com.bowfletchers.chatberry.Adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.RecyclerView;
@@ -10,14 +11,24 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bowfletchers.chatberry.Activities.MessageViewer;
+import com.bowfletchers.chatberry.ClassLibrary.Member;
 import com.bowfletchers.chatberry.R;
+import com.bumptech.glide.Glide;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ChatHistoryInfoAdapter extends RecyclerView.Adapter<ChatHistoryInfoAdapter.ViewHolder> {
 
     private Context mcontext;
-    public ChatHistoryInfoAdapter(Context context)
+    private List<Member> memberList = new ArrayList<>();
+    private List<String> chatIdList = new ArrayList<>();
+    public ChatHistoryInfoAdapter(Context context, List<Member> members, List<String> chatIdList)
     {
         this.mcontext = context;
+        this.memberList = members;
+        this.chatIdList = chatIdList;
     }
     @NonNull
     @Override
@@ -28,14 +39,23 @@ public class ChatHistoryInfoAdapter extends RecyclerView.Adapter<ChatHistoryInfo
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.friendName.setText("Friend");
-        holder.lastMessage.setText("last message");
+    public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
+        holder.friendName.setText(memberList.get(position).name);
+        //holder.lastMessage.setText("last message");
+        Glide.with(mcontext).load(memberList.get(position).profilePicture).into(holder.friendImage);
+        holder.recyclerViewLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(mcontext, MessageViewer.class);
+                intent.putExtra("chatMember", memberList.get(position));
+                mcontext.startActivity(intent);
+            }
+        });
     }
 
     @Override
     public int getItemCount() {
-        return 4;
+        return memberList.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
