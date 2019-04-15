@@ -2,8 +2,6 @@ package com.bowfletchers.chatberry.Activities;
 
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.Observer;
-import android.arch.lifecycle.ViewModel;
-import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -15,7 +13,6 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -23,13 +20,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.SimpleCursorTreeAdapter;
 import android.widget.Toast;
 
 import com.bowfletchers.chatberry.ClassLibrary.FirebaseInstances;
 import com.bowfletchers.chatberry.ClassLibrary.UserStory;
 import com.bowfletchers.chatberry.R;
-import com.bowfletchers.chatberry.ViewModel.UserStory.UserStoryViewModel;
+import com.bowfletchers.chatberry.ViewModel.UserData.UserStoryViewModel;
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -47,6 +43,8 @@ public class CreateUserStory extends AppCompatActivity {
 
     private final int REQUEST_CODE_IMAGE = 1;
     private final String STORE_URL = "gs://chatberry-201de.appspot.com";
+    private final String DEFAULT_PHOTO_URL = "https://banner2.kisspng.com/20180228/drw/kisspng-common-sunflower-clip-art-sunflower-5a9649f0a8c575.8371432015197987686913.jpg";
+
 
 
     private FirebaseAuth mAuth;
@@ -131,6 +129,10 @@ public class CreateUserStory extends AppCompatActivity {
             case R.id.homePage:
                 Intent chatListIntent = new Intent(CreateUserStory.this, ChatHistoryList.class);
                 startActivity(chatListIntent);
+            case R.id.friendStories:
+                Intent friendStoriesIntent = new Intent(CreateUserStory.this, FriendStories.class);
+                startActivity(friendStoriesIntent);
+                return true;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -147,9 +149,16 @@ public class CreateUserStory extends AppCompatActivity {
 
                 UserStory userStory = dataSnapshot.getValue(UserStory.class);
 
-                // map data to views
-                Glide.with(CreateUserStory.this).load(userStory.getPhotoStoryURL()).into(imageViewStoryPhoto);
-                editTextStatus.setText(userStory.getStatusMessage());
+                if (userStory == null) {
+                    // if user has not  created story , display default info
+                    Glide.with(CreateUserStory.this).load(DEFAULT_PHOTO_URL).into(imageViewStoryPhoto);
+                    editTextStatus.setText(getString(R.string.no_status_message));
+                } else {
+                    // if user has been created story
+                    // retrieve the current data
+                    Glide.with(CreateUserStory.this).load(userStory.getPhotoStoryURL()).into(imageViewStoryPhoto);
+                    editTextStatus.setText(userStory.getStatusMessage());
+                }
             }
         });
     }
@@ -202,7 +211,8 @@ public class CreateUserStory extends AppCompatActivity {
 
     private void updateUserStoryInDatabase(String photoURL, String status) {
         String currentUserId = currentUser.getUid();
-        UserStory userStory = new UserStory(currentUserId, photoURL, status);
+        String currentUserName = currentUser.getDisplayName();
+        UserStory userStory = new UserStory(currentUserId, currentUserName, photoURL, status);
         userDataReference.child(currentUserId).child("story").setValue(userStory);
     }
 
