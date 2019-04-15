@@ -73,7 +73,7 @@ public class CreateUserStory extends AppCompatActivity {
 
         // display current user story when page load
         String userId = currentUser.getUid();
-        //displayUserStory(userId);
+        displayUserStory(userId);
 
         // handle cancel button
         buttonCancel.setOnClickListener(new View.OnClickListener() {
@@ -145,11 +145,13 @@ public class CreateUserStory extends AppCompatActivity {
             @Override
             public void onChanged(@Nullable DataSnapshot dataSnapshot) {
 
-                UserStory userStory = dataSnapshot.getValue(UserStory.class);
-
-                // map data to views
-                Glide.with(CreateUserStory.this).load(userStory.getPhotoStoryURL()).into(imageViewStoryPhoto);
-                editTextStatus.setText(userStory.getStatusMessage());
+                UserStory userStory = null;
+                if (dataSnapshot.getValue() != null) {
+                    userStory = dataSnapshot.getValue(UserStory.class);
+                    // map data to views
+                    Glide.with(CreateUserStory.this).load(userStory.getPhotoStoryURL()).into(imageViewStoryPhoto);
+                    editTextStatus.setText(userStory.getStatusMessage());
+                }
             }
         });
     }
