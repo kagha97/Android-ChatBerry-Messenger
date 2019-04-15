@@ -2,19 +2,14 @@ package com.bowfletchers.chatberry.Activities;
 
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.Observer;
-import android.arch.lifecycle.ViewModel;
-import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.widget.Toast;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -27,10 +22,6 @@ import com.bowfletchers.chatberry.ViewModel.AvailableUsersModel.GetAvailableUser
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
@@ -159,7 +150,7 @@ public class AvailableUsers extends AppCompatActivity {
                 return true;
 
             case R.id.createStory:
-                Intent createNewStoryIntent = new Intent(AvailableUsers.this, CreateUserStory.class);
+                Intent createNewStoryIntent = new Intent(AvailableUsers.this, UserStory.class);
                 startActivity(createNewStoryIntent);
             case R.id.friendStories:
                 Intent friendStoriesIntent = new Intent(AvailableUsers.this, FriendStories.class);

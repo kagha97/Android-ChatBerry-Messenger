@@ -7,7 +7,6 @@ import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.graphics.Color;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -28,10 +27,8 @@ import com.bowfletchers.chatberry.ViewModel.ChatHistoryListModel.ChatHistoryRefe
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -113,7 +110,7 @@ public class ChatHistoryList extends AppCompatActivity {
         chats.observe(this, new Observer<DataSnapshot>() {
             @Override
             public void onChanged(@Nullable DataSnapshot dataSnapshot) {
-                sendNotification();
+                //sendNotification();
                 friendIdList.clear();
                 for(DataSnapshot chats: dataSnapshot.getChildren()){
                     if(auth.equals(chats.child("senderID").getValue().toString())){
@@ -152,7 +149,7 @@ public class ChatHistoryList extends AppCompatActivity {
                 startActivity(chatListIntent);
                 return true;
             case R.id.createStory:
-                Intent createNewStoryIntent = new Intent(ChatHistoryList.this, CreateUserStory.class);
+                Intent createNewStoryIntent = new Intent(ChatHistoryList.this, UserStory.class);
                 startActivity(createNewStoryIntent);
                 return true;
             case R.id.friendStories:

@@ -8,14 +8,12 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bowfletchers.chatberry.R;
 import com.bowfletchers.chatberry.ViewModel.FriendList.FriendListViewModel;
@@ -72,7 +70,7 @@ public class FriendProfile extends AppCompatActivity {
                 Intent chatListIntent = new Intent(FriendProfile.this, ChatHistoryList.class);
                 startActivity(chatListIntent);
             case R.id.createStory:
-                Intent createNewStoryIntent = new Intent(FriendProfile.this, CreateUserStory.class);
+                Intent createNewStoryIntent = new Intent(FriendProfile.this, UserStory.class);
                 startActivity(createNewStoryIntent);
             case R.id.friendStories:
                 Intent friendStoriesIntent = new Intent(FriendProfile.this, FriendStories.class);

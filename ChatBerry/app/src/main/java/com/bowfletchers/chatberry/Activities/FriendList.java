@@ -4,7 +4,6 @@ import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
-import android.print.PrinterId;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -12,19 +11,14 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Toast;
 
 import com.bowfletchers.chatberry.Adapters.FriendListAdapter;
 import com.bowfletchers.chatberry.ClassLibrary.FirebaseInstances;
 import com.bowfletchers.chatberry.ClassLibrary.Member;
 import com.bowfletchers.chatberry.R;
-import com.bowfletchers.chatberry.Testing.MockData;
 import com.bowfletchers.chatberry.ViewModel.FriendList.FriendListViewModel;
-import com.google.android.gms.dynamic.IFragmentWrapper;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -85,7 +79,7 @@ public class FriendList extends AppCompatActivity {
                 Intent chatListIntent = new Intent(FriendList.this, ChatHistoryList.class);
                 startActivity(chatListIntent);
             case R.id.createStory:
-                Intent createNewStoryIntent = new Intent(FriendList.this, CreateUserStory.class);
+                Intent createNewStoryIntent = new Intent(FriendList.this, UserStory.class);
                 startActivity(createNewStoryIntent);
             case R.id.friendStories:
                 Intent friendStoriesIntent = new Intent(FriendList.this, FriendStories.class);

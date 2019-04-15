@@ -15,7 +15,6 @@ import android.view.MenuItem;
 
 import com.bowfletchers.chatberry.Adapters.FriendStoriesAdapter;
 import com.bowfletchers.chatberry.ClassLibrary.FirebaseInstances;
-import com.bowfletchers.chatberry.ClassLibrary.UserStory;
 import com.bowfletchers.chatberry.R;
 import com.bowfletchers.chatberry.ViewModel.FriendList.FriendListViewModel;
 import com.bowfletchers.chatberry.ViewModel.UserData.UserStoryViewModel;
@@ -33,7 +32,7 @@ public class FriendStories extends AppCompatActivity {
 
     private RecyclerView friendStoryRecycler;
     private FriendStoriesAdapter friendStoriesAdapter;
-    private List<UserStory> listFriendStories;
+    private List<com.bowfletchers.chatberry.ClassLibrary.UserStory> listFriendStories;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,7 +74,7 @@ public class FriendStories extends AppCompatActivity {
                 Intent chatListIntent = new Intent(FriendStories.this, ChatHistoryList.class);
                 startActivity(chatListIntent);
             case R.id.createStory:
-                Intent createNewStoryIntent = new Intent(FriendStories.this, CreateUserStory.class);
+                Intent createNewStoryIntent = new Intent(FriendStories.this, UserStory.class);
                 startActivity(createNewStoryIntent);
                 return true;
         }
@@ -106,7 +105,7 @@ public class FriendStories extends AppCompatActivity {
                         @Override
                         public void onChanged(@Nullable DataSnapshot dataSnapshot) {
                             if (dataSnapshot.getValue() != null) {
-                                UserStory currentFriendStory = dataSnapshot.getValue(UserStory.class);
+                                com.bowfletchers.chatberry.ClassLibrary.UserStory currentFriendStory = dataSnapshot.getValue(com.bowfletchers.chatberry.ClassLibrary.UserStory.class);
                                 listFriendStories.add(currentFriendStory);
                                 friendStoriesAdapter.notifyDataSetChanged();
                             }

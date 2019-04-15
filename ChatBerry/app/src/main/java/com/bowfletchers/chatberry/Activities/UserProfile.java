@@ -1,9 +1,5 @@
 package com.bowfletchers.chatberry.Activities;
 
-import android.arch.lifecycle.LiveData;
-import android.arch.lifecycle.Observer;
-import android.arch.lifecycle.ViewModel;
-import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
@@ -27,9 +23,7 @@ import android.widget.Toast;
 import android.support.v7.widget.Toolbar;
 
 import com.bowfletchers.chatberry.ClassLibrary.FirebaseInstances;
-import com.bowfletchers.chatberry.ClassLibrary.Member;
 import com.bowfletchers.chatberry.R;
-import com.bowfletchers.chatberry.ViewModel.UserData.UserInfoViewModel;
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -41,7 +35,6 @@ import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -149,7 +142,7 @@ public class UserProfile extends AppCompatActivity {
                 startActivity(userFriendsIntent);
                 return true;
             case R.id.createStory:
-                Intent createNewStoryIntent = new Intent(UserProfile.this, CreateUserStory.class);
+                Intent createNewStoryIntent = new Intent(UserProfile.this, UserStory.class);
                 startActivity(createNewStoryIntent);
                 return true;
             case R.id.friendStories:
