@@ -7,6 +7,7 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
@@ -38,8 +39,10 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -52,9 +55,11 @@ public class UserProfile extends AppCompatActivity {
     private final String STORE_URL = "gs://chatberry-201de.appspot.com";
     private final String DEFAULT_PHOTO_URL = "https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909__340.png";
     private int userOnlineStatus;
+    private String userId;
 
     ImageView imageViewUserPhoto;
     TextView editTextUserName;
+    TextView textViewUserEmail;
     Switch aSwitchOnlineStatus;
     Button buttonDone;
     Button buttonSignout;
@@ -76,8 +81,6 @@ public class UserProfile extends AppCompatActivity {
         referenceFirebaseInstances();
 
         setTitle(currentUser.getDisplayName() + "'s profile");
-
-
         displayDefaultUserInfo();
 
         // open camera when user click on image view
@@ -177,50 +180,41 @@ public class UserProfile extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-    private void referenceViews() {
-        imageViewUserPhoto = findViewById(R.id.user_profile_avatar);
-        editTextUserName = findViewById(R.id.user_profile_name);
-        aSwitchOnlineStatus = findViewById(R.id.user_profile_onlineStatus_switch);
-        buttonDone = findViewById(R.id.user_profile_button_done);
-        buttonSignout = findViewById(R.id.user_profile_button_logout);
-    }
-
     private void displayDefaultUserInfo(){
-        // read user data based
-        UserInfoViewModel userInfoViewModel = ViewModelProviders.of(UserProfile.this).get(UserInfoViewModel.class);
+          // retrieve user data from database based on id
+          mUserRef.addListenerForSingleValueEvent(new ValueEventListener() {
+              @Override
+              public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                  Log.d("FFF", dataSnapshot.getValue().toString());
+                  String userName = dataSnapshot.child("name").getValue().toString();
+                  String userEmail = dataSnapshot.child("email").getValue().toString();
+                  String userPhotoURL = dataSnapshot.child("profilePicture").getValue().toString();
+                  String userOnlineStatus = dataSnapshot.child("onlineStatus").getValue().toString();
 
-        LiveData<DataSnapshot> userInfoLiveData = userInfoViewModel.getUserDataById(currentUser.getUid());
+                  // mapping data to views
+                  editTextUserName.setText(userName);
+                  textViewUserEmail.setText(userEmail);
+                  Glide.with(UserProfile.this)
+                          .load(userPhotoURL)
+                          .placeholder(Drawable.createFromPath(DEFAULT_PHOTO_URL))
+                          .into(imageViewUserPhoto);
+                  if (userOnlineStatus.equals("1")) {
+                      aSwitchOnlineStatus.setChecked(true);
+                  } else {
+                      aSwitchOnlineStatus.setChecked(false);
+                  }
+              }
 
-        userInfoLiveData.observe(UserProfile.this, new Observer<DataSnapshot>() {
-            @Override
-            public void onChanged(@Nullable DataSnapshot dataSnapshot) {
+              @Override
+              public void onCancelled(@NonNull DatabaseError databaseError) {
 
-                if (dataSnapshot != null) {
-                    String userName = dataSnapshot.child("name").getValue().toString();
-                    String userProfilePicture = dataSnapshot.child("profilePicture").getValue().toString();
-                    String userEmail = dataSnapshot.child("email").getValue().toString();
-                    String userOnlineStatus = dataSnapshot.child("onlineStatus").getValue().toString();
-
-                    Glide.with(UserProfile.this).load(userProfilePicture).into(imageViewUserPhoto);
-                    editTextUserName.setText(userName);
-                    if (userOnlineStatus.equals("1")) {
-                        aSwitchOnlineStatus.setChecked(true);
-                    } else {
-                        aSwitchOnlineStatus.setChecked(false);
-                    }
-                } else {
-                    Glide.with(UserProfile.this).load(DEFAULT_PHOTO_URL).into(imageViewUserPhoto);
-                    editTextUserName.setText("NO NAME");
-                    aSwitchOnlineStatus.setChecked(false);
-                }
-            }
-        });
+              }
+          });
     }
 
     private void uploadUserPhotoToStore() {
         // set components to create img name
         String userName = currentUser.getDisplayName();
-        String userId = currentUser.getUid();
         String imageName = userName + userId + ".png";
 
         // upload current img to store
@@ -257,6 +251,9 @@ public class UserProfile extends AppCompatActivity {
 
                         // update online status
                         updateUserOnlineStatus(userOnlineStatus);
+
+                        // show the upload status to user
+                        Toast.makeText(UserProfile.this, "Your profile has been updated.", Toast.LENGTH_SHORT).show();
                     }
                 });
             }
@@ -282,21 +279,29 @@ public class UserProfile extends AppCompatActivity {
     }
 
     private void updateUserInfoInDatabase(String newUserPhoToURL, String newUserDisplayName) {
-        String currentUserId = currentUser.getUid();
-        mUserRef.child(currentUserId).child("name").setValue(newUserDisplayName);
-        mUserRef.child(currentUserId).child("profilePicture").setValue(newUserPhoToURL);
+        mUserRef.child("name").setValue(newUserDisplayName);
+        mUserRef.child("profilePicture").setValue(newUserPhoToURL);
     }
 
     private void updateUserOnlineStatus(int userOnlineStatus) {
-        String currentUserId = currentUser.getUid();
-        mUserRef.child(currentUserId).child("onlineStatus").setValue(userOnlineStatus);
+        mUserRef.child("onlineStatus").setValue(userOnlineStatus);
     }
 
     private void referenceFirebaseInstances() {
-        mUserRef = FirebaseInstances.getDatabaseReference("users");
         mAuth = FirebaseInstances.getDatabaseAuth();
         currentUser = mAuth.getCurrentUser();
+        userId = currentUser.getUid();
+        mUserRef = FirebaseInstances.getDatabaseReference("/users/" + userId);
         firebaseStore = FirebaseInstances.getFirebaseStorage();
         storageReference = firebaseStore.getReferenceFromUrl(STORE_URL);
+    }
+
+    private void referenceViews() {
+        imageViewUserPhoto = findViewById(R.id.user_profile_avatar);
+        editTextUserName = findViewById(R.id.user_profile_name);
+        textViewUserEmail = findViewById(R.id.textViewUserProfileEmail);
+        aSwitchOnlineStatus = findViewById(R.id.user_profile_onlineStatus_switch);
+        buttonDone = findViewById(R.id.user_profile_button_done);
+        buttonSignout = findViewById(R.id.user_profile_button_logout);
     }
 }

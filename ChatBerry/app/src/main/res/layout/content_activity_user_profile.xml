@@ -65,25 +65,48 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="64dp"
         android:layout_marginLeft="64dp"
-        android:layout_marginTop="88dp"
-        android:text="@string/user_profile_button_done_label"
+        android:layout_marginTop="40dp"
         android:background="@color/colorPrimary"
+        android:text="@string/user_profile_button_done_label"
         android:textColor="#fff"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/user_profile_onlineStatus_label" />
+        app:layout_constraintTop_toBottomOf="@+id/textViewUserProfileEmailLabel" />
 
     <Button
         android:id="@+id/user_profile_button_logout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="76dp"
-        android:layout_marginLeft="76dp"
-        android:layout_marginTop="88dp"
-        android:text="@string/user_profile_button_logout_label"
+        android:layout_marginStart="68dp"
+        android:layout_marginLeft="68dp"
+        android:layout_marginTop="40dp"
         android:background="@android:color/holo_red_light"
+        android:text="@string/user_profile_button_logout_label"
         android:textColor="#fff"
         android:textStyle="bold"
         app:layout_constraintStart_toEndOf="@+id/user_profile_button_done"
-        app:layout_constraintTop_toBottomOf="@+id/user_profile_onlineStatus_switch" />
+        app:layout_constraintTop_toBottomOf="@+id/textViewUserProfileEmail" />
+
+    <TextView
+        android:id="@+id/textViewUserProfileEmailLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="52dp"
+        android:layout_marginLeft="52dp"
+        android:layout_marginTop="28dp"
+        android:textSize="20sp"
+        android:text="Email"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/user_profile_onlineStatus_label" />
+
+    <TextView
+        android:id="@+id/textViewUserProfileEmail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="48dp"
+        android:layout_marginLeft="48dp"
+        android:text="abc@gmail.com"
+        android:textSize="14sp"
+        app:layout_constraintBaseline_toBaselineOf="@+id/textViewUserProfileEmailLabel"
+        app:layout_constraintStart_toEndOf="@+id/textViewUserProfileEmailLabel" />
 </android.support.constraint.ConstraintLayout>
