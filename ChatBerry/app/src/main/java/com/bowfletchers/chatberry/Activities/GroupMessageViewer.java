@@ -184,7 +184,7 @@ public class GroupMessageViewer extends AppCompatActivity {
                     }
 
 
-                    Member member = new Member(uid, name, onlineStatus, false, pfp);
+                    Member member = new Member(uid, name, onlineStatus, false, pfp, "0");
                     memberList.add(member);
                 }
 

@@ -165,9 +165,10 @@ public class EditGroupChat extends AppCompatActivity {
                         Log.i("gNames", dataSnapshot.child(mem.getMemberID()).child("name").getValue().toString());
                         String id = dataSnapshot.child(mem.getMemberID()).child("id").getValue().toString();
                         String name = dataSnapshot.child(mem.getMemberID()).child("name").getValue().toString();
+                        String onlineStatus = dataSnapshot.child(mem.getMemberID()).child("onlineStatus").getValue().toString();
                         //       String status = snapshot.child("onlineStatus").getValue().toString();
                         String pfp = dataSnapshot.child(mem.getMemberID()).child("profilePicture").getValue().toString();
-                        Member member = new Member(id, name, "0", false, pfp);
+                        Member member = new Member(id, name, onlineStatus, false, pfp,mem.getType());
                         memberList.add(member);
 
 

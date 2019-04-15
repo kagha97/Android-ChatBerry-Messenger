@@ -96,8 +96,11 @@ public class NewGroupChat extends AppCompatActivity {
                     String pfp = snapshot.child("profilePicture").getValue().toString();
 
 
-                    Member member = new Member(id, name,"0",false, pfp);
-                    mems.add(member);
+                    if (!id.equals(FirebaseInstances.getDatabaseAuth().getCurrentUser().getUid())) {
+                        Member member = new Member(id, name,"0",false, pfp, "0");
+                        mems.add(member);
+                    }
+
                 }
                 memAdapter.notifyDataSetChanged();
             }
@@ -114,6 +117,9 @@ public class NewGroupChat extends AppCompatActivity {
                 checkedMembers.add(mem);
             }
         }
+
+        GCMember mem = new GCMember(FirebaseInstances.getDatabaseAuth().getCurrentUser().getUid(), "1");
+        checkedMembers.add(mem);
 
         GroupChat chat = new GroupChat(groupName.getText().toString(), FirebaseInstances.getDatabaseAuth().getUid(), checkedMembers);
 

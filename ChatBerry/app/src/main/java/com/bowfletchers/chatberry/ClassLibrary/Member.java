@@ -9,6 +9,7 @@ public class Member implements Serializable {
     public String email;
     public String name;
     public boolean add;
+    private String type;
     public long onlineStatus; // 0 for offline and 1 for online
     public String profilePicture;
     public List<Member> friendList;
@@ -60,12 +61,13 @@ public class Member implements Serializable {
         this.me = false;
     }
 
-    public Member (String id, String name, String status, boolean add, String profilePicture) {
+    public Member (String id, String name, String status, boolean add, String profilePicture, String type) {
         this.id = id;
         this.name = name;
         this.add = add;
         this.onlineStatus = Integer.parseInt(status);
         this.profilePicture = profilePicture;
+        this.type = type;
     }
 
     public Member(String name) {
@@ -82,6 +84,14 @@ public class Member implements Serializable {
 
 
 
+    public String getType() {
+        if (type.equals("1")) {
+            return "Admin";
+        }
+        else {
+            return "Member";
+        }
+    }
 
     public String getStatusString() {
         if (onlineStatus == 1) {
