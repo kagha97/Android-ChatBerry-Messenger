@@ -3,12 +3,16 @@ package com.bowfletchers.chatberry.Activities;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Intent;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -51,7 +55,8 @@ public class MessageViewer extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_message_viewer);
         newMessage = findViewById(R.id.messageSend);
-        //getChatRoom();
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
         mAuthentication = FirebaseInstances.getDatabaseAuth();
         mDatabase = FirebaseDatabase.getInstance().getReference("chats");
@@ -216,5 +221,53 @@ public class MessageViewer extends AppCompatActivity {
 
     public void scrollToBottom(View view) {
         recyclerView.scrollToPosition(msgs.size() - 1);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.my_profile:
+                Intent userProfileIntent = new Intent(MessageViewer.this, UserProfile.class);
+                startActivity(userProfileIntent);
+                return true;
+
+            case R.id.my_friends:
+                Intent userFriendsIntent = new Intent(MessageViewer.this, FriendList.class);
+                startActivity(userFriendsIntent);
+                return true;
+
+            case R.id.my_friend_requests:
+                Intent friendRequests = new Intent(MessageViewer.this, FriendRequests.class);
+                startActivity(friendRequests);
+                return true;
+
+            case R.id.homePage:
+                Intent chatListIntent = new Intent(MessageViewer.this, ChatHistoryList.class);
+                startActivity(chatListIntent);
+                return true;
+
+            case R.id.newgc:
+                Intent newGC = new Intent(MessageViewer.this, NewGroupChat.class);
+                startActivity(newGC);
+                return true;
+
+            case R.id.createStory:
+                Intent createNewStoryIntent = new Intent(MessageViewer.this, UserStory.class);
+                startActivity(createNewStoryIntent);
+                return true;
+
+            case R.id.friendStories:
+                Intent friendStoriesIntent = new Intent(MessageViewer.this, FriendStories.class);
+                startActivity(friendStoriesIntent);
+                return true;
+
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

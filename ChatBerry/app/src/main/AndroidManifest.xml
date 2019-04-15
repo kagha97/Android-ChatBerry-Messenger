@@ -40,7 +40,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Activities.MessageViewer" />
+        <activity android:name=".Activities.MessageViewer"
+            android:theme="@style/AppTheme.NoActionBar"/>
         <activity android:name=".Activities.GroupMessageViewer" />
         <activity android:name=".Activities.MainActivity" />
         <activity android:name=".Activities.RegisterAccount" />
