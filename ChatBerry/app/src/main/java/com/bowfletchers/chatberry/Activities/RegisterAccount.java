@@ -65,7 +65,6 @@ public class RegisterAccount extends AppCompatActivity {
 
         // check if the password and confirm password matches
         if (passwordInput.equals(passwordConfirmInput)) {
-            Toast.makeText(this, "Go here????", Toast.LENGTH_SHORT).show();
             // using email and password to sign up
             mAuthentication.createUserWithEmailAndPassword(emailInput, passwordInput)
             .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
