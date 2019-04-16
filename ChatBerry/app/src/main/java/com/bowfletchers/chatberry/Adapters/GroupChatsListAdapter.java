@@ -36,6 +36,7 @@ public class GroupChatsListAdapter extends RecyclerView.Adapter<GroupChatsListAd
     @Override
     public void onBindViewHolder(@NonNull final GroupChatsListAdapter.ViewHolder viewHolder, final int position) {
         viewHolder.groupName.setText(mGroupNames.get(position));
+        viewHolder.groupNameIcon.setText(mGroupNames.get(position).substring(0,1));
         viewHolder.groupChatView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -54,10 +55,12 @@ public class GroupChatsListAdapter extends RecyclerView.Adapter<GroupChatsListAd
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView groupName;
         ConstraintLayout groupChatView;
+        TextView groupNameIcon;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             groupName = itemView.findViewById(R.id.group_chat_name);
             groupChatView = itemView.findViewById(R.id.group_chat_layout);
+            groupNameIcon = itemView.findViewById(R.id.group_chat_icon_text);
         }
     }
 }
