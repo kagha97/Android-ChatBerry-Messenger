@@ -84,39 +84,6 @@ public class ChatHistoryList extends AppCompatActivity {
         } else {
             setTitle("Welcome");
         }
-        createNotificationChannel();
-    }
-
-    private void getDataChanged() {
-        for(int i =0 ; i < chatIdList.size(); i++){
-            DatabaseReference chatsRef = FirebaseDatabase.getInstance().getReference("chats/" + chatIdList.get(i));
-            chatsRef.addChildEventListener(new ChildEventListener() {
-                @Override
-                public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                    sendNotification();
-                }
-
-                @Override
-                public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-                }
-
-                @Override
-                public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-
-                }
-
-                @Override
-                public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                }
-            });
-        }
     }
 
     private void getAllChatsInfo() {
@@ -209,35 +176,6 @@ public class ChatHistoryList extends AppCompatActivity {
                 return true;
         }
         return super.onOptionsItemSelected(item);
-    }
-    public void sendNotification() {
-        NotificationCompat.Builder notifyBuilder = getNotificationBuilder();
-        mNotifyManager.notify(NOTIFICATION_ID, notifyBuilder.build());
-    }
-
-    public void createNotificationChannel() {
-        mNotifyManager = (NotificationManager)
-                getSystemService(NOTIFICATION_SERVICE);
-        if (android.os.Build.VERSION.SDK_INT >=
-                android.os.Build.VERSION_CODES.O) {
-            // Create a NotificationChannel
-            NotificationChannel notificationChannel = new NotificationChannel(PRIMARY_CHANNEL_ID,
-                    "Mascot Notification", NotificationManager
-                    .IMPORTANCE_HIGH);
-            notificationChannel.enableLights(true);
-            notificationChannel.setLightColor(Color.RED);
-            notificationChannel.enableVibration(true);
-            notificationChannel.setDescription("Notification from Mascot");
-            mNotifyManager.createNotificationChannel(notificationChannel);
-        }
-    }
-
-    private NotificationCompat.Builder getNotificationBuilder(){
-        NotificationCompat.Builder notifyBuilder = new NotificationCompat.Builder(this, PRIMARY_CHANNEL_ID)
-                .setContentTitle("You've been notified!")
-                .setContentText("This is your notification text.")
-                .setSmallIcon(R.drawable.ic_android);
-        return notifyBuilder;
     }
 
 }
