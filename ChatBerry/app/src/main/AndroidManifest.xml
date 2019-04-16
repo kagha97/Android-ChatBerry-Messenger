@@ -23,7 +23,7 @@
             android:name=".Activities.FriendStories"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".Activities.CreateUserStory"
+            android:name=".Activities.UserStory"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".Activities.FriendProfile"
@@ -42,7 +42,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Activities.MessageViewer" />
+        <activity android:name=".Activities.MessageViewer"
+            android:theme="@style/AppTheme.NoActionBar"/>
         <activity android:name=".Activities.GroupMessageViewer" />
         <activity android:name=".Activities.MainActivity" />
         <activity android:name=".Activities.RegisterAccount" />
@@ -55,7 +56,11 @@
         <activity
             android:name=".Activities.FriendList"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".Activities.FriendRequests" />
+            android:name=".Activities.FriendList"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".Activities.FriendRequests"
+            android:theme="@style/AppTheme.NoActionBar"/>
+
     </application>
 
 </manifest>

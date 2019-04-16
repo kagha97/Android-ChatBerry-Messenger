@@ -15,7 +15,6 @@ import android.view.MenuItem;
 
 import com.bowfletchers.chatberry.Adapters.FriendStoriesAdapter;
 import com.bowfletchers.chatberry.ClassLibrary.FirebaseInstances;
-import com.bowfletchers.chatberry.ClassLibrary.UserStory;
 import com.bowfletchers.chatberry.R;
 import com.bowfletchers.chatberry.ViewModel.FriendList.FriendListViewModel;
 import com.bowfletchers.chatberry.ViewModel.UserData.UserStoryViewModel;
@@ -33,7 +32,7 @@ public class FriendStories extends AppCompatActivity {
 
     private RecyclerView friendStoryRecycler;
     private FriendStoriesAdapter friendStoriesAdapter;
-    private List<UserStory> listFriendStories;
+    private List<com.bowfletchers.chatberry.ClassLibrary.UserStory> listFriendStories;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +41,8 @@ public class FriendStories extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         referenceFirebaseInstances();
+
+        setTitle("Friend's Stories");
 
         // init data
         friendStoryRecycler = findViewById(R.id.recyclerview_friendStories);
@@ -67,16 +68,35 @@ public class FriendStories extends AppCompatActivity {
                 Intent userProfileIntent = new Intent(FriendStories.this, UserProfile.class);
                 startActivity(userProfileIntent);
                 return true;
+
             case R.id.my_friends:
                 Intent userFriendsIntent = new Intent(FriendStories.this, FriendList.class);
                 startActivity(userFriendsIntent);
                 return true;
+
+            case R.id.my_friend_requests:
+                Intent friendRequests = new Intent(FriendStories.this, FriendRequests.class);
+                startActivity(friendRequests);
+                return true;
+
             case R.id.homePage:
                 Intent chatListIntent = new Intent(FriendStories.this, ChatHistoryList.class);
                 startActivity(chatListIntent);
+                return true;
+
+            case R.id.newgc:
+                Intent newGC = new Intent(FriendStories.this, NewGroupChat.class);
+                startActivity(newGC);
+                return true;
+
             case R.id.createStory:
-                Intent createNewStoryIntent = new Intent(FriendStories.this, CreateUserStory.class);
+                Intent createNewStoryIntent = new Intent(FriendStories.this, UserStory.class);
                 startActivity(createNewStoryIntent);
+                return true;
+
+            case R.id.friendStories:
+                Intent friendStoriesIntent = new Intent(FriendStories.this, FriendStories.class);
+                startActivity(friendStoriesIntent);
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -106,7 +126,7 @@ public class FriendStories extends AppCompatActivity {
                         @Override
                         public void onChanged(@Nullable DataSnapshot dataSnapshot) {
                             if (dataSnapshot.getValue() != null) {
-                                UserStory currentFriendStory = dataSnapshot.getValue(UserStory.class);
+                                com.bowfletchers.chatberry.ClassLibrary.UserStory currentFriendStory = dataSnapshot.getValue(com.bowfletchers.chatberry.ClassLibrary.UserStory.class);
                                 listFriendStories.add(currentFriendStory);
                                 friendStoriesAdapter.notifyDataSetChanged();
                             }

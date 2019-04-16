@@ -8,14 +8,12 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bowfletchers.chatberry.R;
 import com.bowfletchers.chatberry.ViewModel.FriendList.FriendListViewModel;
@@ -64,24 +62,32 @@ public class FriendProfile extends AppCompatActivity {
                 Intent userProfileIntent = new Intent(FriendProfile.this, UserProfile.class);
                 startActivity(userProfileIntent);
                 return true;
+
             case R.id.my_friends:
                 Intent userFriendsIntent = new Intent(FriendProfile.this, FriendList.class);
                 startActivity(userFriendsIntent);
                 return true;
+
             case R.id.homePage:
                 Intent chatListIntent = new Intent(FriendProfile.this, ChatHistoryList.class);
                 startActivity(chatListIntent);
+                return true;
+
             case R.id.createStory:
-                Intent createNewStoryIntent = new Intent(FriendProfile.this, CreateUserStory.class);
+                Intent createNewStoryIntent = new Intent(FriendProfile.this, UserStory.class);
                 startActivity(createNewStoryIntent);
+                return true;
+
             case R.id.friendStories:
                 Intent friendStoriesIntent = new Intent(FriendProfile.this, FriendStories.class);
                 startActivity(friendStoriesIntent);
                 return true;
+
             case R.id.my_friend_requests:
                 Intent friendRequestIntent = new Intent(FriendProfile.this, FriendRequests.class);
                 startActivity(friendRequestIntent);
                 return true;
+
             case R.id.newgc:
                 Intent newGC = new Intent(FriendProfile.this, NewGroupChat.class);
                 startActivity(newGC);

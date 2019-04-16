@@ -1,13 +1,9 @@
 package com.bowfletchers.chatberry.Activities;
 
-import android.arch.lifecycle.LiveData;
-import android.arch.lifecycle.Observer;
-import android.arch.lifecycle.ViewModel;
-import android.arch.lifecycle.ViewModelProvider;
-import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
@@ -23,35 +19,36 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.SimpleCursorTreeAdapter;
 import android.widget.Toast;
 
 import com.bowfletchers.chatberry.ClassLibrary.FirebaseInstances;
-import com.bowfletchers.chatberry.ClassLibrary.UserStory;
 import com.bowfletchers.chatberry.R;
-import com.bowfletchers.chatberry.ViewModel.UserData.UserStoryViewModel;
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
 
-public class CreateUserStory extends AppCompatActivity {
+public class UserStory extends AppCompatActivity {
 
     private final int REQUEST_CODE_IMAGE = 1;
     private final String STORE_URL = "gs://chatberry-201de.appspot.com";
+    private final String DEFAULT_PHOTO_STORY = "http://www.pngpix.com/wp-content/uploads/2016/07/PNGPIX-COM-Blossom-Flower-PNG-Transparent-Image-500x514.png";
+    private String currentUserId;
 
 
     private FirebaseAuth mAuth;
     private FirebaseUser currentUser;
-    private DatabaseReference userDataReference;
+    private DatabaseReference userStoryReference;
     private FirebaseStorage mDataStore;
     private StorageReference databaseStoreRef;
 
@@ -72,14 +69,13 @@ public class CreateUserStory extends AppCompatActivity {
         referenceFirebaseInstances();
 
         // display current user story when page load
-        String userId = currentUser.getUid();
-        displayUserStory(userId);
+        displayUserStory();
 
         // handle cancel button
         buttonCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent goBackHomeIntent = new Intent(CreateUserStory.this, ChatHistoryList.class);
+                Intent goBackHomeIntent = new Intent(UserStory.this, ChatHistoryList.class);
                 startActivity(goBackHomeIntent);
             }
         });
@@ -125,26 +121,32 @@ public class CreateUserStory extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.my_profile:
-                Intent userProfileIntent = new Intent(CreateUserStory.this, UserProfile.class);
+                Intent userProfileIntent = new Intent(UserStory.this, UserProfile.class);
                 startActivity(userProfileIntent);
                 return true;
+
             case R.id.my_friends:
-                Intent userFriendsIntent = new Intent(CreateUserStory.this, FriendList.class);
+                Intent userFriendsIntent = new Intent(UserStory.this, FriendList.class);
                 startActivity(userFriendsIntent);
                 return true;
+
             case R.id.homePage:
-                Intent chatListIntent = new Intent(CreateUserStory.this, ChatHistoryList.class);
+                Intent chatListIntent = new Intent(UserStory.this, ChatHistoryList.class);
                 startActivity(chatListIntent);
+                return true;
+
             case R.id.friendStories:
-                Intent friendStoriesIntent = new Intent(CreateUserStory.this, FriendStories.class);
+                Intent friendStoriesIntent = new Intent(UserStory.this, FriendStories.class);
                 startActivity(friendStoriesIntent);
                 return true;
+
             case R.id.my_friend_requests:
-                Intent friendRequestIntent = new Intent(CreateUserStory.this, FriendRequests.class);
+                Intent friendRequestIntent = new Intent(UserStory.this, FriendRequests.class);
                 startActivity(friendRequestIntent);
                 return true;
+                
             case R.id.newgc:
-                Intent newGC = new Intent(CreateUserStory.this, NewGroupChat.class);
+                Intent newGC = new Intent(UserStory.this, NewGroupChat.class);
                 startActivity(newGC);
                 return true;
 
@@ -152,28 +154,25 @@ public class CreateUserStory extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void displayUserStory(String userId) {
-        // read database for user's story and populate it to view
-        UserStoryViewModel userStoryViewModel = ViewModelProviders.of(this).get(UserStoryViewModel.class);
-
-        LiveData<DataSnapshot> userStoryLiveData = userStoryViewModel.getUserStoryById(userId);
-
-        userStoryLiveData.observe(this, new Observer<DataSnapshot>() {
+    public void displayUserStory() {
+        setTitle(currentUser.getDisplayName() + "'s story");
+        userStoryReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onChanged(@Nullable DataSnapshot dataSnapshot) {
-
-//                UserStory userStory = null;
-//                if (dataSnapshot.getValue() != null) {
-//                    userStory = dataSnapshot.getValue(UserStory.class);
-//                    // map data to views
-//                    Glide.with(CreateUserStory.this).load(userStory.getPhotoStoryURL()).placeholder(R.drawable.common_google_signin_btn_icon_dark_focused).into(imageViewStoryPhoto);
-//                    editTextStatus.setText(userStory.getStatusMessage());
-//                }
-                String userName = dataSnapshot.child("userName").getValue().toString();
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 String userStoryPhoto = dataSnapshot.child("photoStoryURL").getValue().toString();
                 String userStatusMsg = dataSnapshot.child("statusMessage").getValue().toString();
-                Glide.with(CreateUserStory.this).load(userStoryPhoto).placeholder(R.drawable.common_google_signin_btn_icon_dark_focused).into(imageViewStoryPhoto);
+
+                // mapping user story data to views
+                Glide.with(UserStory.this)
+                        .load(userStoryPhoto)
+                        .placeholder(Drawable.createFromPath(DEFAULT_PHOTO_STORY))
+                        .into(imageViewStoryPhoto);
                 editTextStatus.setText(userStatusMsg);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
             }
         });
     }
@@ -198,7 +197,7 @@ public class CreateUserStory extends AppCompatActivity {
             @Override
             public void onFailure(@NonNull Exception exception) {
                 // Handle unsuccessful uploads
-                Toast.makeText(CreateUserStory.this, "Upload story image failed", Toast.LENGTH_SHORT).show();
+                Toast.makeText(UserStory.this, "Upload story image failed", Toast.LENGTH_SHORT).show();
             }
         }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
@@ -217,7 +216,7 @@ public class CreateUserStory extends AppCompatActivity {
                             userStatusMessage = statusInput;
                         }
                         updateUserStoryInDatabase(downloadUrl, userStatusMessage);
-                        Toast.makeText(CreateUserStory.this, "Your story has been updated", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(UserStory.this, "Your story has been updated", Toast.LENGTH_SHORT).show();
                     }
                 });
             }
@@ -227,8 +226,8 @@ public class CreateUserStory extends AppCompatActivity {
     private void updateUserStoryInDatabase(String photoURL, String status) {
         String currentUserId = currentUser.getUid();
         String currentUserName = currentUser.getDisplayName();
-        UserStory userStory = new UserStory(currentUserId, currentUserName, photoURL, status);
-        userDataReference.child(currentUserId).child("story").setValue(userStory);
+        com.bowfletchers.chatberry.ClassLibrary.UserStory userStory = new com.bowfletchers.chatberry.ClassLibrary.UserStory(currentUserId, currentUserName, photoURL, status);
+        userStoryReference.setValue(userStory);
     }
 
     private void referenceViews() {
@@ -242,7 +241,8 @@ public class CreateUserStory extends AppCompatActivity {
     private void referenceFirebaseInstances() {
         mAuth = FirebaseInstances.getDatabaseAuth();
         currentUser = mAuth.getCurrentUser();
-        userDataReference = FirebaseInstances.getDatabaseReference("/users");
+        currentUserId = currentUser.getUid();
+        userStoryReference = FirebaseInstances.getDatabaseReference("/users/" + currentUserId + "/story");
         mDataStore = FirebaseInstances.getFirebaseStorage();
         databaseStoreRef = mDataStore.getReferenceFromUrl(STORE_URL);
     }
