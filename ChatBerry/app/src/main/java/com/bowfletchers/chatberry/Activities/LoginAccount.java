@@ -46,6 +46,11 @@ public class LoginAccount extends AppCompatActivity {
         userInputEmail = editTextEmail.getText().toString();
         userInputPassword = editTextPassword.getText().toString();
 
+        if (userInputEmail.equals("") || userInputPassword.equals("")) {
+            Toast.makeText(this, "Invalid login inputs", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         // authenticate user credentials using fire base method
         mAuthentication.signInWithEmailAndPassword(userInputEmail, userInputPassword)
             .addOnCompleteListener(new OnCompleteListener<AuthResult>() {

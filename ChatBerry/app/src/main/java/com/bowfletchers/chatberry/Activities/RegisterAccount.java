@@ -53,6 +53,12 @@ public class RegisterAccount extends AppCompatActivity {
         String passwordInput = editTextPassword.getText().toString();
         String passwordConfirmInput = editTextConfirmPassword.getText().toString();
 
+        if (emailInput.equals("") || usernameInput.equals("") || passwordInput.equals("")
+        || passwordConfirmInput.equals("")) {
+            Toast.makeText(this, "Please fill all the inputs", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         // check if the password and confirm password matches
         if (passwordInput.equals(passwordConfirmInput)) {
             // using email and password to sign up
