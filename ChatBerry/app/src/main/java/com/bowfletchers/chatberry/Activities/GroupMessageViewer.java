@@ -230,7 +230,7 @@ public class GroupMessageViewer extends AppCompatActivity implements AdapterView
     public void sendMessage(View view) {
 //        Log.d("chatid", chatID);
 
-        if (!newMessage.getText().toString().equals("") || !newMessage.getText().toString().matches("\\S+")) {
+        if (!newMessage.getText().toString().equals("") && !newMessage.getText().toString().trim().isEmpty()){
             SendMessage sendMessage = new SendMessage();
 
 
@@ -245,6 +245,7 @@ public class GroupMessageViewer extends AppCompatActivity implements AdapterView
                     Snackbar.LENGTH_SHORT)
                     .show();
         }
+
 
 
     }

@@ -262,6 +262,7 @@ public class MessageViewer extends AppCompatActivity implements AdapterView.OnIt
     }
 
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
         newMessage.setText(newMessage.getText() + parent.getItemAtPosition(position).toString());
     }
 
