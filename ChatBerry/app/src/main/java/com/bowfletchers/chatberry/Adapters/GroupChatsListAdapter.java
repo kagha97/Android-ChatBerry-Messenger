@@ -1,13 +1,16 @@
 package com.bowfletchers.chatberry.Adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.bowfletchers.chatberry.Activities.GroupMessageViewer;
 import com.bowfletchers.chatberry.R;
 
 import java.util.ArrayList;
@@ -16,9 +19,11 @@ import java.util.List;
 public class GroupChatsListAdapter extends RecyclerView.Adapter<GroupChatsListAdapter.ViewHolder> {
     private Context mcontext;
     private List<String> mGroupNames = new ArrayList<>();
-    public GroupChatsListAdapter(Context context, List<String> groupNames){
+    private List<String> mGroupId = new ArrayList<>();
+    public GroupChatsListAdapter(Context context, List<String> groupNames, List<String> groupId){
         this.mcontext = context;
         this.mGroupNames = groupNames;
+        this.mGroupId = groupId;
     }
     @NonNull
     @Override
@@ -29,8 +34,16 @@ public class GroupChatsListAdapter extends RecyclerView.Adapter<GroupChatsListAd
     }
 
     @Override
-    public void onBindViewHolder(@NonNull GroupChatsListAdapter.ViewHolder viewHolder, int position) {
+    public void onBindViewHolder(@NonNull final GroupChatsListAdapter.ViewHolder viewHolder, final int position) {
         viewHolder.groupName.setText(mGroupNames.get(position));
+        viewHolder.groupChatView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent groupChatIntent = new Intent(mcontext, GroupMessageViewer.class);
+                groupChatIntent.putExtra("id", mGroupId.get(position));
+                mcontext.startActivity(groupChatIntent);
+            }
+        });
     }
 
     @Override
@@ -40,9 +53,11 @@ public class GroupChatsListAdapter extends RecyclerView.Adapter<GroupChatsListAd
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView groupName;
+        ConstraintLayout groupChatView;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             groupName = itemView.findViewById(R.id.group_chat_name);
+            groupChatView = itemView.findViewById(R.id.group_chat_layout);
         }
     }
 }
