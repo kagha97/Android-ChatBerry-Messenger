@@ -51,11 +51,10 @@
 
 
     <string-array name="emojis">
-            <item>😊</item>
-            <item>😄</item>
-            <item>🙂</item>
-        </string-array>
-
+        <item>😊</item>
+        <item>😄</item>
+        <item>🙂</item>
+    </string-array>
 
 
 </resources>
