@@ -9,9 +9,4 @@
         android:title="Settings"
         android:icon="@drawable/ic_settings"
         app:showAsAction="ifRoom" />
-    <item
-        android:id="@+id/leave"
-        android:orderInCategory="100"
-        android:title="Leave"
-        app:showAsAction="never" />
 </menu>

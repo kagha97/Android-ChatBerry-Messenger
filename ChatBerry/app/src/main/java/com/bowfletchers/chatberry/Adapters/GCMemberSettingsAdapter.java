@@ -62,6 +62,7 @@ public class GCMemberSettingsAdapter extends RecyclerView.Adapter<GCMemberSettin
     class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private TextView name;
         private TextView status;
+        private TextView rank;
         private Button kick;
         private Member currentMember;
 
@@ -72,9 +73,14 @@ public class GCMemberSettingsAdapter extends RecyclerView.Adapter<GCMemberSettin
             name = itemView.findViewById(R.id.name);
             status = itemView.findViewById(R.id.status);
             kick = itemView.findViewById(R.id.kick);
+            rank = itemView.findViewById(R.id.rank);
             ProfileImage = itemView.findViewById(R.id.profilePicture);
             //set the onClickListener so app knows when card is clicked
             view.setOnClickListener(this);
+
+            if (!ownerID.equals(userID)) {
+                kick.setEnabled(false);
+            }
 
 
 
@@ -117,6 +123,7 @@ public class GCMemberSettingsAdapter extends RecyclerView.Adapter<GCMemberSettin
             this.currentMember = member;
             this.name.setText(member.getName());
             this.status.setText(member.getStatusString());
+            this.rank.setText(member.getType());
             Glide.with(Context).load(member.getProfilePicture()).placeholder(R.drawable.ic_person).into(ProfileImage);
         }
     }

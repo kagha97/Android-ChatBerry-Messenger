@@ -96,8 +96,11 @@ public class NewGroupChat extends AppCompatActivity {
                     String pfp = snapshot.child("profilePicture").getValue().toString();
 
 
-                    Member member = new Member(id, name,"0",false, pfp);
-                    mems.add(member);
+                    if (!id.equals(FirebaseInstances.getDatabaseAuth().getCurrentUser().getUid())) {
+                        Member member = new Member(id, name,"0",false, pfp, "0");
+                        mems.add(member);
+                    }
+
                 }
                 memAdapter.notifyDataSetChanged();
             }
@@ -115,21 +118,37 @@ public class NewGroupChat extends AppCompatActivity {
             }
         }
 
-        GroupChat chat = new GroupChat(groupName.getText().toString(), FirebaseInstances.getDatabaseAuth().getUid(), checkedMembers);
+        if (!groupName.getText().toString().equals("") && !groupName.getText().toString().trim().isEmpty()) {
+            GCMember mem = new GCMember(FirebaseInstances.getDatabaseAuth().getCurrentUser().getUid(), "1");
+            checkedMembers.add(mem);
 
-        DatabaseReference newChat = chatDb.push();
-        newChat.setValue(chat);
+            GroupChat chat = new GroupChat(groupName.getText().toString(), FirebaseInstances.getDatabaseAuth().getUid(), checkedMembers);
 
-        String chatID = newChat.getKey();
+            DatabaseReference newChat = chatDb.push();
+            newChat.setValue(chat);
 
-        Intent intent = new Intent(this, GroupMessageViewer.class);
+            String chatID = newChat.getKey();
 
-        intent.putExtra("id" , chatID);
-        intent.putExtra("owner" , FirebaseInstances.getDatabaseAuth().getUid());
-        this.startActivity(intent);
+            Intent intent = new Intent(this, GroupMessageViewer.class);
 
-        Log.d("chatstatus", "new chat room created");
-     //   Log.d("chatstatus", "chatid: " + chatID);
+            intent.putExtra("id" , chatID);
+            intent.putExtra("owner" , FirebaseInstances.getDatabaseAuth().getUid());
+            this.startActivity(intent);
+
+            Log.d("chatstatus", "new chat room created");
+            //   Log.d("chatstatus", "chatid: " + chatID);
+
+
+
+        }
+        else {
+
+            Snackbar.make(recyclerView, "Group chat name can't be empty!",
+                    Snackbar.LENGTH_SHORT)
+                    .show();
+        }
+
+
 
     }
 

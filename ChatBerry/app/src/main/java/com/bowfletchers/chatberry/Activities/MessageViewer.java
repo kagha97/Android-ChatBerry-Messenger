@@ -5,6 +5,7 @@ import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -14,6 +15,9 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,7 +38,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MessageViewer extends AppCompatActivity {
+public class MessageViewer extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
     FirebaseAuth mAuthentication;
     DatabaseReference mDatabase;
     TextView newMessage;
@@ -75,6 +79,12 @@ public class MessageViewer extends AppCompatActivity {
         member = (Member) getIntent().getSerializableExtra("chatMember");
         getChatRoom();
 
+        Spinner spinner = (Spinner) findViewById(R.id.emoji);
+        spinner.setOnItemSelectedListener(this);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+                R.array.emojis, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
 
         setTitle(member.name);
     }
@@ -210,12 +220,21 @@ public class MessageViewer extends AppCompatActivity {
 
 //        Log.d("chatid", chatID);
 
-        SendMessage sendMessage = new SendMessage();
+        if (!newMessage.getText().toString().equals("") && !newMessage.getText().toString().trim().isEmpty()){
+            SendMessage sendMessage = new SendMessage();
 
 
-        sendMessage.sendMessage(chatID, newMessage.getText().toString(), mAuthentication.getCurrentUser().getPhotoUrl().toString());
-        newMessage.setText("");
-        recyclerView.scrollToPosition(msgs.size() - 1);
+            sendMessage.sendMessage(chatID, newMessage.getText().toString(), mAuthentication.getCurrentUser().getPhotoUrl().toString());
+            newMessage.setText("");
+            recyclerView.scrollToPosition(msgs.size() - 1);
+
+        }
+
+        else {
+            Snackbar.make(recyclerView, "Can't send an empty message!",
+                    Snackbar.LENGTH_SHORT)
+                    .show();
+        }
 
     }
 
@@ -269,5 +288,13 @@ public class MessageViewer extends AppCompatActivity {
 
         }
         return super.onOptionsItemSelected(item);
+    }
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        newMessage.setText(newMessage.getText() + parent.getItemAtPosition(position).toString());
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
     }
 }

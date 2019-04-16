@@ -104,8 +104,9 @@ public class AddMemberToGroupChat extends AppCompatActivity {
                             String name = snapshot.child("name").getValue().toString();
                             //       String status = snapshot.child("onlineStatus").getValue().toString();
                             String pfp = snapshot.child("profilePicture").getValue().toString();
+                            String onlineStatus = snapshot.child("onlineStatus").getValue().toString();
 
-                            Member member = new Member(id, name,"0",false, pfp);
+                            Member member = new Member(id, name,onlineStatus,false, pfp,"0");
                             tmems.add(member);
                         }
 
@@ -119,7 +120,7 @@ public class AddMemberToGroupChat extends AppCompatActivity {
                             //       String status = snapshot.child("onlineStatus").getValue().toString();
                             String pfp = snapshot.child("profilePicture").getValue().toString();
 
-                            Member member = new Member(id, name,"0",false, pfp);
+                            Member member = new Member(id, name,"0",false, pfp, "0");
 
                             omems.add(member);
                         }
@@ -167,8 +168,14 @@ public class AddMemberToGroupChat extends AppCompatActivity {
         }
 
         for (Member member : omems) {
+            if (member.getId().equals(userID)){
+                GCMember mem = new GCMember(member.getId(), "1");
+                checkedMembers.add(mem);
+            }
+            else {
                 GCMember mem = new GCMember(member.getId(), "0");
                 checkedMembers.add(mem);
+            }
             }
 
         Log.i("amembers", "------------");
@@ -183,6 +190,9 @@ public class AddMemberToGroupChat extends AppCompatActivity {
         Snackbar.make(view, "Members Added.",
                 Snackbar.LENGTH_SHORT)
                 .show();
+
+       finish();
+
         }
 
 

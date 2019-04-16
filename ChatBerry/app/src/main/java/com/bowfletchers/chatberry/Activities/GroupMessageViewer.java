@@ -7,6 +7,7 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -17,6 +18,9 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.bowfletchers.chatberry.Adapters.MessagesAdapter;
@@ -33,7 +37,7 @@ import com.google.firebase.database.DatabaseReference;
 
 import java.util.ArrayList;
 
-public class GroupMessageViewer extends AppCompatActivity {
+public class GroupMessageViewer extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
     private RecyclerView recyclerView;
     private MessagesAdapter msgAdapter;
     TextView newMessage;
@@ -68,9 +72,38 @@ public class GroupMessageViewer extends AppCompatActivity {
         msgAdapter = new MessagesAdapter(this, msgs);
         recyclerView.setAdapter(msgAdapter);
 
+        Spinner spinner = (Spinner) findViewById(R.id.emoji);
+        spinner.setOnItemSelectedListener(this);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+                R.array.emojis, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
+
+
         Log.i("gchat", "chat id: " +getIntent().getStringExtra("id"));
         chatID = getIntent().getStringExtra("id");
         liveChatRoom(chatID, context);
+
+
+
+
+
+    }
+
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        // put your code here..
+        //
+        //.
+
+        if (chatID != null){
+            //liveChatRoom(chatID, context);
+        }
+        else {
+            finish();
+        }
 
 
     }
@@ -90,16 +123,15 @@ public class GroupMessageViewer extends AppCompatActivity {
                 Intent editGCIntent = new Intent(GroupMessageViewer.this, EditGroupChat.class);
                 editGCIntent.putExtra("id", chatID);
                 editGCIntent.putExtra("title", getTitle().toString());
-                editGCIntent.putExtra("owner", getIntent().getStringExtra("owner"));
+                editGCIntent.putExtra("owner", memberList.get(memberList.size() - 1).id);
                 startActivity(editGCIntent);
                 return true;
-            case R.id.leave:
-             //   Intent userFriendsIntent = new Intent(GroupMessageViewer.this, FriendList.class);
-               // startActivity(userFriendsIntent);
-                return true;
+
         }
         return super.onOptionsItemSelected(item);
     }
+
+
 
 
 
@@ -124,6 +156,7 @@ public class GroupMessageViewer extends AppCompatActivity {
                 }
 
                 memberIDList.add(dataSnapshot.child("ownerID").getValue(String.class));
+
 
                 getMemberList();
 
@@ -170,25 +203,30 @@ public class GroupMessageViewer extends AppCompatActivity {
         memberData.observe(this, new Observer<DataSnapshot>() {
             @Override
             public void onChanged(@Nullable DataSnapshot dataSnapshot) {
-                memberList.clear();
-                for (String id : memberIDList) {
-                    String name = dataSnapshot.child(id).child("name").getValue().toString();
-                    String uid = dataSnapshot.child(id).child("id").getValue().toString();
-                    String pfp = dataSnapshot.child(id).child("profilePicture").getValue().toString();
-                    String onlineStatus;
-                    if (dataSnapshot.child(id).child("onlineStatus").getValue() != null) {
-                        onlineStatus = "1";
+
+
+                    memberList.clear();
+                    Log.i("zeroc", String.valueOf(memberIDList.size()));
+                    for (String id : memberIDList) {
+                        String name = dataSnapshot.child(id).child("name").getValue().toString();
+                        String uid = dataSnapshot.child(id).child("id").getValue().toString();
+                        String pfp = dataSnapshot.child(id).child("profilePicture").getValue().toString();
+                        String onlineStatus;
+                        if (dataSnapshot.child(id).child("onlineStatus").getValue() != null) {
+                            onlineStatus = "1";
+                        }
+                        else {
+                            onlineStatus = "0";
+                        }
+
+
+                        Member member = new Member(uid, name, onlineStatus, false, pfp, "0");
+                        memberList.add(member);
                     }
-                    else {
-                        onlineStatus = "0";
-                    }
+
+                    Log.i("member", String.valueOf(memberList.size()));
 
 
-                    Member member = new Member(uid, name, onlineStatus, false, pfp);
-                    memberList.add(member);
-                }
-
-                Log.i("member", String.valueOf(memberList.size()));
             }
         });
 
@@ -197,13 +235,23 @@ public class GroupMessageViewer extends AppCompatActivity {
     public void sendMessage(View view) {
 //        Log.d("chatid", chatID);
 
-        SendMessage sendMessage = new SendMessage();
+        if (!newMessage.getText().toString().equals("") || !newMessage.getText().toString().matches("\\S+")) {
+            SendMessage sendMessage = new SendMessage();
 
 
-        sendMessage.sendGroupMessage(chatID, newMessage.getText().toString(), mAuthentication.getCurrentUser().getPhotoUrl().toString());
-        newMessage.setText("");
+            sendMessage.sendGroupMessage(chatID, newMessage.getText().toString(), mAuthentication.getCurrentUser().getPhotoUrl().toString());
+            newMessage.setText("");
 
-        recyclerView.scrollToPosition(msgs.size() - 1);
+            recyclerView.scrollToPosition(msgs.size() - 1);
+        }
+        else {
+
+            Snackbar.make(view, "You can't send an empty message!",
+                    Snackbar.LENGTH_SHORT)
+                    .show();
+        }
+
+
     }
 
     public void scrollToBottom(View view) {
@@ -211,6 +259,13 @@ public class GroupMessageViewer extends AppCompatActivity {
     }
 
 
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        newMessage.setText(newMessage.getText() + parent.getItemAtPosition(position).toString());
+    }
 
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
 
+    }
 }
