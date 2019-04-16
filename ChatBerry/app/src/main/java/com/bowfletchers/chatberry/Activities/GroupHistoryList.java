@@ -27,7 +27,6 @@ public class GroupHistoryList extends AppCompatActivity {
     private String groupName;
     private List<String> finalGroupsNameList = new ArrayList<>();
     private List<String> ownerGroupNamesList = new ArrayList<>();
-    private List<String> memeberGroupNamesList = new ArrayList<>();
     private final String auth = FirebaseAuth.getInstance().getUid();
 
     @Override
@@ -41,21 +40,6 @@ public class GroupHistoryList extends AppCompatActivity {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
 
-    private void getFinalGroupNameList() {
-        finalGroupsNameList.clear();
-        finalGroupsNameList.addAll(ownerGroupNamesList);
-        finalGroupsNameList.addAll(memeberGroupNamesList);
-        for(int i = 0; i < ownerGroupNamesList.size(); i++){
-            Log.d("GROUPSO", ownerGroupNamesList.get(i));
-        }
-        for(int i = 0; i < memeberGroupNamesList.size(); i++){
-            Log.d("GROUPSM", memeberGroupNamesList.get(i));
-        }
-        for(int i = 0; i < finalGroupsNameList.size(); i++){
-            Log.d("GROUPS", finalGroupsNameList.get(i));
-        }
-    }
-
     private void getYourGroups() {
         final GetGroupChatsReference groupChatsModel = ViewModelProviders.of(this).get(GetGroupChatsReference.class);
         LiveData<DataSnapshot> groups = groupChatsModel.getAllGroupChats();
@@ -63,16 +47,18 @@ public class GroupHistoryList extends AppCompatActivity {
             @Override
             public void onChanged(@Nullable DataSnapshot dataSnapshot) {
                 ownerGroupNamesList.clear();
-                memeberGroupNamesList.clear();
-                for(DataSnapshot allGroups: dataSnapshot.getChildren()){
+                finalGroupsNameList.clear();
+                for(final DataSnapshot allGroups: dataSnapshot.getChildren()){
                     if(allGroups.child("name").getValue() == null){
                     groupName = "Group";}
                     else{
+                        Log.d("GROUPNAME", allGroups.child("name").getValue().toString());
                     groupName = allGroups.child("name").getValue().toString();}
                     if(allGroups.child("ownerID").getValue() != null) {
                         if (allGroups.child("ownerID").getValue().toString().equals(auth)) {
                             ownerGroupNamesList.add(allGroups.child("name").getValue().toString());
                         } else {
+                            Log.d("GROUPS", "ELSE CHALEYS");
                             groupId = allGroups.getKey();
                             LiveData<DataSnapshot> groupMemebers = groupChatsModel.getGroup(groupId);
                             groupMemebers.observe(GroupHistoryList.this, new Observer<DataSnapshot>() {
@@ -80,7 +66,8 @@ public class GroupHistoryList extends AppCompatActivity {
                                 public void onChanged(@Nullable DataSnapshot dataSnapshot) {
                                     for (DataSnapshot members : dataSnapshot.getChildren()) {
                                         if (members.child("memberID").getValue().toString().equals(auth)) {
-                                            memeberGroupNamesList.add(groupName);
+                                            Log.d("NAME", allGroups.child("name").getValue().toString() );
+                                            finalGroupsNameList.add(allGroups.child("name").getValue().toString());
                                         }
                                     }
                                     mAdapter.notifyDataSetChanged();
@@ -89,7 +76,7 @@ public class GroupHistoryList extends AppCompatActivity {
                         }
                     }
                 }
-                getFinalGroupNameList();
+                finalGroupsNameList.addAll(ownerGroupNamesList);
                 mAdapter.notifyDataSetChanged();
             }
         });
