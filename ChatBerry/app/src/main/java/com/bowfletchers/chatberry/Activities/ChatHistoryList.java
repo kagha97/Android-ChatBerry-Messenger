@@ -150,6 +150,16 @@ public class ChatHistoryList extends AppCompatActivity {
                 startActivity(userFriendsIntent);
                 return true;
 
+            case R.id.online_users:
+                Intent onlineUsersIntent = new Intent(ChatHistoryList.this, AvailableUsers.class);
+                startActivity(onlineUsersIntent);
+                return true;
+
+            case R.id.groupChats:
+                Intent groupChatIntent = new Intent(ChatHistoryList.this, GroupHistoryList.class);
+                startActivity(groupChatIntent);
+                return true;
+
             case R.id.homePage:
                 Intent chatListIntent = new Intent(ChatHistoryList.this, ChatHistoryList.class);
                 startActivity(chatListIntent);

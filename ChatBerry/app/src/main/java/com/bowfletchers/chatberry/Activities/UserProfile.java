@@ -126,43 +126,19 @@ public class UserProfile extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main_menu, menu);
+        getMenuInflater().inflate(R.menu.home_only_menu, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.homePage:
-                Intent chatListIntent = new Intent(UserProfile.this, ChatHistoryList.class);
-                startActivity(chatListIntent);
+            case R.id.homePageOnly:
+                Intent intent = new Intent(this, ChatHistoryList.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                this.startActivity(intent);
+                Runtime.getRuntime().exit(0);
                 return true;
-            case R.id.my_friends:
-                Intent userFriendsIntent = new Intent(UserProfile.this, FriendList.class);
-                startActivity(userFriendsIntent);
-                return true;
-            case R.id.createStory:
-                Intent createNewStoryIntent = new Intent(UserProfile.this, UserStory.class);
-                startActivity(createNewStoryIntent);
-                return true;
-            case R.id.friendStories:
-                Intent friendStoriesIntent = new Intent(UserProfile.this, FriendStories.class);
-                startActivity(friendStoriesIntent);
-                return true;
-            case R.id.my_friend_requests:
-                Intent friendRequestIntent = new Intent(UserProfile.this, FriendRequests.class);
-                startActivity(friendRequestIntent);
-                return true;
-            case R.id.newgc:
-                Intent newGC = new Intent(UserProfile.this, NewGroupChat.class);
-                startActivity(newGC);
-                return true;
-            case R.id.groupChats:
-                Intent groupChatsList = new Intent(UserProfile.this, GroupHistoryList.class);
-                startActivity(groupChatsList);
-                return true;
-            default:
-                // Do nothing
         }
         return super.onOptionsItemSelected(item);
     }

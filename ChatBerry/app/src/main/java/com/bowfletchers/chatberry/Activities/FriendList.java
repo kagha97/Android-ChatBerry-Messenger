@@ -62,46 +62,18 @@ public class FriendList extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main_menu, menu);
+        getMenuInflater().inflate(R.menu.home_only_menu, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.my_profile:
-                Intent userProfileIntent = new Intent(FriendList.this, UserProfile.class);
-                startActivity(userProfileIntent);
-                return true;
-
-            case R.id.my_friends:
-                Intent userFriendsIntent = new Intent(FriendList.this, FriendList.class);
-                startActivity(userFriendsIntent);
-                return true;
-
-            case R.id.homePage:
-                Intent chatListIntent = new Intent(FriendList.this, ChatHistoryList.class);
-                startActivity(chatListIntent);
-                return true;
-
-            case R.id.createStory:
-                Intent createNewStoryIntent = new Intent(FriendList.this, UserStory.class);
-                startActivity(createNewStoryIntent);
-                return true;
-
-            case R.id.friendStories:
-                Intent friendStoriesIntent = new Intent(FriendList.this, FriendStories.class);
-                startActivity(friendStoriesIntent);
-                return true;
-
-            case R.id.my_friend_requests:
-                Intent friendRequestIntent = new Intent(FriendList.this, FriendRequests.class);
-                startActivity(friendRequestIntent);
-                return true;
-
-            case R.id.newgc:
-                Intent newGC = new Intent(FriendList.this, NewGroupChat.class);
-                startActivity(newGC);
+            case R.id.homePageOnly:
+                Intent intent = new Intent(this, ChatHistoryList.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                this.startActivity(intent);
+                Runtime.getRuntime().exit(0);
                 return true;
         }
         return super.onOptionsItemSelected(item);

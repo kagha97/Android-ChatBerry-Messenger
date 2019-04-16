@@ -269,12 +269,5 @@ public class EditGroupChat extends AppCompatActivity {
             Runtime.getRuntime().exit(0);
         }
 
-
-
-
-
-
-
-
     }
 }

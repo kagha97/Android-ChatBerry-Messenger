@@ -113,43 +113,19 @@ public class UserStory extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main_menu, menu);
+        getMenuInflater().inflate(R.menu.home_only_menu, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.my_profile:
-                Intent userProfileIntent = new Intent(UserStory.this, UserProfile.class);
-                startActivity(userProfileIntent);
+            case R.id.homePageOnly:
+                Intent intent = new Intent(this, ChatHistoryList.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                this.startActivity(intent);
+                Runtime.getRuntime().exit(0);
                 return true;
-
-            case R.id.my_friends:
-                Intent userFriendsIntent = new Intent(UserStory.this, FriendList.class);
-                startActivity(userFriendsIntent);
-                return true;
-
-            case R.id.homePage:
-                Intent chatListIntent = new Intent(UserStory.this, ChatHistoryList.class);
-                startActivity(chatListIntent);
-                return true;
-
-            case R.id.friendStories:
-                Intent friendStoriesIntent = new Intent(UserStory.this, FriendStories.class);
-                startActivity(friendStoriesIntent);
-                return true;
-
-            case R.id.my_friend_requests:
-                Intent friendRequestIntent = new Intent(UserStory.this, FriendRequests.class);
-                startActivity(friendRequestIntent);
-                return true;
-                
-            case R.id.newgc:
-                Intent newGC = new Intent(UserStory.this, NewGroupChat.class);
-                startActivity(newGC);
-                return true;
-
         }
         return super.onOptionsItemSelected(item);
     }

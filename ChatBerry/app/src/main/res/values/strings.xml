@@ -45,6 +45,8 @@
     <string name="friend_story_status_msg_sample">This is a nice day</string>
     <string name="send">Send</string>
     <string name="leave_group">Leave</string>
+    <string name="main_menu_online_users">Online Users</string>
+    <string name="main_menu_group_chat">My Groups Chat</string>
 
 
     <string-array name="emojis">

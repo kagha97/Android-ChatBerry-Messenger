@@ -15,6 +15,12 @@
         android:title="@string/menu_user_friends_label"
         app:showAsAction="never" />
     <item
+        android:id="@+id/online_users"
+        android:orderInCategory="100"
+        android:title="@string/main_menu_online_users"
+        app:showAsAction="never" />
+
+    <item
         android:id="@+id/newgc"
         android:orderInCategory="100"
         android:title="@string/menu_gc"
@@ -37,7 +43,7 @@
         app:showAsAction="never" />
     <item
         android:id="@+id/groupChats"
-        android:title="Groups"
+        android:title="@string/main_menu_group_chat"
         app:showAsAction="never"/>
     <item
         android:id="@+id/friendStories"

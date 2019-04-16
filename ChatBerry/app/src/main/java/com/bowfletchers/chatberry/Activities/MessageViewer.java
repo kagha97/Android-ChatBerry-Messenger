@@ -244,51 +244,23 @@ public class MessageViewer extends AppCompatActivity implements AdapterView.OnIt
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main_menu, menu);
+        getMenuInflater().inflate(R.menu.home_only_menu, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.my_profile:
-                Intent userProfileIntent = new Intent(MessageViewer.this, UserProfile.class);
-                startActivity(userProfileIntent);
+            case R.id.homePageOnly:
+                Intent intent = new Intent(this, ChatHistoryList.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                this.startActivity(intent);
+                Runtime.getRuntime().exit(0);
                 return true;
-
-            case R.id.my_friends:
-                Intent userFriendsIntent = new Intent(MessageViewer.this, FriendList.class);
-                startActivity(userFriendsIntent);
-                return true;
-
-            case R.id.my_friend_requests:
-                Intent friendRequests = new Intent(MessageViewer.this, FriendRequests.class);
-                startActivity(friendRequests);
-                return true;
-
-            case R.id.homePage:
-                Intent chatListIntent = new Intent(MessageViewer.this, ChatHistoryList.class);
-                startActivity(chatListIntent);
-                return true;
-
-            case R.id.newgc:
-                Intent newGC = new Intent(MessageViewer.this, NewGroupChat.class);
-                startActivity(newGC);
-                return true;
-
-            case R.id.createStory:
-                Intent createNewStoryIntent = new Intent(MessageViewer.this, UserStory.class);
-                startActivity(createNewStoryIntent);
-                return true;
-
-            case R.id.friendStories:
-                Intent friendStoriesIntent = new Intent(MessageViewer.this, FriendStories.class);
-                startActivity(friendStoriesIntent);
-                return true;
-
         }
         return super.onOptionsItemSelected(item);
     }
+
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         newMessage.setText(newMessage.getText() + parent.getItemAtPosition(position).toString());
     }
