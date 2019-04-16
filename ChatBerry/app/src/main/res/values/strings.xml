@@ -47,6 +47,7 @@
     <string name="leave_group">Leave</string>
     <string name="main_menu_online_users">Available Users</string>
     <string name="main_menu_group_chat">My Groups Chat</string>
+    <string name="g_name">G</string>
 
 
     <string-array name="emojis">
