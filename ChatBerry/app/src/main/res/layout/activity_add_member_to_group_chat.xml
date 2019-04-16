@@ -55,7 +55,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.976"
         app:layout_constraintStart_toStartOf="parent"
-        app:srcCompat="@android:drawable/checkbox_on_background" />
+        app:srcCompat="@drawable/ic_check" />
 
 </android.support.constraint.ConstraintLayout>
 

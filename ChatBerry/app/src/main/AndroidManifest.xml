@@ -16,8 +16,10 @@
         <activity
             android:name=".Activities.GroupHistoryList"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".Activities.AddMemberToGroupChat" />
-        <activity android:name=".Activities.EditGroupChat" />
+        <activity android:name=".Activities.AddMemberToGroupChat"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".Activities.EditGroupChat"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".Activities.NewGroupChat"
             android:label="@string/title_activity_new_group_chat"
