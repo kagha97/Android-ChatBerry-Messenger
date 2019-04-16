@@ -255,7 +255,7 @@ public class MessageViewer extends AppCompatActivity implements AdapterView.OnIt
                 Intent intent = new Intent(this, ChatHistoryList.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 this.startActivity(intent);
-                Runtime.getRuntime().exit(0);
+               // Runtime.getRuntime().exit(0);
                 return true;
         }
         return super.onOptionsItemSelected(item);

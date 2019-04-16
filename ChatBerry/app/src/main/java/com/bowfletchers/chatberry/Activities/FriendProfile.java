@@ -43,8 +43,9 @@ public class FriendProfile extends AppCompatActivity {
         buttonDone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent goBackHome = new Intent(FriendProfile.this, FriendList.class);
-                startActivity(goBackHome);
+                Intent intent = new Intent(FriendProfile.this, FriendList.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                FriendProfile.this.startActivity(intent);
             }
         });
     }
@@ -62,7 +63,7 @@ public class FriendProfile extends AppCompatActivity {
                 Intent intent = new Intent(this, ChatHistoryList.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 this.startActivity(intent);
-                Runtime.getRuntime().exit(0);
+                //Runtime.getRuntime().exit(0);
                 return true;
         }
         return super.onOptionsItemSelected(item);

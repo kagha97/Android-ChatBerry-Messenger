@@ -102,7 +102,8 @@ public class UserProfile extends AppCompatActivity {
                 mAuth.signOut();
                 // set online status to offline (0)
                 updateUserOnlineStatus(0);
-                Intent backSignInIntent = new Intent(UserProfile.this, LoginAccount.class);
+                Intent backSignInIntent = new Intent(UserProfile.this, WelcomePage.class);
+                backSignInIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(backSignInIntent);
             }
         });
@@ -137,7 +138,7 @@ public class UserProfile extends AppCompatActivity {
                 Intent intent = new Intent(this, ChatHistoryList.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 this.startActivity(intent);
-                Runtime.getRuntime().exit(0);
+              //  Runtime.getRuntime().exit(0);
                 return true;
         }
         return super.onOptionsItemSelected(item);
