@@ -59,7 +59,7 @@ public class AvailableUsersInfoAdapter extends RecyclerView.Adapter<AvailableUse
             viewHolder.addUser.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(mcontext, "Friend added" , Toast.LENGTH_LONG).show();
+                    Toast.makeText(mcontext, "Friend request sent" , Toast.LENGTH_LONG).show();
                     viewHolder.addUser.setVisibility(View.VISIBLE);
                     SendInvitations sendInvitations = new SendInvitations();
                     sendInvitations.checkIfAlreadySent(mavailableUsers.get(position).id);
