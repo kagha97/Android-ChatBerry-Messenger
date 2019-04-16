@@ -71,7 +71,7 @@
         android:layout_marginTop="20dp"
         android:ems="10"
         android:inputType="textPassword"
-        android:text="123456"
+        android:text=""
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/passwordTitle" />
