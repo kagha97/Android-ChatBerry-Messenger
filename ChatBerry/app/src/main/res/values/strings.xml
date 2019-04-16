@@ -44,9 +44,10 @@
     <string name="friend_story_status_label">Says:</string>
     <string name="friend_story_status_msg_sample">This is a nice day</string>
     <string name="send">Send</string>
+    <string name="leave_group">Leave</string>
 
 
-        <string-array name="emojis">
+    <string-array name="emojis">
             <item>😊</item>
             <item>😄</item>
             <item>🙂</item>

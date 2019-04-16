@@ -1,15 +1,21 @@
 package com.bowfletchers.chatberry.Activities;
 
+import android.app.Activity;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.DataSetObservable;
 import android.database.DataSetObserver;
 import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
+import android.support.v4.content.IntentCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -18,6 +24,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.bowfletchers.chatberry.Adapters.GCMemberSelectAdapter;
@@ -37,6 +44,7 @@ import com.google.firebase.database.DatabaseReference;
 import java.util.ArrayList;
 import java.util.List;
 
+import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 import static android.support.v7.widget.RecyclerView.*;
 
 public class EditGroupChat extends AppCompatActivity {
@@ -51,6 +59,10 @@ public class EditGroupChat extends AppCompatActivity {
     List<Member> oldMemberList;
     TextView title;
     String ownerID;
+    Button delete;
+    Button addMember;
+    Button changeName;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,18 +71,21 @@ public class EditGroupChat extends AppCompatActivity {
         title = findViewById(R.id.groupName);
         setTitle(getIntent().getStringExtra("title") + "'s Group Settings");
 
-
+        changeName = findViewById(R.id.changeName);
         memberList = new ArrayList<>();
         oldMemberList = new ArrayList<>();
         chatID = getIntent().getStringExtra("id");
         title.setText(getIntent().getStringExtra("title"));
         getChatRoom(getIntent().getStringExtra("id"));
         mAuthintication = FirebaseInstances.getDatabaseAuth();
-
+        delete = findViewById(R.id.delete_group);
+        addMember = findViewById(R.id.add_member);
 
         recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         Log.i("gcsetting", getIntent().getStringExtra("owner"));
+
+        ownerID = getIntent().getStringExtra("owner");
         memberSettingsAdapter = new GCMemberSettingsAdapter(this, memberList, getIntent().getStringExtra("owner"), FirebaseInstances.getDatabaseAuth().getCurrentUser().getUid());
         recyclerView.setAdapter(memberSettingsAdapter);
 
@@ -88,6 +103,16 @@ public class EditGroupChat extends AppCompatActivity {
 
 
         });
+
+
+
+
+       if (!FirebaseInstances.getDatabaseAuth().getCurrentUser().getUid().equals(ownerID)) {
+           delete.setText(getString(R.string.leave_group));
+           addMember.setEnabled(false);
+           changeName.setEnabled(false);
+       }
+
 
 
     }
@@ -212,5 +237,44 @@ public class EditGroupChat extends AppCompatActivity {
                     Snackbar.LENGTH_SHORT)
                     .show();
         }
+    }
+
+    public void deleteGroup(View view) {
+
+        if (!FirebaseInstances.getDatabaseAuth().getCurrentUser().getUid().equals(ownerID)) {
+
+
+            for (GCMember mem : chat.getMemberList()) {
+                if (mem.getMemberID().equals(FirebaseInstances.getDatabaseAuth().getCurrentUser().getUid())) {
+                    chat.getMemberList().remove(mem);
+                }
+            }
+
+            DatabaseReference newChat = FirebaseInstances.getDatabaseReference("gchats/" + chatID);
+            newChat.child("memberList").setValue(chat.getMemberList());
+
+        }
+        else {
+            DatabaseReference chatDb = FirebaseInstances.getDatabaseReference("gchats").child(chatID);
+            chatDb.removeValue();
+          /* Intent intent = new Intent(this, ChatHistoryList.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+        finish();*/
+
+
+            Intent intent = new Intent(this, ChatHistoryList.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            this.startActivity(intent);
+            Runtime.getRuntime().exit(0);
+        }
+
+
+
+
+
+
+
+
     }
 }

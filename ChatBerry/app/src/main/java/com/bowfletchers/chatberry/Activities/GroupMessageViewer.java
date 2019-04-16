@@ -87,6 +87,25 @@ public class GroupMessageViewer extends AppCompatActivity implements AdapterView
 
 
 
+
+    }
+
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        // put your code here..
+        //
+        //.
+
+        if (chatID != null){
+            //liveChatRoom(chatID, context);
+        }
+        else {
+            finish();
+        }
+
+
     }
 
 
@@ -107,13 +126,12 @@ public class GroupMessageViewer extends AppCompatActivity implements AdapterView
                 editGCIntent.putExtra("owner", getIntent().getStringExtra("owner"));
                 startActivity(editGCIntent);
                 return true;
-            case R.id.leave:
-             //   Intent userFriendsIntent = new Intent(GroupMessageViewer.this, FriendList.class);
-               // startActivity(userFriendsIntent);
-                return true;
+
         }
         return super.onOptionsItemSelected(item);
     }
+
+
 
 
 
@@ -184,25 +202,30 @@ public class GroupMessageViewer extends AppCompatActivity implements AdapterView
         memberData.observe(this, new Observer<DataSnapshot>() {
             @Override
             public void onChanged(@Nullable DataSnapshot dataSnapshot) {
-                memberList.clear();
-                for (String id : memberIDList) {
-                    String name = dataSnapshot.child(id).child("name").getValue().toString();
-                    String uid = dataSnapshot.child(id).child("id").getValue().toString();
-                    String pfp = dataSnapshot.child(id).child("profilePicture").getValue().toString();
-                    String onlineStatus;
-                    if (dataSnapshot.child(id).child("onlineStatus").getValue() != null) {
-                        onlineStatus = "1";
+
+
+                    memberList.clear();
+                    Log.i("zeroc", String.valueOf(memberIDList.size()));
+                    for (String id : memberIDList) {
+                        String name = dataSnapshot.child(id).child("name").getValue().toString();
+                        String uid = dataSnapshot.child(id).child("id").getValue().toString();
+                        String pfp = dataSnapshot.child(id).child("profilePicture").getValue().toString();
+                        String onlineStatus;
+                        if (dataSnapshot.child(id).child("onlineStatus").getValue() != null) {
+                            onlineStatus = "1";
+                        }
+                        else {
+                            onlineStatus = "0";
+                        }
+
+
+                        Member member = new Member(uid, name, onlineStatus, false, pfp, "0");
+                        memberList.add(member);
                     }
-                    else {
-                        onlineStatus = "0";
-                    }
+
+                    Log.i("member", String.valueOf(memberList.size()));
 
 
-                    Member member = new Member(uid, name, onlineStatus, false, pfp, "0");
-                    memberList.add(member);
-                }
-
-                Log.i("member", String.valueOf(memberList.size()));
             }
         });
 
