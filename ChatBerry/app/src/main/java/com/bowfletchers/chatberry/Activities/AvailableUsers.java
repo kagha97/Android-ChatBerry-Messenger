@@ -43,6 +43,8 @@ public class AvailableUsers extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        setTitle("Available Users");
+
         mAuth = FirebaseInstances.getDatabaseAuth();
         mUser = mAuth.getCurrentUser();
         if (mUser == null) {

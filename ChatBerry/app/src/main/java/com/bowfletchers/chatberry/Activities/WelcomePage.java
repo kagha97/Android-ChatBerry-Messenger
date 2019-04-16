@@ -33,7 +33,7 @@ public class WelcomePage extends AppCompatActivity {
         mUser = mAuth.getCurrentUser();
 
         if (mUser != null) {
-            Intent gotoChatlistIntent = new Intent(WelcomePage.this, AvailableUsers.class);
+            Intent gotoChatlistIntent = new Intent(WelcomePage.this, ChatHistoryList.class);
             startActivity(gotoChatlistIntent);
             finish();
         }
