@@ -244,15 +244,19 @@ public class EditGroupChat extends AppCompatActivity {
         if (!FirebaseInstances.getDatabaseAuth().getCurrentUser().getUid().equals(ownerID)) {
 
 
+            List<GCMember> newMem = new ArrayList<>();
             for (GCMember mem : chat.getMemberList()) {
-                if (mem.getMemberID().equals(FirebaseInstances.getDatabaseAuth().getCurrentUser().getUid())) {
-                    chat.getMemberList().remove(mem);
+                if (!mem.getMemberID().equals(FirebaseInstances.getDatabaseAuth().getCurrentUser().getUid())) {
+                   newMem.add(mem);
                 }
             }
 
             DatabaseReference newChat = FirebaseInstances.getDatabaseReference("gchats/" + chatID);
-            newChat.child("memberList").setValue(chat.getMemberList());
-
+            newChat.child("memberList").setValue(newMem);
+            Intent intent = new Intent(this, ChatHistoryList.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            this.startActivity(intent);
+            Runtime.getRuntime().exit(0);
         }
         else {
             DatabaseReference chatDb = FirebaseInstances.getDatabaseReference("gchats").child(chatID);
