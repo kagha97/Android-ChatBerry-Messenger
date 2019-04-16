@@ -9,4 +9,11 @@
         android:title="Settings"
         android:icon="@drawable/ic_settings"
         app:showAsAction="ifRoom" />
+
+
+    <item
+        android:id="@+id/homePage"
+        android:title="@string/menu_home_activity_label"
+        app:showAsAction="ifRoom"
+        android:icon="@drawable/ic_home_page" />
 </menu>

@@ -85,28 +85,16 @@ public class GroupMessageViewer extends AppCompatActivity implements AdapterView
         liveChatRoom(chatID, context);
 
 
+        Snackbar.make(recyclerView, "Welcome to " +getIntent().getStringExtra("name"),
+                Snackbar.LENGTH_SHORT)
+                .show();
 
 
-
-    }
-
-
-    @Override
-    public void onResume(){
-        super.onResume();
-        // put your code here..
-        //
-        //.
-
-        if (chatID != null){
-            //liveChatRoom(chatID, context);
-        }
-        else {
-            finish();
-        }
 
 
     }
+
+
 
 
     @Override
@@ -125,6 +113,13 @@ public class GroupMessageViewer extends AppCompatActivity implements AdapterView
                 editGCIntent.putExtra("title", getTitle().toString());
                 editGCIntent.putExtra("owner", memberList.get(memberList.size() - 1).id);
                 startActivity(editGCIntent);
+                return true;
+
+            case R.id.homePage:
+                Intent intent = new Intent(this, ChatHistoryList.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                this.startActivity(intent);
+                // Runtime.getRuntime().exit(0);
                 return true;
 
         }

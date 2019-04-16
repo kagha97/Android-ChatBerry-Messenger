@@ -133,6 +133,7 @@ public class NewGroupChat extends AppCompatActivity {
 
             intent.putExtra("id" , chatID);
             intent.putExtra("owner" , FirebaseInstances.getDatabaseAuth().getUid());
+            intent.putExtra("name" , groupName.getText().toString());
             this.startActivity(intent);
 
             Log.d("chatstatus", "new chat room created");

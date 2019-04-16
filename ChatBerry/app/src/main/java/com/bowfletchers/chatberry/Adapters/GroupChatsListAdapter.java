@@ -42,6 +42,7 @@ public class GroupChatsListAdapter extends RecyclerView.Adapter<GroupChatsListAd
             public void onClick(View v) {
                 Intent groupChatIntent = new Intent(mcontext, GroupMessageViewer.class);
                 groupChatIntent.putExtra("id", mGroupId.get(position));
+                groupChatIntent.putExtra("name", mGroupNames.get(position));
                 mcontext.startActivity(groupChatIntent);
             }
         });
