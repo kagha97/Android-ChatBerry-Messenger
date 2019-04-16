@@ -49,4 +49,9 @@
         android:id="@+id/friendStories"
         android:title="@string/menu_friend_stories"
         app:showAsAction="never" />
+    <item
+        android:id="@+id/about"
+        android:title="About"
+        app:showAsAction="never"
+        android:orderInCategory="100"/>
 </menu>

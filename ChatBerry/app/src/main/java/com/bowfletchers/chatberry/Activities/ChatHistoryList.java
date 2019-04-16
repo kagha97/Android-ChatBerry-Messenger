@@ -187,6 +187,11 @@ public class ChatHistoryList extends AppCompatActivity {
                 Intent newGC = new Intent(ChatHistoryList.this, NewGroupChat.class);
                 startActivity(newGC);
                 return true;
+
+            case R.id.about:
+                Intent about = new Intent(ChatHistoryList.this, About.class);
+                startActivity(about);
+                return true;
         }
         return super.onOptionsItemSelected(item);
     }
