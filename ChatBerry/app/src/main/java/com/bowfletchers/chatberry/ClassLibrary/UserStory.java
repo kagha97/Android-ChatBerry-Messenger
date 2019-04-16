@@ -1,6 +1,8 @@
 package com.bowfletchers.chatberry.ClassLibrary;
 
-public class UserStory {
+import java.io.Serializable;
+
+public class UserStory implements Serializable {
 
     public String userId;
     public String photoStoryURL;

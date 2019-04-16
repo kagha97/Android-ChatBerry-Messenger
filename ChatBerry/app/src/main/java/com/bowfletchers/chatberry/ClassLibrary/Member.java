@@ -14,7 +14,7 @@ public class Member implements Serializable {
     public String profilePicture;
     public List<Member> friendList;
     public List<Chat> chatList;
-    public List<Story> stories;
+    public UserStory story;
     public Boolean invitationRequest;
     public Boolean me;
 
@@ -30,7 +30,7 @@ public class Member implements Serializable {
         this.profilePicture = "0";
         friendList = new ArrayList<>();
         chatList = new ArrayList<>();
-        stories = new ArrayList<>();
+        story = new UserStory();
         this.invitationRequest = false;
         this.me = false;
     }
@@ -43,8 +43,9 @@ public class Member implements Serializable {
         this.onlineStatus = 0;
         friendList = new ArrayList<>();
         chatList = new ArrayList<>();
-        stories = new ArrayList<>();
+        story = new UserStory(id, name, profilePicture, "");
         this.invitationRequest = false;
+        this.type = "0";
         this.me = false;
     }
 
@@ -56,7 +57,7 @@ public class Member implements Serializable {
         this.onlineStatus = onlineStatus;
         friendList = new ArrayList<>();
         chatList = new ArrayList<>();
-        stories = new ArrayList<>();
+        story = new UserStory(id, name, profilePicture, "");
         this.invitationRequest = false;
         this.me = false;
     }
@@ -67,6 +68,7 @@ public class Member implements Serializable {
         this.add = add;
         this.onlineStatus = Integer.parseInt(status);
         this.profilePicture = profilePicture;
+        this.story = new UserStory(id, name, profilePicture, "");
         this.type = type;
     }
 
@@ -77,7 +79,7 @@ public class Member implements Serializable {
         this.profilePicture = "";
         friendList = new ArrayList<>();
         chatList = new ArrayList<>();
-        stories = new ArrayList<>();
+        this.story = new UserStory();
         this.invitationRequest = false;
         this.me = false;
     }
@@ -156,9 +158,7 @@ public class Member implements Serializable {
         return chatList;
     }
 
-    public List<Story> getStories() {
-        return stories;
-    }
+
 
     public void addFriend(Member friend) {
         this.friendList.add(friend);
@@ -168,13 +168,6 @@ public class Member implements Serializable {
         this.friendList.remove(friend);
     }
 
-    public void addStory(Story story) {
-        this.stories.add(story);
-    }
-
-    public void removeStory(Story story) {
-        this.stories.remove(story);
-    }
 
     public void setName(String name) {
         this.name = name;
@@ -208,16 +201,29 @@ public class Member implements Serializable {
 
     public void setMe(Boolean me) { this.me = me; }
 
+    public UserStory getStory() {
+        return story;
+    }
+
+    public void setStory(UserStory story) {
+        this.story = story;
+    }
+
     @Override
     public String toString() {
         return "Member{" +
                 "id='" + id + '\'' +
                 ", email='" + email + '\'' +
                 ", name='" + name + '\'' +
-                ", profilePicture=" + profilePicture +
+                ", add=" + add +
+                ", type='" + type + '\'' +
+                ", onlineStatus=" + onlineStatus +
+                ", profilePicture='" + profilePicture + '\'' +
                 ", friendList=" + friendList +
                 ", chatList=" + chatList +
-                ", stories=" + stories +
+                ", story=" + story +
+                ", invitationRequest=" + invitationRequest +
+                ", me=" + me +
                 '}';
     }
 }

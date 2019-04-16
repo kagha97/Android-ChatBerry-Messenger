@@ -1,6 +1,7 @@
 package com.bowfletchers.chatberry.Activities;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -22,6 +23,8 @@ import com.google.firebase.database.FirebaseDatabase;
 
 public class RegisterAccount extends AppCompatActivity {
 
+    private final String DEFAULT_USER_PHOTO_URL = "https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909__340.png";
+
     EditText editTextEmail;
     EditText editTextUserName;
     EditText editTextPassword;
@@ -34,10 +37,11 @@ public class RegisterAccount extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register_account);
-        // reference for the views
-        referenceUIs();
         // reference for firebase modules
         referenceFirebase();
+        // reference for the views
+        referenceUIs();
+
     }
 
     public void cancelRegister(View view) {
@@ -61,13 +65,13 @@ public class RegisterAccount extends AppCompatActivity {
 
         // check if the password and confirm password matches
         if (passwordInput.equals(passwordConfirmInput)) {
+            Toast.makeText(this, "Go here????", Toast.LENGTH_SHORT).show();
             // using email and password to sign up
             mAuthentication.createUserWithEmailAndPassword(emailInput, passwordInput)
             .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                 @Override
                 public void onComplete(@NonNull Task<AuthResult> task) {
                     if (task.isSuccessful()) {
-                        //Toast.makeText(RegisterAccount.this, "Register successful", Toast.LENGTH_SHORT).show();
                         // get userID from firebase auth
                         final FirebaseUser currentUser = mAuthentication.getCurrentUser();
                         if (currentUser != null) {
@@ -75,20 +79,21 @@ public class RegisterAccount extends AppCompatActivity {
                             // save display name to user profile
                             UserProfileChangeRequest profileUpdate = new UserProfileChangeRequest.Builder()
                                     .setDisplayName(usernameInput)
+                                    .setPhotoUri(Uri.parse(DEFAULT_USER_PHOTO_URL))
                                     .build();
                             currentUser.updateProfile(profileUpdate);
 
                             String userId = currentUser.getUid();
 
                             // create user object
-                            Member newMember = new Member(userId, usernameInput, emailInput, "");
+                            Member newMember = new Member(userId, usernameInput, emailInput, DEFAULT_USER_PHOTO_URL);
 
                             // save new user to firebase database
                             mDatabase.child("users").child(userId).setValue(newMember);
 
                             // navigate to chat list activity
                             Intent chatListIntent = new Intent(RegisterAccount.this, ChatHistoryList.class);
-                            chatListIntent.putExtra("NewUser", newMember);
+                            //chatListIntent.putExtra("NewUser", newMember);
                             startActivity(chatListIntent);
                         }
 
