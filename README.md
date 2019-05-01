@@ -5,7 +5,7 @@ Group name: BowFletchers
 Date created : 2019-01-29
 
 ### What is this repository for? ###
-Android Chat application created in Android Studio. 
+Android Chat application created in Android Studio. Written in Java with Firebase for back-end database.
 
 Features include:
 
