@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.bowfletchers.chatberry">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -9,20 +11,65 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".Activities.About"
+            android:screenOrientation="portrait"></activity>
         <activity
-            android:name=".WelcomePage"
+            android:name=".Activities.GroupHistoryList"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".Activities.AddMemberToGroupChat"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".Activities.EditGroupChat"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".Activities.NewGroupChat"
+            android:label="@string/title_activity_new_group_chat"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".Activities.FriendStories"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".Activities.UserStory"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".Activities.FriendProfile"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".Activities.AvailableUsers"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".Activities.LoginAccount" />
+        <activity
+            android:name=".Activities.WelcomePage"
             android:label="@string/title_activity_welcome_page"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
-        <activity android:name=".MainActivity">
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Register_account" />
-        <activity android:name=".User_profile" />
-        <activity android:name=".Friend_List"></activity>
+        <activity
+            android:name=".Activities.MessageViewer"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".Activities.GroupMessageViewer" />
+        <activity android:name=".Activities.MainActivity" />
+        <activity android:name=".Activities.RegisterAccount"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".Activities.UserProfile"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".Activities.ChatHistoryList"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".Activities.FriendList"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".Activities.FriendRequests"
+            android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
 </manifest>

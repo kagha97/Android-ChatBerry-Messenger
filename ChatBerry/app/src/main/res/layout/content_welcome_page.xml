@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context=".WelcomePage"
+    tools:context=".Activities.WelcomePage"
     tools:showIn="@layout/activity_welcome_page">
 
     <ImageView
@@ -20,10 +20,10 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:srcCompat="@drawable/logo" />
+        android:src="@drawable/logo" />
 
     <Button
-        android:id="@+id/signIn"
+        android:id="@+id/btnSignIn"
         android:layout_width="160dp"
         android:layout_height="51dp"
         android:layout_marginStart="8dp"
@@ -36,10 +36,11 @@
         android:textColor="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/logo" />
+        app:layout_constraintTop_toBottomOf="@+id/logo"
+        android:onClick="singIn"/>
 
     <Button
-        android:id="@+id/signUp"
+        android:id="@+id/btnSignUp"
         android:layout_width="160dp"
         android:layout_height="51dp"
         android:layout_marginStart="8dp"
@@ -53,7 +54,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/signIn" />
+        app:layout_constraintTop_toBottomOf="@+id/btnSignIn"
+        android:onClick="singUp"/>
 
     <ImageView
         android:id="@+id/team_logo"
@@ -68,6 +70,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        tools:srcCompat="@drawable/team_logo" />
+        android:src="@drawable/team_logo" />
 
 </android.support.constraint.ConstraintLayout>

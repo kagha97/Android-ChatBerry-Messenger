@@ -1,24 +1,73 @@
 <resources>
     <string name="app_name">ChatBerry</string>
-<<<<<<< HEAD
     <string name="register_new_account_text">Register new account</string>
     <string name="user_email_label">Email:</string>
-    <string name="email_input_hint">Enter email address here ...</string>
+    <string name="email_input_hint">Enter email address here</string>
     <string name="register_username_label">Username</string>
-    <string name="register_username_hint">Enter username here ...</string>
+    <string name="register_username_hint">Enter username here</string>
     <string name="register_password_label">Password</string>
-    <string name="register_password_hint">Enter password here ...</string>
+    <string name="register_password_hint">Enter password here</string>
     <string name="register_confirm_password_label">Confirm password</string>
-    <string name="register_confirm_password_text">Enter password again here ...</string>
+    <string name="register_confirm_password_text">Enter password again here</string>
     <string name="register_button_cancel_label">Cancel</string>
     <string name="register_button_confirm_label">Register</string>
     <string name="user_profile_sample_name">Barrack Obama</string>
     <string name="user_profile_online_status_label">Online status</string>
     <string name="user_profile_button_done_label">Done</string>
     <string name="user_profile_button_logout_label">Sign out</string>
-=======
+
     <string name="sign_up">Sign-Up</string>
     <string name="sign_in">Sign-In</string>
-    <string name="title_activity_welcome_page">WelcomePage</string>
->>>>>>> welcome-ui
+    <string name="title_activity_welcome_page">ChatBerry</string>
+    <string name="signIn_email_label">Email</string>
+    <string name="signIn_password_label">Password</string>
+
+    <string name="profile_picture">Profile picture</string>
+    <string name="name">Name</string>
+    <string name="message">Message</string>
+    <string name="menu_user_profile_label">My Profile</string>
+    <string name="menu_user_friends_label">My Friends</string>
+    <string name="menu_gc">New Group Chat</string>
+    <string name="menu_home_activity_label">Home Activity</string>
+    <string name="title_activity_new_group_chat">NewGroupChat</string>
+    <string name="group_name">Group Name:</string>
+    <string name="name_label">Name</string>
+    <string name="button_chat_label">Chat</string>
+    <string name="button_friend_detail_label">Detail</string>
+    <string name="menu_create_story">Create new story</string>
+    <string name="user_story_status_hint">Your status</string>
+    <string name="button_update_story_label">Update</string>
+    <string name="login_email_hint">Email</string>
+    <string name="menu_friend_request">Friend Requests</string>
+    <string name="menu_friend_stories">Friend\'s Stories</string>
+    <string name="no_status_message">No Status at this time</string>
+    <string name="friend_story_status_label">Says:</string>
+    <string name="friend_story_status_msg_sample">This is a nice day</string>
+    <string name="send">Send</string>
+    <string name="leave_group">Leave</string>
+    <string name="main_menu_online_users">Available Users</string>
+    <string name="main_menu_group_chat">My Groups Chat</string>
+    <string name="g_name">G</string>
+
+
+    <string-array name="emojis">
+        <item>😊</item>
+        <item>😄</item>
+        <item>🙂</item>
+        <item>🥰</item>
+        <item>🤣</item>
+        <item>🙄</item>
+        <item>😡</item>
+        <item>🧐</item>
+        <item>😢</item>
+        <item>😤</item>
+        <item>👌</item>
+        <item>👻</item>
+        <item>👽</item>
+        <item>💩</item>
+        <item>👀</item>
+
+    </string-array>
+
+
 </resources>
