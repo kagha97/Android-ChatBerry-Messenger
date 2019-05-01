@@ -1,11 +1,18 @@
-# Read Me #
+# ChatBerry Messenger for Android #
 
-Course code: SODV 3203
-Authors: Karamullah Agha, Khushveen Smagh, Hai Do
-BVC usernames: k.agha809, k.smagh938, h.do488
+Developers: k.agha809, k.smagh938, h.do488
 Group name: BowFletchers
-Projetct code: Group Project
 Date created : 2019-01-29
 
 ### What is this repository for? ###
-This project is to create a chat app for Android platform using Java
+Android Chat application created in Android Studio. 
+
+Features include:
+
+- Adding friends
+- Messaging friends
+- Creating and managing group chats
+- Sharing stories
+- See list of all users
+- See friend profile
+- Update your profile detail
